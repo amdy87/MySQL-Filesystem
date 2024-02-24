@@ -83,8 +83,8 @@ Images can be included with `![alt_text](image_path)`
 <!--Include sections, for example, illustrating the database architecture (with, for example, an ERD).-->
 
 <!--Included below are some sample diagrams, including some example tech stack diagrams.-->
-<!-- 
-You can make headings at different levels by writing `# Heading` with the number of `#` corresponding to the heading level (e.g. `## h2`). -->
+
+<!-- You can make headings at different levels by writing `# Heading` with the number of `#` corresponding to the heading level (e.g. `## h2`). -->
 
 #### Technology Stack
 
