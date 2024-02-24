@@ -4,7 +4,7 @@
 
 <!--The name of your team.-->
 
-### Project Abstract
+## Project Abstract
 
 <!--A one paragraph summary of what the software will do.-->
 
@@ -12,7 +12,7 @@ This is an example paragraph written in markdown. You can use *italics*, **bold*
 
 Please view this file's source to see `<!--comments-->` with guidance on how you might use the different sections of this document. 
 
-### Customer
+## Customer
 
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
 
