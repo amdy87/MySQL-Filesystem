@@ -92,7 +92,7 @@ You can make headings at different levels by writing `# Heading` with the number
 ```mermaid
 flowchart RL
 subgraph Front End
-	A(Javascript: React <br>"For most symbols double quotes are enough: ```~`!@#$%^*()[]{}|\/:;'?<>,.+=-_"</br>)
+	A("Javascript: React For most symbols double quotes are enough: ```~`!@#$%^*()[]{}|\/:;'?<>,.+=-_")
 end
 	
 subgraph Back End
