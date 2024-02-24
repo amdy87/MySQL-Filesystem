@@ -4,7 +4,7 @@
 
 <!--The name of your team.-->
 
-### Project Abstract
+## Project Abstract
 
 <!--A one paragraph summary of what the software will do.-->
 
@@ -12,7 +12,7 @@ This is an example paragraph written in markdown. You can use *italics*, **bold*
 
 Please view this file's source to see `<!--comments-->` with guidance on how you might use the different sections of this document. 
 
-### Customer
+## Customer
 
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
 
@@ -76,7 +76,7 @@ Images can be included with `![alt_text](image_path)`
 | change |    how    | columns |
 | are    | justified |         |
 
-### Specification
+## Specification
 
 <!--A detailed specification of the system. UML, or other diagrams, such as finite automata, or other appropriate specification formalisms, are encouraged over natural language.-->
 
@@ -84,56 +84,19 @@ Images can be included with `![alt_text](image_path)`
 
 <!--Included below are some sample diagrams, including some example tech stack diagrams.-->
 
-You can make headings at different levels by writing `# Heading` with the number of `#` corresponding to the heading level (e.g. `## h2`).
+<!-- You can make headings at different levels by writing `# Heading` with the number of `#` corresponding to the heading level (e.g. `## h2`). -->
 
 #### Technology Stack
 
-Here are some sample technology stacks that you can use for inspiration:
 
 ```mermaid
 flowchart RL
 subgraph Front End
-	A(Javascript: React)
+	A("Javascript: React (to be changed)")
 end
 	
 subgraph Back End
-	B(Python: Django with \nDjango Rest Framework)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|Django ORM| C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
-end
-	
-subgraph Back End
-	B(Python: Flask)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|"REST API"| B
-B <-->|SQLAlchemy| C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Javascript: Vue)
-end
-	
-subgraph Back End
-	B(Javascript: Express)
+	B(TypeScript: Express)
 end
 	
 subgraph Database
@@ -143,43 +106,6 @@ end
 A <-->|"REST API"| B
 B <--> C
 ```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Static JS, CSS, HTML)
-end
-	
-subgraph Back End
-	B(Java: SpringBoot)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|HTTP| B
-B <--> C
-```
-
-```mermaid
-flowchart RL
-subgraph Front End
-	A(Mobile App)
-end
-	
-subgraph Back End
-	B(Python: Django)
-end
-	
-subgraph Database
-	C[(MySQL)]
-end
-
-A <-->|REST API| B
-B <-->|Django ORM| C
-```
-
 
 
 #### Database
