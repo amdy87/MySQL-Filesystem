@@ -1,16 +1,13 @@
 # Requirements and Specification Document
 
-## TeamName
+## Team Name
 
 <!--The name of your team.-->
 
 ## Project Abstract
 
-<!--A one paragraph summary of what the software will do.-->
 
-This is an example paragraph written in markdown. You can use *italics*, **bold**, and other formatting options. You can also <u>use inline html</u> to format your text. The example sections included in this document are not necessarily all the sections you will want, and it is possible that you won't use all the one's provided. It is your responsibility to create a document that adequately conveys all the information about your project specifications and requirements.
-
-Please view this file's source to see `<!--comments-->` with guidance on how you might use the different sections of this document. 
+This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, size, last updated). Users will be required to log in and will only be ablet o view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
 
 ## Customer
 
