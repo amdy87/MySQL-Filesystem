@@ -195,42 +195,26 @@ graph TD;
     Error_Message --> End;
 ```
 
-#### Behavior
-
-```mermaid
----
-title: Sample State Diagram For Coffee Application
----
-stateDiagram
-    [*] --> Ready
-    Ready --> Brewing : Start Brewing
-    Brewing --> Ready : Brew Complete
-    Brewing --> WaterLowError : Water Low
-    WaterLowError --> Ready : Refill Water
-    Brewing --> BeansLowError : Beans Low
-    BeansLowError --> Ready : Refill Beans
-```
-
 #### Sequence Diagram
 
 ```mermaid
 sequenceDiagram
 
-participant ReactFrontend
-participant DjangoBackend
-participant MySQLDatabase
+participant React Frontend
+participant Express Backend
+participant MySQL DB
 
-ReactFrontend ->> DjangoBackend: HTTP Request (e.g., GET /api/data)
-activate DjangoBackend
+React Frontend ->> Express Backend: HTTP Request (e.g., POST /file)
+activate Express Backend
 
-DjangoBackend ->> MySQLDatabase: Query (e.g., SELECT * FROM data_table)
-activate MySQLDatabase
+Express Backend ->> MySQL DB: Query (e.g., INSERT INTO files ...)
+activate MySQL DB
 
-MySQLDatabase -->> DjangoBackend: Result Set
-deactivate MySQLDatabase
+MySQL DB -->> Express Backend: Query Result
+deactivate MySQL DB
 
-DjangoBackend -->> ReactFrontend: JSON Response
-deactivate DjangoBackend
+Express Backend -->> React Frontend: Status Code (e.g. 201 Created)
+deactivate Express Backend
 ```
 
 ### Standards & Conventions
