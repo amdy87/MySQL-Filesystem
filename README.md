@@ -88,14 +88,11 @@ You can make headings at different levels by writing `# Heading` with the number
 
 #### Technology Stack
 
-Here are some sample technology stacks that you can use for inspiration:
-
-
 
 ```mermaid
 flowchart RL
 subgraph Front End
-	A(Javascript: React [To be change])
+	A(Javascript: React)
 end
 	
 subgraph Back End
