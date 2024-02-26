@@ -2,7 +2,7 @@
 
 ## Team Name
 
-<!--The name of your team.-->
+MyFilesystem
 
 ## Project Abstract
 
@@ -318,8 +318,6 @@ deactivate MySQL DB
 Express Backend -->> React Frontend: Status Code (e.g. 201 Created)
 deactivate Express Backend
 ```
-
-### Standards & Conventions
 
 # Code Standards
 
