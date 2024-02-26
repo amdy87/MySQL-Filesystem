@@ -450,10 +450,21 @@ This document outlined the code standard for writing our project: MySQL-based Fi
 
 ### Project Structure
 - src/
-    - components/: React components.
-    - utils/: Utility functions and constants.
+    - components/: reusable components without state.
+        - sample/: page directory 
+            - sample.js: actual component 
+            - sample.test.js: test file for the component
+        - index.js: file for exporting all components
+    - containers/: a single use container with states that possibly contain multiple components.
+    - pages/: a single page.
+        - sample/: page directory 
+            - sample.js: actual page view
+            - sample.test.js: test file for the page
+    - utils/: helper functions and constants.
+        - constans/: contains directory
+        - helper/: helper function directory
     - api/: API calls.
-    - styles/: Global styles and themes.
+    - stores/: Global state store using Redux
     - assets/: Static assets like images and icons.
 
 ### Naming Conventions
