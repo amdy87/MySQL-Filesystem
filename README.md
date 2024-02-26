@@ -321,4 +321,73 @@ deactivate Express Backend
 
 ### Standards & Conventions
 
-<!--Here you can document your coding standards and conventions. This includes decisions about naming, style guides, etc.-->
+# Code Standards
+
+This document outlined the code standard for writing our project: MySQL-based Filesystem. The project uses React.js as frontend and Typescript as backend. 
+
+## React.js standards
+
+[Project Structure](#project-structure)
+
+[Naming Conventions](#naming-conventions)
+
+[State Management](#state-management)
+
+[Styling](#styling)
+
+### Project Structure
+- src/
+    - components/: React components.
+    - utils/: Utility functions and constants.
+    - api/: API calls.
+    - styles/: Global styles and themes.
+    - assets/: Static assets like images and icons.
+
+### Naming Conventions
+
+- **Components:** Use PascalCase for React components. For example, `UserProfile.js`.
+- **Files:** Use camelCase for other files. For example, `userProfileHelpers.js`.
+- **Methods & Variables:** Use camelCase for methods and variables. For instance, `getUserData`.
+
+### State Management
+
+- Prefer local state management with hooks (`useState`, `useReducer`) for simple state logic.
+- Use context (`useContext`) for global state management or when passing props deeply.
+- Use Redux for complex applications.
+
+### Styling
+- Use React Bootstrap to keep project styling consistent.
+- Keep styling props minimal and use class names for static style.
+
+### Testing
+- Write unit tests for components using React Testing Library.
+- Test both the UI and interaction logic.
+- Maintain above 80% coverage
+
+# Typescript Standards
+
+### Source File Structure
+Files consist of the following, in order:
+
+1. JSDoc with `@fileoverview`, if present
+2. Imports, if present
+3. The file’s implementation
+
+### `@fileoverview` JSDoc
+A file may have a @fileoverview JSDoc. It should provide a description of the file's content.
+
+```
+/**
+ * @fileoverview Description of file
+ */
+```
+
+### Naming Conventions
+- **Classes:** Use UpperCamelCase. For example, `FirstProjectFile`.
+- **Constants:** Use all uppercase and separate words by underscore. For example, `SOME_CONSTANT`.
+- **Files:** Use camelCase for other files. For example, `userProfile.ts`.
+- **Functions & Variables:** Use camelCase for functions and variables. For instance, `getUserData`.
+
+### Testing
+- Test that everything we need is being pulled from the database.
+- Maintain above 80% coverage
