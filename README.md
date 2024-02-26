@@ -64,6 +64,12 @@ Images can be included with `![alt_text](image_path)`
 
 <!--Discuss what security requirements are necessary and why. Are there privacy or confidentiality issues? Is your system vulnerable to denial-of-service attacks?-->
 
+- Only users having the permission to create/read/update/delete a file can do so
+- User input (i.e. the modifications they make to the file system) is sanitized before storing files in the database
+- User passwords are salted and hashed to comply with modern security standards
+- Use HTTPS for secure communication
+- Comprehensive logging to ensure the system is functioning as intended
+
 ### System Requirements
 
 <!--List here all of the external entities, other than users, on which your system will depend. For example, if your system inter-operates with sendmail, or if you will depend on Apache for the web server, or if you must target both Unix and Windows, list those requirements here. List also memory requirements, performance/speed requirements, data capacity requirements, if applicable.-->
