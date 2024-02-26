@@ -128,6 +128,7 @@ erDiagram
         string name
         string email
         string phone
+        string password "Hashed/Encrypted"
     }
 
     Permission {
@@ -182,8 +183,62 @@ erDiagram
 
 ```mermaid
 ---
-title: Sample Class Diagram for Animal Program
+title: Class Diagram for Animal Program
 ---
+classDiagram
+
+    class User{
+        - String name
+        - int id
+        - String email
+        - String phone
+        - String password
+
+    }
+    class File {
+        - String name
+        - int id
+        - Directory parent
+        - String path
+        - int[] file_permission_ids
+        + File(String name)
+        + void setName(String name)
+        + String getName()
+        + int getId()
+        + String getParent()
+        + String getPath()
+        + int[] getFilePermissionIds()
+    }
+
+    class Directory {
+        - String name
+        - int id
+        - int user_id
+        - Directory parent
+        - String path
+        - int[] dir_permissions_ids
+        + Directory(String name)
+        + void setName(String name)
+        + String getName()
+        + int getId()
+        + String getParent()
+        + String getPath()
+        + int[] getDirPermissionIds()
+    }
+
+    class Permission {
+        - String name
+        - int id
+        - String path
+        + Permission(String name)
+        + void setName(String name)
+        + String getName()
+        + int getId()
+    }
+   
+```
+
+<!-- 
 classDiagram
     class Animal {
         - String name
@@ -206,8 +261,7 @@ classDiagram
     }
     Animal <|-- Dog
     Animal <|-- Cat
-    Animal <|-- Bird
-```
+    Animal <|-- Bird -->
 
 #### Flowchart
 
