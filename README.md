@@ -261,6 +261,8 @@ erDiagram
         int file_id PK
         int user_id FK
         int permission_id FK
+        int parent_dir_id FK
+        int file_permission_id FK
         string created_date
         string updated_date
         string content_type
@@ -303,7 +305,7 @@ erDiagram
 
 ```mermaid
 ---
-title: Class Diagram for Animal Program
+title: Class Diagram for Our Program
 ---
 classDiagram
 
