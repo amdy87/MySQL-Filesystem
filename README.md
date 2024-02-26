@@ -117,6 +117,10 @@ erDiagram
     User ||--o{ Permission: "Creates"
     Directory ||--o{ File : "contains"
     File ||--o{ File_Content : "contains"
+    Permission ||--|{ File_Permission: ""
+    Permission ||--|{ Directory_Permission: ""
+    File_Permission }|--|{ File: ""
+    Directory_Permission }|--|{ Directory: ""
 
     User {
         int user_id PK
@@ -141,7 +145,20 @@ erDiagram
         int file_size
         string file_path
     }
+    File_Permission {
+        int file_permission_id PK
+        int file_id FK
+        int user_id FK
+        int permission_id FK
+    }
     
+    Directory_Permission {
+        int dir_permission_id PK
+        int dir_id FK
+        int user_id FK
+        int permission_id FK
+    }
+
     Directory {
         int dir_id PK
         int parent_dir_id FK
@@ -155,6 +172,8 @@ erDiagram
         int file_id FK
         string content
     }
+
+
 
 ```
 
