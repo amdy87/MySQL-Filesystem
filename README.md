@@ -12,45 +12,145 @@ This project will implement a MySQL-based filesystem that will allow users to ma
 ## Customer
 
 <!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
+The customers for this software are the CS506 instructional staff and people needing/desiring a web based file system.
 
 ### User Requirements
 
 <!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
 
-Here is a user requirements sample from [Crookshanks](https://learning-oreilly-com.ezproxy.library.wisc.edu/library/view/practical-software-development/9781484206201/9781484206218_Ch02.xhtml):
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R11  | Users should not have to sign into the system; their current network login should be used for identification. | Med      | Done   |
-| R12  | The user should pick a project first; the tasks available are a derivative of the project. | High     | Open   |
-| R13  | A full-time employee should not be able to submit a time card with less than 40 hours per week recorded. | High     | Open   |
-| R14  | A contractor can submit any number of hours up to 60 without special approval. | Med      | Open   |
-| R15  | A team lead can see his/her team's time cards before they are submitted but cannot approve them until the user submits it. | High     | Open   |
+| R01  |  Users should be able to create new files and directories where desired. |    | Open   |
+| R02  |  Users should be able to delete files and directories. |     | Open   |
+| R03  | Users should be able to move files to new locations or directories. |      | Open   |
+| R04  |  Users should be able to rename files and directories. |       | Open   |
+| R05  | Users should have an account associated with the file system they are using.|      | Open   |
+| R06  | There should be a GUI to display the files and how they are organized.|      | Open   |
+| R07  | The user should be able to login to an account. |      | Open   |
+| R08  | The user should be able to logout of an account. |      | Open   |
+| R09  | Users and files associated to one account/file system should not be able to access other accounts/file systems|      | Open   |
+| R10  | Users should be able to view the contents of a selected file. |      | Open   |
+| R11  | Users should be able to make basic edits to the contents of a file. |      | Open   |
+| R12  | Users should be able to view metadata about a selected file. |      | Open   |
+| R13  | Users should be able to edit the metadata of a selected file.|      | Open   |
+| R14  | System should be able to handle many different file systems and many files in each system. |      | Open   |
+| R15  | Users should be able to share/export files or directories. |      | Open   |
+| R16  | Users should be able to import a file from their local machine. |      | Open   |
+| R17  | Users should be able to organize the files how they want |      | Open   |
+| R18  | System should be able to sort the files if the user would like. |      | Open   |
+| R19  | System should store sensitive information securely |      | Open   |
+| R20  | Users should be able to rename their file system |      | Open   |
+| R21  | Users should be able to delete their account. |      | Open   |
+| R22  | Users should be able to restart their file system from scratch |      | Open   |
 
-<div align="center"><small><i>Excerpt from Crookshanks Table 2-2 showing example user requirements for a timekeeping system</i></small></div>
-
-- You 
-  - Can
-    - Use
-- Bullet
-  - Points
-    - In
-    - Markdown
-
-### Use Cases & User Stories
+### User Stories
 
 <!--Use cases and user stories that support the user requirements in the previous section. The use cases should be based off user stories. Every major scenario should be represented by a use case, and every use case should say something not already illustrated by the other use cases. Diagrams (such as sequence charts) are encouraged. Ask the customer what are the most important use cases to implement by the deadline. You can have a total ordering, or mark use cases with “must have,” “useful,” or “optional.” For each use case you may list one or more concrete acceptance tests (concrete scenarios that the customer will try to see if the use case is implemented).-->
 
-Here is a sample user story from [Clean Agile](https://learning-oreilly-com.ezproxy.library.wisc.edu/library/view/clean-agile-back/9780135782002/ch03.xhtml#ch03lev1sec1) using a markdown block quote:
 
-> As the driver of a car, in order to increase my velocity, I will press my foot harder on the accelerator pedal.
+##### File Creation
 
-1. You
-   1. Can
-      1. Also
-2. Use
-   1. Numbered
-      1. Lists
+(U01)
+> To add a file, I press the “add” button and the file creation dialog appears
+
+(U02)
+> I select file type from file creation dialog, and I am prompted to name the file
+
+(U03)
+> To finish the creation, I press “confirm” button
+
+(U04)
+> To cancel the creation, I press the “cancel” button
+
+##### File Deletion
+
+(U05)
+> To delete a file or directory, I select the file or directory and press delete, file is moved to “recently deleted” directory
+
+##### File Updating
+
+(U06)
+> To update a file, I select the file and right click, and am prompted with the update file options dialog
+
+##### File Reading
+(U07)
+> To open a file, I double click on it or press the open button while it is selected and the contents of that file are displayed on the screen.
+
+(U08)
+> Once file is open, To edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
+
+(U09)
+> If the file can not be displayed/opened, the system will display an error message.
+
+##### File Metadata
+(U10)
+> To view the metadata of a file, I select it and right click to display the "options" dialog.
+
+(U11)
+> When the "options" dialog is open, I click the properties button and the "properties" dialog appears displaying the metadata of the file.
+
+##### Navigation
+
+(U12)
+> To change directories, I double-click the directory that I want to move to in the directory tree, and the new directory is opened up and displayed
+
+(U13)
+> When a directory is selected or the arrow attached to it is clicked, the directory tree should display the files and directories it contains beneath it in the tree.
+
+(U14)
+> When a directory is selected and its contents are already displayed in the tree, the contents should no longer be displayed in the tree.
+
+##### Login
+
+(U15)
+> When the webpage is loaded, login page appears and I am prompted to enter a username and password
+
+(U16)
+> Once my username and password are entered, I then press the “login” button to login
+
+(U17)
+> If my login credentials are incorrect the system will display an error message.
+
+##### User Creation
+
+(U18)
+> To create a new user, I press “create new user” button on login page and the “Create New User” page is shown
+
+(U19)
+> On the “Create New User” page, I am prompted to enter a username, password, and to re-enter the password;
+
+(U20)
+> To complete user creation, I press the confirm button and I am logged into the service
+
+(U21) 
+> If the credentials I entered are not allowed, the system displays an error message.
+
+##### File Export
+
+(U22) 
+> To export a file, I select the file and press the export button and the export file dialog appears.
+
+##### File Import
+(U23) 
+> To import a file, I select the import button and the import file dialog is displayed.
+
+(U24) 
+>I drag the desired file into the window or search for it using the access file dialog and it is imported into the current directory.
+
+### Use Cases
+
+- User wants to add a file (U01 - U04)
+- User wants to delete a file (U05)
+- User wants to update a file (U06)
+- User wants to view the contents of a file (U07 - U09)
+- User wants to view the metadata of a file (U10, U11)
+- User wants to change the directory they are in or view what a directory holds (U12 - U14)
+- User wants to login to a file system (U15, U16)
+- User wants to create a new account (U18-U21)
+- User wants to export a file (U22)
+- User wants to import a new file to the system (U23-U24)
+
 
 ### User Interface Requirements
 
@@ -58,7 +158,14 @@ Here is a sample user story from [Clean Agile](https://learning-oreilly-com.ezpr
 
 <!--NOTE: Please include illustrations or screenshots of what your user interface would look like -- even if they’re rough -- and interleave it with your description.-->
 
-Images can be included with `![alt_text](image_path)`
+- Login page
+- User creation page
+- Tree-like display of the file system
+- Window to display file contents
+- Top of screen navigation bar
+- Dialogs to guide users through use cases as necessary
+- File types are handled correctly
+- Navigation changes display
 
 ### Security Requirements
 
