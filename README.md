@@ -200,6 +200,10 @@ classDiagram
         + String getPhone()
         + int getId()
         + String getRole()
+        + void setRole(String role)
+        + void setEmail(String email)
+        + void setPhone(String phone)
+        + void setPassword(String prev_pw, String new_pw)
 
     }
     class File {
