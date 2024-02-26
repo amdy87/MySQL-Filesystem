@@ -68,10 +68,16 @@ Images can be included with `![alt_text](image_path)`
 
 <!--List here all of the external entities, other than users, on which your system will depend. For example, if your system inter-operates with sendmail, or if you will depend on Apache for the web server, or if you must target both Unix and Windows, list those requirements here. List also memory requirements, performance/speed requirements, data capacity requirements, if applicable.-->
 
-| You    |    can    |    also |
-| ------ | :-------: | ------: |
-| change |    how    | columns |
-| are    | justified |         |
+- Linux machine on which to run Docker
+- 4 GB RAM
+- TODO <performance/speed_requirements (we need to decide how fast we want certain operations to be)
+    - LOGIN
+    - CREATE
+    - READ
+    - UPDATE
+    - DELETE
+    - LOAD tree view
+- TODO <data_capacity_requirements> (depends on how many users we plan to support)
 
 ## Specification
 
