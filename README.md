@@ -193,18 +193,16 @@ classDiagram
 
 ```mermaid
 ---
-title: Sample Program Flowchart
+title: Program Flowchart
 ---
 graph TD;
-    Start([Start]) --> Input_Data[/Input Data/];
-    Input_Data --> Process_Data[Process Data];
-    Process_Data --> Validate_Data{Validate Data};
-    Validate_Data -->|Valid| Process_Valid_Data[Process Valid Data];
-    Validate_Data -->|Invalid| Error_Message[/Error Message/];
-    Process_Valid_Data --> Analyze_Data[Analyze Data];
-    Analyze_Data --> Generate_Output[Generate Output];
-    Generate_Output --> Display_Output[/Display Output/];
-    Display_Output --> End([End]);
+    Start([Start]) --> User_Auth[/User Login/ Signup/];
+    User_Auth --> Input_Query[Process Query];
+    Input_Query --> Validate_Query{Validate Query};
+    Validate_Query -->|Valid| Process_Valid_Query[Process Valid Query];
+    Validate_Query -->|Invalid| Error_Message[/Error Message/];
+    Process_Valid_Query --> Display_File_Structure[Display File Structure];
+    Display_File_Structure --> End([End]);
     Error_Message --> End;
 ```
 
