@@ -286,7 +286,7 @@ erDiagram
         int dir_id PK
         int parent_dir_id FK
         int user_id FK
-        int permission_id FK
+        int dir_permission_id FK
         string name
     }
 
