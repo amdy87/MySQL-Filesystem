@@ -109,40 +109,53 @@ B <--> C
 
 ```mermaid
 ---
-title: Sample Database ERD for an Order System
+title: Database ERD for an SQL-Based File System
 ---
 erDiagram
-    Customer ||--o{ Order : "placed by"
-    Order ||--o{ OrderItem : "contains"
-    Product ||--o{ OrderItem : "included in"
+    User ||--o{ File : "Creates"
+    User ||--o{ Directory: "Creates"
+    User ||--o{ Permission: "Creates"
+    Directory ||--o{ File : "contains"
+    File ||--o{ File_Content : "contains"
 
-    Customer {
-        int customer_id PK
+    User {
+        int user_id PK
         string name
         string email
         string phone
     }
 
-    Order {
-        int order_id PK
-        int customer_id FK
-        string order_date
-        string status
+    Permission {
+        int permission_id PK
+        int name
+        int description
     }
 
-    Product {
-        int product_id PK
+    File {
+        int file_id PK
+        int user_id FK
+        int permission_id FK
+        string created_date
+        string updated_date
+        string content_type
+        int file_size
+        string file_path
+    }
+    
+    Directory {
+        int dir_id PK
+        int parent_dir_id FK
+        int user_id FK
+        int permission_id FK
         string name
-        string description
-        decimal price
     }
 
-    OrderItem {
-        int order_item_id PK
-        int order_id FK
-        int product_id FK
-        int quantity
+    File_Content {
+        int file_content_id PK
+        int file_id FK
+        string content
     }
+
 ```
 
 #### Class Diagram
