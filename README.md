@@ -106,12 +106,12 @@ B <--> C
 
 
 #### Database
-
+[Mermaid ER Diagram Notaton Documentation](https://mermaid.js.org/syntax/entityRelationshipDiagram.html)
 ```mermaid
 ---
 title: Database ERD for an SQL-Based File System
 ---
-[Mermaid ER Diagram Notaton Documentation](https://mermaid.js.org/syntax/entityRelationshipDiagram.html)
+
 erDiagram
     User ||--o{ File : "Creates"
     User ||--o{ Directory: "Creates"
