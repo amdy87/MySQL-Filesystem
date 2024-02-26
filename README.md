@@ -129,6 +129,7 @@ erDiagram
         string email
         string phone
         string password "Hashed/Encrypted"
+        string role "ADMIN/USER"
     }
 
     Permission {
@@ -190,9 +191,15 @@ classDiagram
     class User{
         - String name
         - int id
+        - String role
         - String email
         - String phone
         - String password
+        + String getName()
+        + String getEmail()
+        + String getPhone()
+        + int getId()
+        + String getRole()
 
     }
     class File {
