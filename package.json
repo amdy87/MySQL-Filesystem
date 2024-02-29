@@ -1,0 +1,21 @@
+{
+  "name": "group-project",
+  "version": "1.0.0",
+  "description": "MyFilesystem",
+  "main": "index.js",
+  "devDependencies": {
+    "@types/node": "^20.11.22",
+    "prisma": "^5.10.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.10.2"
+  }
+}

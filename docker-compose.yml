@@ -9,15 +9,28 @@ services:
       - 80:80
 
   db:
-    image: mysql
-    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
-    command: --default-authentication-plugin=mysql_native_password
+    image: mysql/mysql-server:latest
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 3306:3306
+      - 63306:63306
     environment:
-      MYSQL_ROOT_PASSWORD: example
+      MYSQL_ROOT_PASSWORD: splung3
+      MYSQL_DATABASE: splunge_db
+      MYSQL_ROOT_HOST: "%"
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: splung3
+    ports: 
+      - "60080:80"
+  
   adminer:
     image: adminer
     restart: always
