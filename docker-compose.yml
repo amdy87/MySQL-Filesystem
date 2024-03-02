@@ -7,12 +7,16 @@ services:
     build: ./my-filesystem-portal
     ports:
       - 80:80
+    volumes:
+      - frontend-dist:/usr/share/nginx/my_filesystem/
 
   server:
     build:
       context: ./backend
     ports:
       - 3000:3000
+    volumes:
+      - frontend-dist:/app/frontend-dist  # Mount frontend build output directory
 
   db:
     image: mysql
@@ -29,3 +33,5 @@ services:
     restart: always
     ports:
       - 8080:8080
+volumes:
+  frontend-dist:
