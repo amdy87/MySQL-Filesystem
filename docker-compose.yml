@@ -8,31 +8,30 @@ services:
     ports:
       - 80:80
 
+  server:
+    build:
+      context: ./backend
+    ports:
+      - 3000:3000
+
   db:
     image: mysql/mysql-server:latest
     restart: always
-    command: --default-authentication-plugin=mysql_native_password
     ports:
-      - 63306:63306
+      - 53306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: splung3
-      MYSQL_DATABASE: splunge_db
-      MYSQL_ROOT_HOST: "%"
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: db
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    restart: always
-    depends_on:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_USER: root
-      PMA_PASSWORD: splung3
-    ports: 
-      - "60080:80"
-  
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    environment:
+      PMA_HOST: db1
+      PMA_USER: root
+      PMA_PASSWORD: password
+    
+
