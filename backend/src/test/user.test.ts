@@ -27,3 +27,32 @@ describe('POST /api/user/signup', () => {
         }
     })
 });
+
+
+describe('POST /api/user/login', () => {
+    const user = userData[0]
+    var newUserId: number;
+    it('Insert one user from userData', async () => {
+        const response = await request(app)
+            .post('/api/user/signup')
+            .send(user);
+        expect(response.status).toBe(200);
+        const responseBody = response.body; // Extract the response body
+        newUserId = responseBody.id;
+        }
+    )
+
+    it('Login using correct password', async () => {
+        const response = await request(app)
+            .post('/api/user/login')
+            .send(user);
+        expect(response.status).toBe(200);
+    });
+
+    it('User Record created should be deleted now',async () => {
+        const response = await request(app)
+                            .del(`/api/user/${newUserId}`)
+        expect(response.body.id).toBe(newUserId);
+    })
+
+});
