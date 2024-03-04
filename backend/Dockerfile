@@ -3,6 +3,12 @@ WORKDIR /app
 COPY package*.json .
 RUN npm ci
 COPY . .
+
+ENV DATABASE_URL=mysql://root:password@db:3306/db
+
+RUN npx prisma generate --schema ./src/prisma/schema.prisma
+# RUN npx prisma db push --schema ./src/prisma/schema.prisma
+# RUN npx prisma db pull --schema ./src/prisma/schema.prisma
 RUN npm run build
 EXPOSE 3000
 CMD ["node", "dist/entrypoint.js"]
