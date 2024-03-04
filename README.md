@@ -243,10 +243,9 @@ erDiagram
     Directory_Permission }|--|{ Directory: ""
 
     User {
-        int user_id PK
+        int id PK
         string name
         string email
-        string phone
         string password "Hashed/Encrypted"
         string role "ADMIN/USER"
     }
@@ -262,10 +261,8 @@ erDiagram
         int user_id FK
         int parent_dir_id FK
         int file_permission_id FK
-        string created_date
-        string updated_date
-        string content_type
-        int file_size
+        string created_at
+        string updated_at
         string file_path
     }
     File_Permission {
@@ -287,6 +284,8 @@ erDiagram
         int parent_dir_id FK
         int user_id FK
         int dir_permission_id FK
+        string created_at
+        string updated_at
         string name
     }
 
@@ -313,11 +312,9 @@ classDiagram
         - int id
         - String role
         - String email
-        - String phone
         - String password
         + String getName()
         + String getEmail()
-        + String getPhone()
         + int getId()
         + String getRole()
         + void setRole(String role)
@@ -332,6 +329,8 @@ classDiagram
         - Directory parent
         - String path
         - int[] file_permission_ids
+        - createdAt
+        - updatedAt
         + File(String name)
         + void setName(String name)
         + String getName()
@@ -339,6 +338,8 @@ classDiagram
         + String getParent()
         + String getPath()
         + int[] getFilePermissionIds()
+        + String getCreatedDate()
+        + String getUpdatedDate()
     }
 
     class Directory {
@@ -347,6 +348,8 @@ classDiagram
         - int user_id
         - Directory parent
         - String path
+        - createdAt
+        - updatedAt
         - int[] dir_permissions_ids
         + Directory(String name)
         + void setName(String name)
@@ -355,6 +358,8 @@ classDiagram
         + String getParent()
         + String getPath()
         + int[] getDirPermissionIds()
+        + String getCreatedDate()
+        + String getUpdatedDate()
     }
 
     class Permission {
