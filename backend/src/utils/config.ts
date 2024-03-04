@@ -33,5 +33,5 @@ export enum Role {
 //     return true;
 // },
 
-export const PORT = env.port || 4000;
+export const PORT = env.port || 3000;
 // export const userRole Role

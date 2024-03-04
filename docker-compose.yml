@@ -2,6 +2,16 @@ version: '3.8'
 
 services:
 
+  db:
+    image: mysql/mysql-server:latest
+    restart: always
+    ports:
+      - 53306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: db
+
   frontend:
     image: my_filesystem_portal
     build: ./my-filesystem-portal
@@ -17,17 +27,11 @@ services:
       - 3000:3000
     volumes:
       - frontend-dist:/app/frontend-dist  # Mount frontend build output directory
-
-  db:
-    image: mysql
-    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    ports:
-      - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: example
-
+      - DATABASE_URL=mysql://root:password@db:3306/db
+    depends_on:
+      - db
+      
   adminer:
     image: adminer
     restart: always
