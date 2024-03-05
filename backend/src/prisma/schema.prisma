@@ -41,6 +41,5 @@ model File {
   path            String
   parentId        Int
   ownerId         Int
-  fileContentId   Int
 }
 
