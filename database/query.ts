@@ -15,7 +15,7 @@ async function addUser(email: string, name: string, password: string, role: stri
           role,
         },
       });
-      console.log('User added:', newUser);
+      console.log('User added');
       return newUser;
     } catch (error) {
       console.error('Error adding user:', error);
@@ -34,7 +34,7 @@ async function addUser(email: string, name: string, password: string, role: stri
           ownerId
         },
       });
-      console.log('New Directory created:', newDir);
+      console.log('New Directory created');
       return newDir;
     } catch (error) {
       console.error('Error creating directory:', error);
@@ -54,7 +54,7 @@ async function addUser(email: string, name: string, password: string, role: stri
           fileContentId
         },
       });
-      console.log('New file created:', newFile);
+      console.log('New file created');
       return newFile;
     } catch (error) {
       console.error('Error creating file:', error);
@@ -63,8 +63,29 @@ async function addUser(email: string, name: string, password: string, role: stri
   }
 
   // reading contents of a directory
+  async function addFileContent(fileId: number, content: string) {
+    try {
+      const newFileContent = await prisma.fileContent.create({
+        data: {
+          fileId,
+          content,
+        },
+      });
+      console.log('New file content created');
+      return newFileContent;
+    } catch (error) {
+      console.error('Error creating file:', error);
+      throw error;
+    }
+  }
 
   // reading contents of a file
 
+  // deleting a directory
 
-export {addUser, addDirectory, addFile}
+  // deleting a file
+
+  // deleting a user
+
+
+export {addUser, addDirectory, addFile, addFileContent}
