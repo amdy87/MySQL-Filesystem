@@ -8,7 +8,7 @@ apiRoutes.get('/tree', (_req: Request, res: Response) => {
     const tmpFile: DbFile = {
         name: "myfile", metadata: {
             createdAt: 123,
-            updDatedAt: 555,
+            updatedAt: 555,
             perms: {
                 read: true,
                 write: false,
@@ -19,7 +19,7 @@ apiRoutes.get('/tree', (_req: Request, res: Response) => {
     const tmpFile2: DbFile = {
         name: "another file", metadata: {
             createdAt: 12344,
-            updDatedAt: 555555,
+            updatedAt: 555555,
             perms: {
                 read: true,
                 write: false,
@@ -31,7 +31,7 @@ apiRoutes.get('/tree', (_req: Request, res: Response) => {
         name: "root",
         metadata: {
             createdAt: 223,
-            updDatedAt: 655,
+            updatedAt: 655,
             perms: {
                 read: false,
                 write: false,
@@ -45,7 +45,7 @@ apiRoutes.get('/tree', (_req: Request, res: Response) => {
         name: "root",
         metadata: {
             createdAt: 123,
-            updDatedAt: 455,
+            updatedAt: 455,
             perms: {
                 read: true,
                 write: true,

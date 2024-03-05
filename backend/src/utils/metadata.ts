@@ -1,7 +1,7 @@
 export type Metadata = {
     perms: Perms;
     createdAt: number;
-    updDatedAt: number;
+    updatedAt: number;
 }
 
 type Perms = {
