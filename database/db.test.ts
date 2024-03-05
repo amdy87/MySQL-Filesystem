@@ -1,17 +1,29 @@
-import { addUser, addDirectory, addFile, addFileContent } from './query.ts'; // Assuming the file containing the createUser function is named userFunctions.js
-import { PrismaClient } from '@prisma/client'
+import { addUser, addDirectory, addFile, addFileContent } from './query.ts'; 
+import { PrismaClient } from '@prisma/client';
+import { jest, describe, it, expect } from '@jest/globals';
 
 const prisma = new PrismaClient()
+jest.mock('@prisma/client');
+const PrismaClientMock = PrismaClient as jest.MockedClass<typeof PrismaClient>;
+const prismaMock = new PrismaClientMock();
+
+describe('addUser', () => {
+  it('should add a new user', async() => {
+    prismaMock.user.create.mockResolvedValueOnce({ });
+    const newUser = await addUser();
+    expect(newUser).toEqual({});
+  });
+});
 
 async function main() {
   try {
     // add a new user
-    // const email = "test1@test.com";
-    // const name = "test";
-    // const password = "password123";
-    // const role = "admin";
-    // const newUser = await addUser(email, name, password, role);
-    // console.log('New user:', newUser);
+    const email = "test1@test.com";
+    const name = "test";
+    const password = "password123";
+    const role = "admin";
+    const newUser = await addUser(email, name, password, role);
+    console.log('New user:', newUser);
 
     // add a new directory for the user
     const directoryName = "directory";
@@ -36,6 +48,12 @@ async function main() {
     const content = "This is the file content.";
     const newFileContent = await addFileContent(fileId, content);
     console.log("file content:", newFileContent);
+
+    // read the contents of the file
+    // delete the file
+    // delete the directory
+    // delete the user
+
   } catch (error) {
     console.error('Error:', error);
   } finally {
