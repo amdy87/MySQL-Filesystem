@@ -4,34 +4,43 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("USER_DB_URL")
+  url      = env("USER_DB_URL") 
 }
 
 model User {
   id        Int         @id @default(autoincrement())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime? @default(now())
   email     String      @unique
-  name      String?
-  password  String?
-  File      File?
-  Directory Directory[]
+  name      String
+  password  String
+  role      String
 }
 
 model Directory {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
   updatedAt       DateTime? @default(now())
-  directoryName   String
-  directoryParent Int?
+  name            String    
   path            String
-  userId          User?     @relation(fields: [id], references: [id])
+  parentId        Int?
+  ownerId         Int
 }
 
 model File {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
   updatedAt       DateTime? @default(now())
-  fileName        String
-  directoryParent Int
+  name            String
   path            String
-  userId          User?     @relation(fields: [id], references: [id])
+  parentId        Int
+  ownerId         Int
+  fileContentId   Int
+
+}
+
+model FileContent {
+  id      Int @id @default(autoincrement())
+  fileId  Int
+  content String
 }

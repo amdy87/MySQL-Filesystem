@@ -5,14 +5,27 @@ const prisma = new PrismaClient()
 
 async function main() {
   try {
-    const newUser = await addUser('test@example5.com', 'Test User', 'password123');
+    const email = "test1@test.com";
+    const name = "test";
+    const password = "password123";
+    const role = "admin";
+    const newUser = await addUser(email, name, password, role);
     console.log('New user:', newUser);
 
+    const directoryName = "directory";
+    const directoryPath = "/directory";
+    const directoryParentId = 0;
+    const directoryOwnerId = 1;
     // TODO: add user permission capabilities
-    const newDir = await addDirectory("directory_test", "./directory_test", 0);
+    const newDir = await addDirectory(directoryName, directoryPath, directoryParentId, directoryOwnerId);
     console.log('New directory:', newDir);
 
-    const newFile = await addFile("file_test", newDir.id, "./directory_test/file_test");
+    const fileName = "file.txt";
+    const filePath = "/directory/file.txt"
+    const fileParentId = 1;
+    const fileOwnerId = 1;
+    const fileContentId = 0;
+    const newFile = await addFile(fileName, filePath, fileParentId, fileOwnerId, fileContentId);
     console.log('New file:', newFile);
 
   } catch (error) {
