@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("USER_DB_URL")
+  url      = env("USER_DB_URL") 
 }
 
 model User {
@@ -17,8 +17,8 @@ model User {
 }
 
 model Directory {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
   updatedAt       DateTime? @default(now())
   directoryName   String
   directoryParent Int?
@@ -27,8 +27,8 @@ model Directory {
 }
 
 model File {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
   updatedAt       DateTime? @default(now())
   fileName        String
   directoryParent Int
