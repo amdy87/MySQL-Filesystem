@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-import {Role} from "../utils/config";
+import {prisma} from "../entrypoint";
 import errorHandler from "../utils/errorHandler";
 
 const controller: any = {};
-const prisma: PrismaClient = new PrismaClient();
+// const prisma: PrismaClient = new PrismaClient();
 
 
 // Create and register a User
@@ -15,11 +15,11 @@ controller.signUp = async (req: Request, res: Response) => {
     try{
         let user: Prisma.UserCreateInput
         const {name, email, password} = req.body;
-
+        const hashedPassword = bcrypt.hashSync(password, 12);
         user = {
             name: name, 
             email: email, 
-            password: password
+            password: hashedPassword
         }
         const result = await prisma.user.create({ data: user })
         res.send(result);
@@ -45,11 +45,15 @@ controller.signInWithPassword = async (req: Request, res: Response) => {
                 password: true
             }
         })
-
-        if (user?.password === password) {
-            res.send("LOG IN successfully");
+        if (user) {
+            const correct: boolean = await bcrypt.compare(password, user.password);
+            if(correct) {
+                res.send("LOG IN successfully");
+            }else {
+                throw errorHandler.UnauthorizedError("")
+            }
         }else {
-            const message: String = "Incorrect password";
+            const message: String = "User does not exist, please signup";
             res.status(401);
             res.send(message);
         }

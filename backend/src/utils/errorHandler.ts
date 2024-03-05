@@ -1,5 +1,5 @@
 
-import { Request, Response } from "supertest";
+import { Request, Response } from "express";
 import { Prisma } from "@prisma/client";
 
 // Error enum
@@ -39,7 +39,8 @@ errorHandler.UserNotFoundError = (message: String) => {
 
 errorHandler.handleError = ( error: any, res: Response) => {
     // To be enriched later
-    console.log(error);
+    res.status(error.status);
+    res.send(error.message);
 }
 
 

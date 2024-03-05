@@ -2,10 +2,10 @@ import {PrismaClient} from "@prisma/client";
 import {exec} from 'child_process';
 
 import app from './server';
-import prisma from "./prisma/prisma-extensions";
+// import prisma from "./prisma/prisma-extensions";
 import {PORT} from './utils/config';
 
-const prismaClient = new PrismaClient();
+export const prisma = new PrismaClient();
 
 async function waitForConnection(predicate: () => Promise<boolean>, options: any): Promise<void> {
     let retries = options.retries;
@@ -33,7 +33,7 @@ async function waitForConnection(predicate: () => Promise<boolean>, options: any
 async function waitForDatabase() {
     const dbReady = async () => {
       try {
-        await prismaClient.$connect();
+        await prisma.$connect();
         return true;
       } catch (error) {
         return false;
@@ -52,11 +52,13 @@ async function runPrismaCommands() {
     try {
         await waitForDatabase();
         // Run Prisma commands
-        const command = 'npx prisma db push --schema ./src/prisma/schema.prisma'
-        const command2 = 'npx prisma db pull --schema ./src/prisma/schema.prisma'
+        const command = "npx prisma migrate dev --name init  --schema ./src/prisma/schema.prisma"
+        const command2 = "npx prisma migrate dev --schema ./src/prisma/schema.prisma";
+        // const command = 'npx prisma db push --schema ./src/prisma/schema.prisma'
+        // const command2 = 'npx prisma db pull --schema ./src/prisma/schema.prisma'
         exec(command, (error, stdout, stderr) => {
         if (error) {
-            console.error('Error running Prisma commands:', error);
+            console.error('Error running Prisma commands to init:', error);
         } else {
             console.log(stdout);
             console.error(stderr);
@@ -64,7 +66,7 @@ async function runPrismaCommands() {
         });
         exec(command2, (error, stdout, stderr) => {
             if (error) {
-                console.error('Error running Prisma commands:', error);
+                console.error('Error running Prisma commands to migrate', error);
             } else {
                 console.log(stdout);
                 console.error(stderr);
