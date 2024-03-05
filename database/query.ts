@@ -5,13 +5,14 @@ const prisma = new PrismaClient()
 // TODO: add user permissions for Directory and Files
 
 // adding a new user
-async function addUser(email: string, name: string, password: string) {
+async function addUser(email: string, name: string, password: string, role: string) {
     try {
       const newUser = await prisma.user.create({
         data: {
           email,
           name,
           password,
+          role,
         },
       });
       console.log('User added:', newUser);
@@ -23,13 +24,14 @@ async function addUser(email: string, name: string, password: string) {
   }
   
   // creating a directory
-  async function addDirectory(directoryName: string, path: string, directoryParent: number) {
+  async function addDirectory(name: string, path: string, parentId: number, ownerId: number) {
     try {
       const newDir = await prisma.directory.create({
         data: {
-          directoryName,
+          name,
           path,
-          directoryParent,
+          parentId,
+          ownerId
         },
       });
       console.log('New Directory created:', newDir);
@@ -41,13 +43,15 @@ async function addUser(email: string, name: string, password: string) {
   }
 
   // creating a file
-  async function addFile(fileName: string, directoryParent: number, path: string) {
+  async function addFile(name: string, path: string, parentId: number, ownerId: number, fileContentId: number) {
     try {
       const newFile = await prisma.file.create({
         data: {
-          fileName,
-          directoryParent,
+          name,
           path,
+          parentId,
+          ownerId,
+          fileContentId
         },
       });
       console.log('New file created:', newFile);
@@ -57,6 +61,7 @@ async function addUser(email: string, name: string, password: string) {
       throw error;
     }
   }
+
   // reading contents of a directory
 
   // reading contents of a file
