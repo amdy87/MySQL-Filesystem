@@ -6,8 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     // Serve static files from the 'dist' directory
-    fs:{
+    fs: {
       strict: false,
     }
+  },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/utils/testSetup.js'],
+    globals: true
   }
 })
