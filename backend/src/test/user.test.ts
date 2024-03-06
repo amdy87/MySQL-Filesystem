@@ -1,5 +1,4 @@
 import request from 'supertest';
-import {Request, Response} from "express";
 import userData from './sample_data/users';
 import {WEB_DOMAIN} from "../utils/config";
 
@@ -38,7 +37,7 @@ describe('POST /api/user/login', () => {
         expect(response.status).toBe(200);
         const responseBody = response.body; // Extract the response body
         newUserId = responseBody.id;
-        }
+    }
     )
 
     it('Login using correct password', async () => {

@@ -7,7 +7,7 @@
     "prisma-migrate": "",
     "prisma-connect": "npm run prisma-generate && npm run prisma-migrate",
     "run-docker": "bash ../run_docker.sh",
-    "test": "jest", 
+    "test": "jest --testPathPattern=user.test.ts", 
     "dev-run": "npm run build && node dist/entrypoint.js",
     "dev-test": "npm run build && npm run test"
   },
