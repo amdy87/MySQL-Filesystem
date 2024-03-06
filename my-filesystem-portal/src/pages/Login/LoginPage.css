@@ -1,0 +1,55 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 150px;
+    background: aquamarine;
+    padding-bottom: 150px;
+
+}
+
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.text{
+    background: aquamarine;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.info{
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    background: azure;
+}
+
+.submit{
+    display: flex;
+    gap: 24px; 
+    margin: auto;
+}
+
+.button{
+    display: flex;
+    align-items: center;
+    color:azure;
+    background:aquamarine;
+    cursor: pointer;
+}
+
+.azure{
+    background: lightblue;
+    color: azure;
+}
