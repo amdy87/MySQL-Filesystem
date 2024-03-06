@@ -21,28 +21,28 @@ The customers for this software are the CS506 instructional staff and people nee
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| R01  |  Users should be able to create new files and directories where desired. |    | Open   |
-| R02  |  Users should be able to delete files and directories. |     | Open   |
-| R03  | Users should be able to move files to new locations or directories. |      | Open   |
-| R04  |  Users should be able to rename files and directories. |       | Open   |
-| R05  | Users should have an account associated with the file system they are using.|      | Open   |
-| R06  | There should be a GUI to display the files and how they are organized.|      | Open   |
-| R07  | The user should be able to login to an account. |      | Open   |
-| R08  | The user should be able to logout of an account. |      | Open   |
-| R09  | Users and files associated to one account/file system should not be able to access other accounts/file systems|      | Open   |
-| R10  | Users should be able to view the contents of a selected file. |      | Open   |
-| R11  | Users should be able to make basic edits to the contents of a file. |      | Open   |
-| R12  | Users should be able to view metadata about a selected file. |      | Open   |
-| R13  | Users should be able to edit the metadata of a selected file.|      | Open   |
-| R14  | System should be able to handle many different file systems and many files in each system. |      | Open   |
-| R15  | Users should be able to share/export files or directories. |      | Open   |
-| R16  | Users should be able to import a file from their local machine. |      | Open   |
-| R17  | Users should be able to organize the files how they want |      | Open   |
-| R18  | System should be able to sort the files if the user would like. |      | Open   |
-| R19  | System should store sensitive information securely |      | Open   |
-| R20  | Users should be able to rename their file system |      | Open   |
-| R21  | Users should be able to delete their account. |      | Open   |
-| R22  | Users should be able to restart their file system from scratch |      | Open   |
+| **R01**  |  Users should be able to create new files and directories where desired. |  high  | Open   |
+| **R02**  |  Users should be able to delete files and directories. |  high   | Open   |
+| **R03**  | Users should be able to move files to new locations or directories. |   high   | Open   |
+| **R04**  |  Users should be able to rename files and directories. |  medium     | Open   |
+| **R05**  | Users should have an account associated with the file system they are using.|  high    | Open   |
+| **R06**  | There should be a GUI to display the contents of a file and how they are organized.|   high   | Open   |
+| **R07**  | The user should be able to login to an account. |   high   | Open   |
+| **R08**  | The user should be able to logout of an account. |   high   | Open   |
+| **R09**  | Users and files associated to one account/file system should not be able to access file systems they do not have permission for|  high    | Open   |
+| **R10**  | Users should be able to view the contents of a selected file. |   medium   | Open   |
+| **R11**  | Users should be able to make basic edits to the contents of a file. |   low   | Open   |
+| **R12**  | Users should be able to view metadata about a selected file. |   medium   | Open   |
+| **R13**  | Users should be able to edit the metadata of a selected file.|  medium    | Open   |
+| **R14**  | System should be able to handle many different file systems and many files in each system. |   high   | Open   |
+| **R15**  | Users should be able to share/export files or directories. |  medium    | Open   |
+| **R16**  | Users should be able to import a file from their local machine. |  medium    | Open   |
+| **R17**  | System should be able to sort the files alphabetically by file name descending |   low   | Open   |
+| **R18**  | System should be able to sort the files alphabetically by file name ascending |    low  | Open   |
+| **R19**  | System should store sensitive information securely |   high   | Open   |
+| **R20**  | Users should be able to rename their file system |   low   | Open   |
+| **R21**  | Users should be able to delete their account. |   medium   | Open   |
+| **R22**  | Users should be able to restart their file system from scratch |  low    | Open   |
 
 ### User Stories
 
@@ -110,7 +110,7 @@ The customers for this software are the CS506 instructional staff and people nee
 > Once my username and password are entered, I then press the “login” button to login
 
 (U17)
-> If my login credentials are incorrect the system will display an error message.
+> If my login credentials are incorrect the system will display an error message and I will be prompted to enter the info again.
 
 ##### User Creation
 
@@ -151,6 +151,33 @@ The customers for this software are the CS506 instructional staff and people nee
 - User wants to export a file (U22)
 - User wants to import a new file to the system (U23-U24)
 
+### User-Requirements Tracability
+| Requirements  | User stories |
+| ------------  | ------------ |
+| [R01](#user-requirements) | [U01-U04](#file-creation)  |
+| [R02](#user-requirements) | [U05](#file-deletion)  |
+| [R04](#user-requirements) | [] |
+| [R03](#user-requirements) | [U12-U14](#navigation)  |
+| [R05](#user-requirements) | [U18-U21](#user-creation)|
+| [R06](#user-requirements) | [style](#user-interface-requirements) |
+| [R07](#user-requirements) | [U15-U17](#login)|
+| [R08](#user-requirements) | [] |
+| [R09](#user-requirements) | [permissions class](#class-diagram) |
+| [R10](#user-requirements) | [U07-U09](#file-reading) |
+| [R11](#user-requirements) | [] |
+| [R12](#user-requirements) | [U10-U11](#file-metadata) |
+| [R13](#user-requirements) | [](#file-metadata) |
+| [R14](#user-requirements) | [database](#database) |
+| [R15](#user-requirements) | [U22](#file-export) |
+| [R16](#user-requirements) | [U23-24](#file-import) |
+| [R17](#user-requirements) | [] |
+| [R18](#user-requirements) | [] |
+| [R19](#user-requirements) | [security](#security-requirements) |
+| [R20](#user-requirements) | [] |
+| [R21](#user-requirements) | [] |
+| [R22](#user-requirements) | [] |
+
+
 
 ### User Interface Requirements
 
@@ -166,6 +193,10 @@ The customers for this software are the CS506 instructional staff and people nee
 - Dialogs to guide users through use cases as necessary
 - File types are handled correctly
 - Navigation changes display
+
+**Style**
+
+![style](Resources/mainPageDesign.png)
 
 ### Security Requirements
 
@@ -490,7 +521,8 @@ This document outlined the code standard for writing our project: MySQL-based Fi
 ### Testing
 - Write unit tests for components using React Testing Library.
 - Test both the UI and interaction logic.
-- Maintain above 80% coverage
+- Each file will have associated unit test files
+- Maintain above 60% coverage
 
 # Typescript Standards
 
@@ -518,4 +550,6 @@ A file may have a @fileoverview JSDoc. It should provide a description of the fi
 
 ### Testing
 - Test that everything we need is being pulled from the database.
-- Maintain above 80% coverage
+- Maintain above 60% coverage
+- Each file will have associated unit test files for automated Testing
+- GUI will be tested manually to ensure correct functionality and desired appearance
