@@ -8,13 +8,35 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String?  @db.VarChar(255)
-  email    String   @unique(map: "email") @db.VarChar(255)
-  role     Role     @default(USER)
-  createAt DateTime @default(now()) @map("created_at")
-  password String
-  updateAt DateTime @updatedAt @map("updated_at")
+  id        Int        @id @default(autoincrement())
+  name      String?
+  email     String     @unique
+  role      Role       @default(USER)
+  createAt  DateTime   @default(now()) @map("created_at")
+  password  String?
+  updateAt  DateTime   @updatedAt @map("updated_at")
+  Directory Directory?
+  File      File?
+}
+
+model Directory {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  directoryName   String
+  directoryParent Int?
+  path            String
+  User            User      @relation(fields: [id], references: [id])
+}
+
+model File {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  fileName        String
+  directoryParent Int
+  path            String
+  User            User      @relation(fields: [id], references: [id])
 }
 
 enum Role {
