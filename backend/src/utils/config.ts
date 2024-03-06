@@ -1,4 +1,3 @@
-import errorHandler from "./errorHandler";
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -39,4 +38,3 @@ export enum Role {
 
 export const PORT = env.port || 3000;
 export const WEB_DOMAIN = env.WEB_DOMAIN;
-// export const userRole Role

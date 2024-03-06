@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 import {prisma} from "../entrypoint";
-import errorHandler from "../utils/errorHandler";
+import {errorHandler} from "../utils/errorHandler";
 
 
 const userControllers = {
@@ -30,7 +30,7 @@ const userControllers = {
     }},
 
     // Authenticate a user using email/password
-    signInWithPassword: async (req: Request, res: Response) => {
+    loginWithPassword: async (req: Request, res: Response) => {
         try {
             const {email, password} = req.body;
             const user = await prisma.user.findUnique({
@@ -43,31 +43,28 @@ const userControllers = {
                     password: true
                 }
             })
-
-            const userPassword: string = user && user.password ? user.password : "";
-
-            bcrypt.compare(password, userPassword, (err, result) => {
-                if (err) {
-                    const message: string = "Incorrect password";
-                    res.status(401);
-                    res.send(message);
-                }
-                
-                if (result) {
-                    res.json({"message": `${user?.name} LOG IN successfully`, 
-                                "user": user})
-                } else {
-                    console.log('Passwords do not match');
-                    // TODO: THROW ERROR
-                }
-            });
+            if(!user) {
+                throw errorHandler.UserNotFoundError("User does not exist, please signup")
+            }
+            const userPassword: string = user?.password || "";
+            const result = await bcrypt.compare(password, userPassword);
+            if (result) {
+                res.json({
+                  message: `${user?.name} LOG IN successfully`,
+                  user: user,
+                });
+            } else {
+                throw errorHandler.UnauthorizedError("Incorrect password");
+            }
 
         } catch (error: any) {
+            console.log("sldijfil: " + error.code);
             // Set generic error message on auth errors
             if (error.code === "P2015") {
                 const message: string = "A related User record could not be found.";
                 error = errorHandler.UserNotFoundError(message);
             }
+
             errorHandler.handleError(error, res);
         }},
 
@@ -83,7 +80,6 @@ const userControllers = {
             })
             res.send(user);
       } catch (error: any) {
-        // Set generic error message on auth errors
         if (error.code === "P2015") {
             const message: string = "A related User record could not be found.";
             error = errorHandler.UserNotFoundError(message);
