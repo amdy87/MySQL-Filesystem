@@ -1,4 +1,7 @@
-import errorHandler from "./errorHandler";
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Get environment variables
 const env = process.env;
@@ -34,4 +37,4 @@ export enum Role {
 // },
 
 export const PORT = env.port || 3000;
-// export const userRole Role
+export const WEB_DOMAIN = env.WEB_DOMAIN;
