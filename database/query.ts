@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Role } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 // TODO: add user permissions for Directory and Files
 
 // adding a new user
-async function addUser(email: string, name: string, password: string, role: string) {
+async function addUser(email: string, name: string, password: string, role: Role) {
     try {
       const newUser = await prisma.user.create({
         data: {email,name,password,role},
@@ -33,11 +33,12 @@ async function addUser(email: string, name: string, password: string, role: stri
   }
 
   // creating a file
-  async function addFile(name: string, path: string, parentId: number, ownerId: number, fileContentId: number) {
+  async function addFile(name: string, path: string, parentId: number, ownerId: number, content: string) {
     try {
       const newFile = await prisma.file.create({
-        data: {name,path,parentId,ownerId,fileContentId},
+        data: {name, path, parentId, ownerId, content},
       });
+     
       console.log('New file created');
       return newFile;
     } catch (error) {
@@ -46,21 +47,23 @@ async function addUser(email: string, name: string, password: string, role: stri
     }
   }
 
-  // reading contents of a directory
-  async function addFileContent(fileId: number, content: string) {
+  // reading contents of a file
+  async function readFile(userId: number) {
     try {
-      const newFileContent = await prisma.fileContent.create({
-        data: {fileId,content},
-      });
-      console.log('New file content created');
-      return newFileContent;
-    } catch (error) {
-      console.error('Error creating file:', error);
-      throw error;
-    }
+      const files = await prisma.file.findMany({
+        where: {
+          ownerId: userId,
+        },
+      })
+      console.log('read successfully');
+      return files;
+    } catch (e) {
+      console.error('Error reading contents:', e);
+      throw e;
+    } 
   }
 
-  // reading contents of a file
+  // updating contents of a file
 
   // deleting a directory
 
@@ -69,4 +72,4 @@ async function addUser(email: string, name: string, password: string, role: stri
   // deleting a user
 
 
-export {addUser, addDirectory, addFile, addFileContent}
+export {addUser, addDirectory, addFile, readFile}

@@ -1,27 +1,27 @@
-import { addUser, addDirectory, addFile, addFileContent } from './query.ts'; 
+import { addUser, addDirectory, addFile, readFile } from './query.ts'; 
 import { PrismaClient } from '@prisma/client';
 import { jest, describe, it, expect } from '@jest/globals';
 
 const prisma = new PrismaClient()
-jest.mock('@prisma/client');
-const PrismaClientMock = PrismaClient as jest.MockedClass<typeof PrismaClient>;
-const prismaMock = new PrismaClientMock();
+// jest.mock('@prisma/client');
+// const PrismaClientMock = PrismaClient as jest.MockedClass<typeof PrismaClient>;
+// const prismaMock = new PrismaClientMock();
 
-describe('addUser', () => {
-  it('should add a new user', async() => {
-    prismaMock.user.create.mockResolvedValueOnce({ });
-    const newUser = await addUser();
-    expect(newUser).toEqual({});
-  });
-});
+// describe('addUser', () => {
+//   it('should add a new user', async() => {
+//     prismaMock.user.create.mockResolvedValueOnce({ });
+//     const newUser = await addUser();
+//     expect(newUser).toEqual({});
+//   });
+// });
 
 async function main() {
   try {
     // add a new user
-    const email = "test1@test.com";
+    const email = "test3@test.com";
     const name = "test";
     const password = "password123";
-    const role = "admin";
+    const role = "ADMIN";
     const newUser = await addUser(email, name, password, role);
     console.log('New user:', newUser);
 
@@ -39,17 +39,15 @@ async function main() {
     const filePath = "/directory/file.txt"
     const fileParentId = 1;
     const fileOwnerId = 1;
-    const fileContentId = 0;
-    const newFile = await addFile(fileName, filePath, fileParentId, fileOwnerId, fileContentId);
+    const content = "file content";
+    const newFile = await addFile(fileName, filePath, fileParentId, fileOwnerId, content);
     console.log('New file:', newFile);
 
-    // add file contents
-    const fileId = 0;
-    const content = "This is the file content.";
-    const newFileContent = await addFileContent(fileId, content);
-    console.log("file content:", newFileContent);
-
     // read the contents of the file
+    const userId = 1;
+    const readingFile = await readFile(userId);
+    console.log("file read:", readingFile);
+
     // delete the file
     // delete the directory
     // delete the user

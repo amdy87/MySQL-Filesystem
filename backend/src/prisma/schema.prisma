@@ -41,6 +41,11 @@ model File {
   path            String
   parentId        Int
   ownerId         Int
-  fileContent     String
+}
+
+enum Permissions {
+  READ
+  WRITE
+  EXECUTE  
 }
 
