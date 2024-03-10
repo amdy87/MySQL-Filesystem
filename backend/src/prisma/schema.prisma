@@ -43,3 +43,9 @@ model File {
   ownerId         Int
 }
 
+enum Permissions {
+  READ
+  WRITE
+  EXECUTE  
+}
+
