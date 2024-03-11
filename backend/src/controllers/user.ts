@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
+import {Prisma} from "@prisma/client";
 import bcrypt from "bcrypt";
 
 import {prisma} from "../entrypoint";
 import {errorHandler} from "../utils/errorHandler";
-
 
 const userControllers = {
     // Create and register a User
