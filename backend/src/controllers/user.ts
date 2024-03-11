@@ -63,6 +63,7 @@ const userControllers = {
                     email: email,
                 },
                 select:{
+                    id: true,
                     name: true,
                     email: true,
                     password: true,
@@ -117,12 +118,13 @@ const userControllers = {
             const updatedUser = await prisma.user.update({
                 where: { id: userId },
                 data: {
+                    id: existingUser.id,
                     name: name || existingUser.name, // Update name if provided, otherwise keep existing value
                     email: email || existingUser.email, // Update email if provided, otherwise keep existing value
                     rootDirId: rootDirId || existingUser.rootDirId
                 }
             });
-            res.send(updatedUser);
+            res.send({user:updatedUser});
         } catch (error: any){
             if (error.code === "P2015") {
                 const message: string = "A related User record could not be found.";
@@ -144,7 +146,7 @@ const userControllers = {
                     id: userIdInt,
                 },
             })
-            res.send(user);
+            res.send({user: user});
       } catch (error: any) {
         if (error.code === "P2015") {
             const message: string = "A related User record could not be found.";

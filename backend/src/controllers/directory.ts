@@ -21,10 +21,11 @@ const controller = {
                     name: true,
                     path:true,
                     parentId: true,
-                    ownerId: true
+                    ownerId: true,
+                    permissions:true
                 }
             })
-            res.send(directories);
+            res.send({ownerId: userId, dirs: directories});
 
         } catch (error:any) {
             // if (error.code === "P2002") {
@@ -51,7 +52,6 @@ const controller = {
                 ownerId: ownerId
             }
             const result = await prisma.directory.create({data: directory});
-            // res.send(result);
             return result;
 
         } catch (error:any) {
@@ -79,8 +79,8 @@ const controller = {
                 path: path,
                 ownerId: ownerId
             }
-            const result = await prisma.directory.create({data: directory});
-            res.send(result);
+            const newDirectory = await prisma.directory.create({data: directory});
+            res.send({dir: newDirectory, message: "Successfully create a directory"});
 
         } catch (error:any) {
             if (error.code === "P2002") {
