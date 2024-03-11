@@ -5,16 +5,16 @@ const router = express.Router();
 
 
 /**
- * Get a list of all directories
+ * Get a list of all directories owned by a user
  * @route GET /dir/
- * @access ADMIN User
+ * @access Any User
  * 
  * @body
  *  @requires
  *  @field userId (int)
  */
 
-router.get("/dir", directoryControllers.getAllDirectory);
+router.get("/dir", directoryControllers.getDirectories);
 
 
 export default router;

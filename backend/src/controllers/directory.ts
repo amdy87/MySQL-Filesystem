@@ -1,39 +1,41 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
 
-import {Role} from "../utils/config";
+import {prisma} from "../entrypoint";
 import {errorHandler} from "../utils/errorHandler";
 
-const controller: any = {};
-import {prisma} from "../entrypoint";
-
-
-// Get a list of all directories if request user is an ADMIN
-controller.getAllDirectory = async (req: Request, res: Response) =>{
-    try{
-        const {userId} = req.body;
-        const user = await prisma.user.findUnique({
-            where:{
-                id: userId,
-            },
-            select:{
-                role: true,
+const controller = {
+    getDirectories: async (req: Request, res: Response) =>{
+        try{
+            const {userId} = req.body;
+            if (!userId) {
+                throw errorHandler.InvalidParamError('userId is missing in the request body');
             }
-        })
-        if(user?.role == Role.ADMIN) {
-            const directories = await prisma.directory.findMany();
+            const directories = await prisma.directory.findMany({
+                where:{
+                    ownerId: userId,
+                },
+                select:{
+                    id: true,
+                    createdAt: true,
+                    updatedAt:true,
+                    name: true,
+                    path:true,
+                    parentId: true,
+                    ownerId: true
+                }
+            })
             res.send(directories);
-        }else {
-            res.send("User has no authorization to get all directories");
+
+        } catch (error:any) {
+            // if (error.code === "P2002") {
+            // const message = "User with the same email already exists.";
+            // error = errorHandler.DuplicationError(message);
+            // }
+            errorHandler.handleError(error, res);
         }
-    } catch (error:any) {
-        if (error.code === "P2002") {
-        const message = "User with the same email already exists.";
-        error = errorHandler.DuplicationError(message);
-        }
-        errorHandler.handleError(error, res);
     }
-};
+
+}
 
 
 export default controller;
