@@ -3,6 +3,7 @@ import path from 'path';
 
 import userRoutes from './routes/user';
 import directoryRoutes from "./routes/directory";
+import permissionRoutes from "./routes/permission";
 import { apiRoutes } from './routes/api';
 
 const app = express();
@@ -16,6 +17,7 @@ app.get('/index.html', (req, res) => {
 });
 
 app.use("/api/dir", directoryRoutes);
+app.use("/api/permission", permissionRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api", apiRoutes);
 
