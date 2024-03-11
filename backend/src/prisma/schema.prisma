@@ -7,40 +7,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
-  name      String?
-  password  String?
-  file      File?
-  role     Role     @default(USER)
-  directories Directory[]
-  createAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
-}
-
-model Directory {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime? @default(now())
-  directoryName   String
-  directoryParent Int?
-  path            String
-  userId          User?     @relation(fields: [id], references: [id])
-}
-
-model File {
-  id              Int      @id @default(autoincrement())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime? @default(now())
-  fileName        String
-  directoryParent Int
-  path            String
-  ownerId          User?     @relation(fields: [id], references: [id])
-}
-
 
 enum Role {
   ADMIN
   USER
 }
+
+enum Permissions {
+  READ
+  WRITE
+  EXECUTE  
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime? @default(now())
+  email     String      @unique
+  name      String
+  password  String
+  role      Role        @default(USER)
+}
+
+
+model File {
+  id              Int       @id @default(autoincrement())
+  content         String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  name            String
+  path            String
+  parentId        Int
+  ownerId         Int
+}
+
+
+
+model Directory {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  name            String    
+  path            String
+  parentId        Int?
+  ownerId         Int
+}
+

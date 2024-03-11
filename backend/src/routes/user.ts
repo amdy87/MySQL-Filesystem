@@ -44,7 +44,7 @@ router.post("/signup", userControllers.signUp);
  *  @field password (String)
  *  @desc User provided password
  */
-router.post("/login", userControllers.signInWithPassword);
+router.post("/login", userControllers.loginWithPassword);
 
 /**
  * Delete a user profile
