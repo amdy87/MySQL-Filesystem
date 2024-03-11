@@ -26,6 +26,7 @@ model User {
   email     String      @unique
   name      String
   password  String
+  rootDirId Int?
   role      Role        @default(USER)
 }
 
