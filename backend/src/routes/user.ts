@@ -47,6 +47,30 @@ router.post("/signup", userControllers.signUp);
 router.post("/login", userControllers.loginWithPassword);
 
 /**
+ * Update a user record
+ * @route POST /user/update
+ * @access Everyone
+ * 
+ * @body
+ *  @required
+ *  @field userId (int)
+ *  @desc User id
+ * 
+ *  @optional
+ *  @field email (String)
+ *  @desc User new email
+ * 
+ *  @optional
+ *  @field name (String)
+ *  @desc User new name
+ * 
+ *  @optional
+ *  @field rootDirId (int)
+ *  @desc id of the root direcotry owned by user
+ */
+router.post("/update", userControllers.updateUserById);
+
+/**
  * Delete a user profile
  * @route DELETE /users/delete/:id
  * @access Authenticated user

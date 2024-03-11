@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import {Prisma} from "@prisma/client";
+import {Prisma, PermissionType} from "@prisma/client";
+
 import {prisma} from "../entrypoint";
 import {errorHandler} from "../utils/errorHandler";
 
@@ -10,6 +11,7 @@ const controller = {
             if (!userId) {
                 throw errorHandler.InvalidParamError('userId is missing in the request body');
             }
+
             const directories = await prisma.directory.findMany({
                 where:{
                     ownerId: userId,
@@ -44,12 +46,34 @@ const controller = {
                 throw errorHandler.InvalidParamError('ownerId');
             }
 
+            // Check if user exists
+            const existingUser = await prisma.user.findUnique({
+                where: {id: ownerId }
+            });
+
+            // TODO: Check uniqueness of root dir
+
+            if (!existingUser) {
+                throw errorHandler.UserNotFoundError("User does not exist");
+            }
+            // Retrieve existing permission records from the database
+            const existingPermissions = await prisma.permission.findMany({
+                where: {
+                type: {
+                    in: [PermissionType.READ, PermissionType.WRITE, PermissionType.EXECUTE],
+                },
+                },
+            });
+
             let directory: Prisma.DirectoryCreateInput;
             directory = {
                 name: name,
                 parentId: null,
                 path: path,
-                ownerId: ownerId
+                ownerId: ownerId,
+                permissions: {
+                    connect: existingPermissions.map(permission => ({ id: permission.id })),
+                },
             }
             const result = await prisma.directory.create({data: directory});
             return result;
@@ -69,6 +93,16 @@ const controller = {
             if (!ownerId) {
                 throw errorHandler.InvalidParamError('ownerId');
             }
+
+            // Check if user exists
+            const existingUser = await prisma.user.findUnique({
+                where: {id: ownerId }
+            });
+
+            if (!existingUser) {
+                throw errorHandler.UserNotFoundError("User does not exist");
+            }
+
             if (!parentId) {
                 throw errorHandler.InvalidParamError('parentId');
             }
