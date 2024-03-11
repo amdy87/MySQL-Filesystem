@@ -37,7 +37,8 @@ export const errorHandler = {
      * @return InvalidParamError
      */
     InvalidParamError: (param: string) => {
-      return { name: ERROR.InvalidParamError, status: 400, param };
+        const message: string = `${param} is invalid or missing in the body`;
+      return { name: ERROR.InvalidParamError, status: 400, message };
     },
     /**
      * Thrown when a document with duplicate
@@ -81,7 +82,7 @@ export const errorHandler = {
     },
 
     handleError: (error: Error, res: Response) => {
-        console.log("errorHandler: 84 ->" + error.status);
+        console.log("errorHandler: 84 ->" + error);
         res.status(error.status);
         res.send(error.message);
     }

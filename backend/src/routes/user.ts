@@ -10,15 +10,15 @@ const router = express.Router();
  * 
  * @body
  *  @requires
- *  @field name (String)
+ *  @field name (string)
  *  @desc User name
  * 
  *  @requires
- *  @field email (String)
+ *  @field email (string)
  *  @desc User email
  * 
  *  @requires
- *  @field password (String)
+ *  @field password (string)
  *  @desc User password
  *  * Password must:
  *  * contain at least an uppercase letter

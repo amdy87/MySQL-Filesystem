@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { Prisma, PrismaClient } from "@prisma/client";
+import {Prisma} from "@prisma/client";
 import bcrypt from "bcrypt";
 
 import {prisma} from "../entrypoint";
+import directoryController from "./directory";
 import {errorHandler} from "../utils/errorHandler";
-
 
 const userControllers = {
     // Create and register a User
@@ -19,8 +19,33 @@ const userControllers = {
             email: email, 
             password: hashedPassword
         }
-        const result = await prisma.user.create({ data: user })
-        res.send(result);
+        const newUser = await prisma.user.create({ data: user })
+        // Create a root directory for new user
+        const addRootDirRequest = Object.assign({}, req, {
+            ...req,
+            body: {
+                "name": "root",
+                "path": "",
+                "ownerId": newUser.id
+            // Add or modify properties as needed
+            },
+        }) as Request;
+        const newRootDir = await directoryController.addRootDirectory(addRootDirRequest, res);
+        if(!newRootDir) {
+            throw errorHandler.ForbiddenError("Root directory creation failed");
+        }
+        // Create a root directory for new user
+        const updateUserRequest = Object.assign({}, req, {
+            ...req,
+            body: {
+                "userId": newUser.id,
+                "rootDirId": newRootDir.id
+            // Add or modify properties as needed
+            },
+        }) as Request;
+        // Update user's rootDirId field
+        userControllers.updateUserById(updateUserRequest, res);
+
     } catch (error:any) {
         if (error.code === "P2002") {
         const message = "User with the same email already exists.";
@@ -40,7 +65,9 @@ const userControllers = {
                 select:{
                     name: true,
                     email: true,
-                    password: true
+                    password: true,
+                    rootDirId: true,
+                    
                 }
             })
             if(!user) {
@@ -58,7 +85,6 @@ const userControllers = {
             }
 
         } catch (error: any) {
-            console.log("sldijfil: " + error.code);
             // Set generic error message on auth errors
             if (error.code === "P2015") {
                 const message: string = "A related User record could not be found.";
@@ -67,6 +93,46 @@ const userControllers = {
 
             errorHandler.handleError(error, res);
         }},
+
+    // Update User information
+    updateUserById: async (req: Request, res: Response) =>{
+        try{
+
+            // Extract updated user data from request body
+            const { name, email, userId, rootDirId } = req.body;
+            
+            if (!userId) {
+                throw errorHandler.InvalidParamError("userId");
+            }
+
+            // Check if user exists
+            const existingUser = await prisma.user.findUnique({
+                where: {id: userId }
+            });
+
+            if (!existingUser) {
+                throw errorHandler.UserNotFoundError("User does not exist");
+            }
+            // Update user record in the database
+            const updatedUser = await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    name: name || existingUser.name, // Update name if provided, otherwise keep existing value
+                    email: email || existingUser.email, // Update email if provided, otherwise keep existing value
+                    rootDirId: rootDirId || existingUser.rootDirId
+                }
+            });
+            res.send(updatedUser);
+        } catch (error: any){
+            if (error.code === "P2015") {
+                const message: string = "A related User record could not be found.";
+                error = errorHandler.UserNotFoundError(message);
+            }
+            console.log(error);
+            errorHandler.handleError(error, res);
+        }
+
+    },
 
     // Delete a user with the specified id and all related data
     deleteUserById: async (req: Request, res: Response) => {
