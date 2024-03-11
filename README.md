@@ -42,7 +42,7 @@ The customers for this software are the CS506 instructional staff and people nee
 | **R19**  | System should store sensitive information securely |   high   | Open   |
 | **R20**  | Users should be able to rename their file system |   low   | Open   |
 | **R21**  | Users should be able to delete their account. |   medium   | Open   |
-| **R22**  | Users should be able to restart their file system from scratch |  low    | Open   |
+| **R22**  | Users should be able to access documentation about how the system is designed |  high    | Open   |
 
 ### User Stories
 
@@ -89,6 +89,15 @@ The customers for this software are the CS506 instructional staff and people nee
 
 (U11)
 > When the "options" dialog is open, I click the properties button and the "properties" dialog appears displaying the metadata of the file.
+
+(U38)
+> To edit the metadata I press the edit button on the options dialog
+
+(U39)
+> After making the edits I press the confirm button to save my edits to the metadata
+
+(U40)
+> I press the cancel button to discard any changes I made
 
 ##### Navigation
 
@@ -138,6 +147,52 @@ The customers for this software are the CS506 instructional staff and people nee
 (U24) 
 >I drag the desired file into the window or search for it using the access file dialog and it is imported into the current directory.
 
+##### File Renaming
+(U25)
+> To rename a file, I press the "rename file" button when the file is selected and am prompted with the "rename file" dialog
+
+(U26)
+> I enter the new file name into the entry box and press confirm to rename a file
+
+(U27)
+> To cancel file creation, I press the cancel button in the "rename file" dialog
+
+##### logout
+(U28)
+> To logout, I press the logout button on the homepage and am prompted with the "confirm logout" dialog
+
+(U29)
+> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage
+
+
+##### File sorting
+(U30)
+> To sort the files alphabetically descending, I press the sort button
+
+(U31)
+> To sort the files alphabetically ascending, I press the sort button after the files are sorted alphabetically descending
+
+##### Project Documentation
+(U32)
+> To understand how the system works, I access the project README.md file 
+
+##### File System Renaming
+(U33)
+> To rename the file system, I press the edit file system name button next to the file system name and I am prompted with the rename file system dialog
+
+(U34)
+> In the rename file system dialog, I enter the new name into the prompt and press confirm to rename the file system or cancel to return
+
+##### Account Deletion
+(U35)
+> To delete my account, I press the delete account button
+
+(U36)
+> I am prompted with the confirm account deletion dialog
+
+(U37)
+> I press the confirm button on the account deletion dialog to delete my account or the cancel button to return
+
 ### Use Cases
 
 - User wants to add a file (U01 - U04)
@@ -156,26 +211,26 @@ The customers for this software are the CS506 instructional staff and people nee
 | ------------  | ------------ |
 | [R01](#user-requirements) | [U01-U04](#file-creation)  |
 | [R02](#user-requirements) | [U05](#file-deletion)  |
-| [R04](#user-requirements) | [] |
+| [R04](#user-requirements) | [U25-U27](#file-renaming) |
 | [R03](#user-requirements) | [U12-U14](#navigation)  |
 | [R05](#user-requirements) | [U18-U21](#user-creation)|
-| [R06](#user-requirements) | [style](#user-interface-requirements) |
+| [R06](#user-requirements) | [Style](#user-interface-requirements) |
 | [R07](#user-requirements) | [U15-U17](#login)|
-| [R08](#user-requirements) | [] |
-| [R09](#user-requirements) | [permissions class](#class-diagram) |
+| [R08](#user-requirements) | [U27-U28](#logout) |
+| [R09](#user-requirements) | [Permissions Class](#class-diagram) |
 | [R10](#user-requirements) | [U07-U09](#file-reading) |
 | [R11](#user-requirements) | [] |
 | [R12](#user-requirements) | [U10-U11](#file-metadata) |
-| [R13](#user-requirements) | [](#file-metadata) |
-| [R14](#user-requirements) | [database](#database) |
+| [R13](#user-requirements) | [U38-U40](#file-metadata) |
+| [R14](#user-requirements) | [Database](#database) |
 | [R15](#user-requirements) | [U22](#file-export) |
-| [R16](#user-requirements) | [U23-24](#file-import) |
-| [R17](#user-requirements) | [] |
-| [R18](#user-requirements) | [] |
-| [R19](#user-requirements) | [security](#security-requirements) |
-| [R20](#user-requirements) | [] |
-| [R21](#user-requirements) | [] |
-| [R22](#user-requirements) | [] |
+| [R16](#user-requirements) | [U23-U24](#file-import) |
+| [R17](#user-requirements) | [U30](#file-sorting) |
+| [R18](#user-requirements) | [U31](#file-sorting) |
+| [R19](#user-requirements) | [Security](#security-requirements) |
+| [R20](#user-requirements) | [U33-U34](#file-system-renaming) |
+| [R21](#user-requirements) | [U35-U37](#account-deletion) |
+| [R22](#user-requirements) | [U32](#project-documentation) |
 
 
 
