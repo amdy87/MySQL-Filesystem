@@ -1,7 +1,7 @@
 
 import './LoginPage.css'
 import React, { useState } from 'react'
-import { Header } from '../../components'
+import { Header } from '@components'
 import { Button, Container, Row, Col, Form } from "react-bootstrap"
 import { useNavigate } from 'react-router-dom';
 
