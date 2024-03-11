@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Navbar, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import mysqllogo from '../../assets/mysqllogo.jpg'
+import mysqllogo from '@assets/mysqllogo.jpg'
 export default function Header({ username }) {
 
     const navigate = useNavigate();
