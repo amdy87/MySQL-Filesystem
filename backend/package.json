@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "prisma-generate": "npx prisma generate --schema ./src/prisma/schema.prisma",
-    "prisma-migrate": "",
-    "prisma-connect": "npm run prisma-generate && npm run prisma-migrate",
-    "run-docker": "bash ../run_docker.sh",
-    "test": "jest --testPathPattern=user.test.ts", 
+    "prisma-generate": "npx prisma generat",
+    "prisma-migrate-init": "npx prisma migrate dev --name init",
+    "prisma-migrate-dev": "npx prisma migrate de",
+    "prisma-connect": "npm run prisma-generate && npm run prisma-migrate-init && npm run prisma-migrate-dev",
+    "test": "jest --testPathPattern=user.test.ts",
     "dev-run": "npm run build && node dist/entrypoint.js",
     "dev-test": "npm run build && npm run test"
+  },
+  "prisma": {
+     "seed": "ts-node ./prisma/seeds/seed.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

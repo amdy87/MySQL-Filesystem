@@ -10,15 +10,15 @@ const router = express.Router();
  * 
  * @body
  *  @requires
- *  @field name (String)
+ *  @field name (string)
  *  @desc User name
  * 
  *  @requires
- *  @field email (String)
+ *  @field email (string)
  *  @desc User email
  * 
  *  @requires
- *  @field password (String)
+ *  @field password (string)
  *  @desc User password
  *  * Password must:
  *  * contain at least an uppercase letter
@@ -45,6 +45,30 @@ router.post("/signup", userControllers.signUp);
  *  @desc User provided password
  */
 router.post("/login", userControllers.loginWithPassword);
+
+/**
+ * Update a user record
+ * @route POST /user/update
+ * @access Everyone
+ * 
+ * @body
+ *  @required
+ *  @field userId (int)
+ *  @desc User id
+ * 
+ *  @optional
+ *  @field email (String)
+ *  @desc User new email
+ * 
+ *  @optional
+ *  @field name (String)
+ *  @desc User new name
+ * 
+ *  @optional
+ *  @field rootDirId (int)
+ *  @desc id of the root direcotry owned by user
+ */
+router.post("/update", userControllers.updateUserById);
 
 /**
  * Delete a user profile
