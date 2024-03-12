@@ -5,6 +5,7 @@ import userRoutes from './routes/user';
 import directoryRoutes from "./routes/directory";
 import permissionRoutes from "./routes/permission";
 import { apiRoutes } from './routes/api';
+import { filesRouter } from './routes/file';
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use("/api/dir", directoryRoutes);
 app.use("/api/permission", permissionRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api", apiRoutes);
+app.use("/api/file", filesRouter);
 
 export default app
