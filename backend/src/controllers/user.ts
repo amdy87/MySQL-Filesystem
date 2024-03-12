@@ -87,7 +87,7 @@ const userControllers = {
 
         } catch (error: any) {
             // Set generic error message on auth errors
-            if (error.code === "P2015") {
+            if (error.code === "P2025") {
                 const message: string = "A related User record could not be found.";
                 error = errorHandler.UserNotFoundError(message);
             }
@@ -126,7 +126,7 @@ const userControllers = {
             });
             res.send({user:updatedUser});
         } catch (error: any){
-            if (error.code === "P2015") {
+            if (error.code === "P2025") {
                 const message: string = "A related User record could not be found.";
                 error = errorHandler.UserNotFoundError(message);
             }
@@ -146,9 +146,11 @@ const userControllers = {
                     id: userIdInt,
                 },
             })
+            //  TODO: Delete related directory and files
             res.send({user: user});
       } catch (error: any) {
-        if (error.code === "P2015") {
+        console.log(error);
+        if (error.code === "P2025") {
             const message: string = "A related User record could not be found.";
             error = errorHandler.UserNotFoundError(message);
             }
