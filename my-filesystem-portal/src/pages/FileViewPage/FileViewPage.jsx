@@ -31,6 +31,7 @@ export default function FileViewPage() {
                     currentDir = currentDir.directories.find(dir => dir.name === tree.path[i]);
                 }
             }
+            console.log(currentDir)
             files.push({
                 fileName: ".",
                 fileType: "directory",
@@ -80,6 +81,14 @@ export default function FileViewPage() {
         });
     }
 
+    const jumpDirectory = (index) => {
+        const path = tree.path.slice(0, index + 1);
+        setTree({
+            path: path,
+            files: tree.files
+        });
+    }
+
 
 
 
@@ -95,9 +104,9 @@ export default function FileViewPage() {
             {
                 tree ? tree.path.map((path, i) => {
                     if (i != tree.path.length - 1) {
-                        return <Breadcrumb.Item>{path}</Breadcrumb.Item>
+                        return <Breadcrumb.Item key={i} onClick={() => jumpDirectory(i)}>{path}</Breadcrumb.Item>
                     } else {
-                        return <Breadcrumb.Item active>{path}</Breadcrumb.Item>
+                        return <Breadcrumb.Item key={i} active>{path}</Breadcrumb.Item>
                     }
                 })
                     :
