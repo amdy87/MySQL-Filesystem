@@ -13,20 +13,21 @@ services:
       MYSQL_DATABASE: db
 
   frontend:
-    image: my_filesystem_portal
-    build: ./my-filesystem-portal
+    image: my-filesystem-portal:latest
+    build: 
+      context: ./my-filesystem-portal
+      args:
+        - MYFILESYSTEM_BACKEND_HOST=localhost
     ports:
       - 80:80
-    volumes:
-      - frontend-dist:/usr/share/nginx/my_filesystem/
+      
 
   server:
+    hostname: server
     build:
       context: ./backend
     ports:
       - 3000:3000
-    volumes:
-      - frontend-dist:/app/frontend-dist  # Mount frontend build output directory
     environment:
       - DATABASE_URL=mysql://root:password@db:3306/db
     depends_on:
@@ -37,5 +38,6 @@ services:
     restart: always
     ports:
       - 8080:8080
+
 volumes:
   frontend-dist:
