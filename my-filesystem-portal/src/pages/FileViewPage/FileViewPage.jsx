@@ -8,6 +8,7 @@ export default function FileViewPage() {
 
     const [tree, setTree] = useState();
     const [displayedFiles, setDisplayedFiles] = useState();
+    const [username, setUsername] = useState();
 
     useEffect(() => {
         getFileTree().then((data) => {
@@ -16,6 +17,8 @@ export default function FileViewPage() {
                 files: data
             })
         });
+
+        setUsername(localStorage.getItem("username"));
     }, [])
 
     useEffect(() => {
@@ -81,7 +84,7 @@ export default function FileViewPage() {
 
 
     return <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-        <Header style={{ width: 50 }} username={"Boyan Sun"}></Header>
+        <Header style={{ width: 50 }} username={username}></Header>
         <Row>
             <Col className='m-3'><h1>{"Boyan Sun" + "'s FileSystem"}</h1></Col>
             <Col md="auto" className='m-3'>
