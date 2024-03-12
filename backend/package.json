@@ -12,7 +12,7 @@
     "dev-test": "npm run build && npm run test"
   },
   "prisma": {
-     "seed": "ts-node ./prisma/seeds/seed.ts"
+    "seed": "ts-node ./prisma/seeds/seed.ts"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -20,6 +20,7 @@
     "@types/jest": "^29.5.12",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
+    "prettier": "3.2.5",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",

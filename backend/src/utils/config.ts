@@ -6,11 +6,10 @@ dotenv.config();
 // Get environment variables
 const env = process.env;
 
-
 // // ENUMS
 export enum Role {
-    USER = "USER",
-    ADMIN = "ADMIN"
+  USER = 'USER',
+  ADMIN = 'ADMIN',
 }
 
 // export validate: function (value) {
