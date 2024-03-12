@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PermissionType {
+  READ
+  WRITE
+  EXECUTE
+}
+
+model Permission {
+  id          Int             @id @default(autoincrement())
+  type        PermissionType
+  directory   Directory[]    @relation("DirectoryPermissions")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime? @default(now())
+  email     String      @unique
+  name      String
+  password  String
+  rootDirId Int?
+  role      Role        @default(USER)
+}
+
+
+model File {
+  id              Int       @id @default(autoincrement())
+  content         String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  name            String
+  path            String
+  parentId        Int
+  ownerId         Int
+}
+
+
+
+model Directory {
+  id              Int       @id @default(autoincrement())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @default(now())
+  name            String    
+  path            String
+  parentId        Int?
+  ownerId         Int
+  permissions     Permission[]  @relation("DirectoryPermissions")
+}
+
