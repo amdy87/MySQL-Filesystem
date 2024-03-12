@@ -1,4 +1,4 @@
-import { Container, Table, Row, Button, Col } from 'react-bootstrap';
+import { Breadcrumb, Container, Table, Row, Button, Col } from 'react-bootstrap';
 import { Header, FileTableRow } from '@components'
 import { useEffect, useState } from 'react';
 import { getFileTree } from '@api/file';
@@ -21,18 +21,27 @@ export default function FileViewPage() {
     useEffect(() => {
         if (tree) {
             let files = [];
-            let currentDir = tree.files;
+            let currentDir = tree.files, parentDir = null;
             for (let i = 1; i < tree.path.length; i++) {
                 if (currentDir.directories) {
+                    parentDir = currentDir;
                     currentDir = currentDir.directories.find(dir => dir.name === tree.path[i]);
                 }
             }
             files.push({
                 fileName: ".",
-                fileType: "directories",
+                fileType: "directory",
                 permissions: currentDir.metadata.perms,
                 updatedAt: currentDir.metadata.updatedAt
             })
+            if(tree.path.length > 1){
+                files.push({
+                    fileName: "..",
+                    fileType: "directory",
+                    permissions: parentDir.metadata.perms,
+                    updatedAt: parentDir.metadata.updatedAt
+                })
+            }
             files = files.concat(currentDir.directories.map((dir) => {
                 return {
                     fileName: dir.name,
@@ -54,6 +63,20 @@ export default function FileViewPage() {
         }
     }, [tree])
 
+    const clickDirectory = (name) => {
+        const path = tree.path;
+        console.log(name)
+        if(name === ".."){
+            path.pop()
+        }else{
+            path.push(name);
+        }
+        setTree({
+            path: path,
+            files: tree.files
+        });
+    }
+
 
 
 
@@ -65,6 +88,19 @@ export default function FileViewPage() {
                 <Button>AddFile</Button>
             </Col>
         </Row>
+        <Breadcrumb className='m-3'>
+            {
+                tree ? tree.path.map((path, i) => {
+                    if (i != tree.path.length - 1) {
+                        return <Breadcrumb.Item>{path}</Breadcrumb.Item>
+                    } else {
+                        return <Breadcrumb.Item active>{path}</Breadcrumb.Item>
+                    }
+                })
+                    :
+                    <></>
+            }
+        </Breadcrumb>
         <Container fluid style={{ height: 'calc(100vh - 100px)' }}>
             <Table striped bordered hover>
                 <thead>
@@ -79,8 +115,10 @@ export default function FileViewPage() {
                 <tbody>
                     {
                         displayedFiles ? displayedFiles.map((file) => {
-                            return <FileTableRow {...file}></FileTableRow>
-                        }) : <></>
+                            return <FileTableRow {...file} clickDirectory={clickDirectory}></FileTableRow>
+                        })
+                            :
+                            null
                     }
                 </tbody>
             </Table>
