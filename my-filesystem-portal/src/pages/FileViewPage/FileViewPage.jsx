@@ -25,6 +25,7 @@ export default function FileViewPage() {
         if (tree) {
             let files = [];
             let currentDir = tree.files, parentDir = null;
+            // look for the current directory by the path stack
             for (let i = 1; i < tree.path.length; i++) {
                 if (currentDir.directories) {
                     parentDir = currentDir;
@@ -38,6 +39,7 @@ export default function FileViewPage() {
                 permissions: currentDir.metadata.perms,
                 updatedAt: currentDir.metadata.updatedAt
             })
+            // add the parent directory if not in the root
             if(tree.path.length > 1){
                 files.push({
                     fileName: "..",
