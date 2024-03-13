@@ -1,7 +1,7 @@
-import { Metadata } from "./metadata"
+import { Metadata } from './metadata';
 
 export interface DbFile {
-    name: string;
-    content?: string;
-    metadata: Metadata;
+  name: string;
+  content?: string;
+  metadata: Metadata;
 }
