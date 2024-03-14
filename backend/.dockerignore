@@ -4,4 +4,3 @@ node_modules
 dist
 src/test/
 .env
-src/prisma/migrations

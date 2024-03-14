@@ -29,13 +29,9 @@ const controller = {
           permissions: true,
         },
       });
-      res.send({ ownerId: userId, dirs: directories });
+      res.status(201)
+        .send({ ownerId: userId, dirs: directories });
     } catch (error: any) {
-      // if (error.code === "P2002") {
-      // const message = "User with the same email already exists.";
-      // error = errorHandler.DuplicationError(message);
-      // }
-      console.log(error.code);
       errorHandler.handleError(error, res);
     }
   },
@@ -120,10 +116,11 @@ const controller = {
         ownerId: ownerId,
       };
       const newDirectory = await prisma.directory.create({ data: directory });
-      res.send({
-        dir: newDirectory,
-        message: 'Successfully create a directory',
-      });
+      res.status(201)
+          .send({
+              dir: newDirectory,
+              message: 'Successfully create a directory',
+            });
     } catch (error: any) {
       if (error.code === 'P2002') {
         // TODO: Check with DB, does DB handle this correctly

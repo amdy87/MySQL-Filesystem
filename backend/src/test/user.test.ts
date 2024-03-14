@@ -1,9 +1,9 @@
 import request from 'supertest';
 import userData from './sample_data/users';
-import { WEB_DOMAIN } from '../utils/config';
+import { BACKEND_DOMAIN } from '../utils/config';
 
-const url = `${WEB_DOMAIN}/api`;
-describe(`POST ${WEB_DOMAIN}/api/user/signup`, () => {
+const url = `${BACKEND_DOMAIN}/api`;
+describe(`POST ${BACKEND_DOMAIN}/api/user/signup`, () => {
   var new_ids: any[] = [];
   it('Insert all user from userData', async () => {
     for (const user of userData) {

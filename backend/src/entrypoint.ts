@@ -55,9 +55,8 @@ async function runPrismaCommands() {
   try {
     await waitForDatabase();
     // Run Prisma commands
-    const command = 'npx prisma migrate dev --name init';
-    const command2 = 'npx prisma migrate de';
-    const command3 = 'npx prisma db seed';
+    const command = 'npx prisma migrate dev --skip-seed flag';
+    const command2 = 'npx prisma db seed';
     exec(command, (error, stdout, stderr) => {
       if (error) {
         console.error('Error running Prisma commands to init:', error);
@@ -68,15 +67,10 @@ async function runPrismaCommands() {
     });
     exec(command2, (error, stdout, stderr) => {
       if (error) {
-        console.error('Error running Prisma commands to migrate', error);
-      } else {
-        console.log(stdout);
-        console.error(stderr);
-      }
-    });
-    exec(command3, (error, stdout, stderr) => {
-      if (error) {
-        console.error('Error running Prisma seed', error);
+        console.error(
+          'Error running Prisma commands to add initial db records',
+          error,
+        );
       } else {
         console.log(stdout);
         console.error(stderr);

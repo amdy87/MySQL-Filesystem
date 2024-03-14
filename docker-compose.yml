@@ -1,10 +1,9 @@
 version: '3.8'
 
 services:
-
   db:
     image: mysql/mysql-server:latest
-    # restart: always
+    restart: always
     ports:
       - 53306:3306
     environment:
@@ -14,13 +13,12 @@ services:
 
   frontend:
     image: my-filesystem-portal:latest
-    build: 
+    build:
       context: ./my-filesystem-portal
       args:
         - MYFILESYSTEM_BACKEND_HOST=localhost
     ports:
       - 80:80
-      
 
   server:
     hostname: server
@@ -30,14 +28,9 @@ services:
       - 3000:3000
     environment:
       - DATABASE_URL=mysql://root:password@db:3306/db
-    depends_on:
-      - db
-      
+
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-
-volumes:
-  frontend-dist:

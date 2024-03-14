@@ -78,7 +78,6 @@ export const errorHandler = {
   },
 
   handleError: (error: Error, res: Response) => {
-    console.log('errorHandler: 84 ->' + error);
     res.status(error.status);
     res.send(error.message);
   },

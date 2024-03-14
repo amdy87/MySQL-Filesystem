@@ -30,6 +30,7 @@ const userControllers = {
           // Add or modify properties as needed
         },
       }) as Request;
+
       const newRootDir = await directoryController.addRootDirectory(
         addRootDirRequest,
         res,
@@ -47,117 +48,13 @@ const userControllers = {
         },
       }) as Request;
       // Update user's rootDirId field
-      userControllers.updateUserById(updateUserRequest, res);
+      await userControllers.updateUserById(updateUserRequest, res);
     } catch (error: any) {
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
         error = errorHandler.DuplicationError(message);
-        }
-        errorHandler.handleError(error, res);
-    }},
-
-    // Authenticate a user using email/password
-    loginWithPassword: async (req: Request, res: Response) => {
-        try {
-            const {email, password} = req.body;
-            const user = await prisma.user.findUnique({
-                where:{
-                    email: email,
-                },
-                select:{
-                    id: true,
-                    name: true,
-                    email: true,
-                    password: true,
-                    rootDirId: true,
-                    
-                }
-            })
-            if(!user) {
-                throw errorHandler.UserNotFoundError("User does not exist, please signup")
-            }
-            const userPassword: string = user?.password || "";
-            const result = await bcrypt.compare(password, userPassword);
-            if (result) {
-                res.json({
-                  message: `${user?.name} LOG IN successfully`,
-                  user: user,
-                });
-            } else {
-                throw errorHandler.UnauthorizedError("Incorrect password");
-            }
-
-        } catch (error: any) {
-            // Set generic error message on auth errors
-            if (error.code === "P2025") {
-                const message: string = "A related User record could not be found.";
-                error = errorHandler.UserNotFoundError(message);
-            }
-
-            errorHandler.handleError(error, res);
-        }},
-
-    // Update User information
-    updateUserById: async (req: Request, res: Response) =>{
-        try{
-
-            // Extract updated user data from request body
-            const { name, email, userId, rootDirId } = req.body;
-            
-            if (!userId) {
-                throw errorHandler.InvalidParamError("userId");
-            }
-
-            // Check if user exists
-            const existingUser = await prisma.user.findUnique({
-                where: {id: userId }
-            });
-
-            if (!existingUser) {
-                throw errorHandler.UserNotFoundError("User does not exist");
-            }
-            // Update user record in the database
-            const updatedUser = await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    id: existingUser.id,
-                    name: name || existingUser.name, // Update name if provided, otherwise keep existing value
-                    email: email || existingUser.email, // Update email if provided, otherwise keep existing value
-                    rootDirId: rootDirId || existingUser.rootDirId
-                }
-            });
-            res.send({user:updatedUser});
-        } catch (error: any){
-            if (error.code === "P2025") {
-                const message: string = "A related User record could not be found.";
-                error = errorHandler.UserNotFoundError(message);
-            }
-            console.log(error);
-            errorHandler.handleError(error, res);
-        }
-
-    },
-
-    // Delete a user with the specified id and all related data
-    deleteUserById: async (req: Request, res: Response) => {
-        const userId = req.params.id;
-        const userIdInt = parseInt(userId, 10);
-        try {
-            const user = await prisma.user.delete({
-                where: {
-                    id: userIdInt,
-                },
-            })
-            //  TODO: Delete related directory and files
-            res.send({user: user});
-      } catch (error: any) {
-        console.log(error);
-        if (error.code === "P2025") {
-            const message: string = "A related User record could not be found.";
-            error = errorHandler.UserNotFoundError(message);
-            }
-            errorHandler.handleError(error, res);
-        }
+      }
+      errorHandler.handleError(error, res);
     }
   },
 
@@ -194,7 +91,7 @@ const userControllers = {
       }
     } catch (error: any) {
       // Set generic error message on auth errors
-      if (error.code === 'P2015') {
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }
@@ -230,14 +127,24 @@ const userControllers = {
           email: email || existingUser.email, // Update email if provided, otherwise keep existing value
           rootDirId: rootDirId || existingUser.rootDirId,
         },
+        // Omit password field from the returned user object
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          rootDirId: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
-      res.send({ user: updatedUser });
+      res.status(200).send({ user: updatedUser, debugMsg: 'updated user' });
+      return updatedUser;
     } catch (error: any) {
-      if (error.code === 'P2015') {
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }
-      console.log(error);
       errorHandler.handleError(error, res);
     }
   },
@@ -251,10 +158,22 @@ const userControllers = {
         where: {
           id: userIdInt,
         },
+        // Omit password field from the returned user object
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          rootDirId: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
-      res.send({ user: user });
+      //  TODO: Delete related directory and files
+      res.status(200).send({ user: user });
     } catch (error: any) {
-      if (error.code === 'P2015') {
+      console.log(error);
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }
