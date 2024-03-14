@@ -36,11 +36,11 @@ router.post('/signup', userControllers.signUp);
  *
  * @body
  *  @required
- *  @field email (String)
+ *  @field email (string)
  *  @desc User registered email
  *
  *  @required
- *  @field password (String)
+ *  @field password (string)
  *  @desc User provided password
  */
 router.post('/login', userControllers.loginWithPassword);
@@ -56,11 +56,11 @@ router.post('/login', userControllers.loginWithPassword);
  *  @desc User id
  *
  *  @optional
- *  @field email (String)
+ *  @field email (string)
  *  @desc User new email
  *
  *  @optional
- *  @field name (String)
+ *  @field name (string)
  *  @desc User new name
  *
  *  @optional

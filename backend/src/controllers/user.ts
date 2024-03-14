@@ -30,6 +30,7 @@ const userControllers = {
           // Add or modify properties as needed
         },
       }) as Request;
+
       const newRootDir = await directoryController.addRootDirectory(
         addRootDirRequest,
         res,
@@ -47,7 +48,7 @@ const userControllers = {
         },
       }) as Request;
       // Update user's rootDirId field
-      userControllers.updateUserById(updateUserRequest, res);
+      await userControllers.updateUserById(updateUserRequest, res);
     } catch (error: any) {
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
@@ -90,7 +91,7 @@ const userControllers = {
       }
     } catch (error: any) {
       // Set generic error message on auth errors
-      if (error.code === 'P2015') {
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }
@@ -126,14 +127,24 @@ const userControllers = {
           email: email || existingUser.email, // Update email if provided, otherwise keep existing value
           rootDirId: rootDirId || existingUser.rootDirId,
         },
+        // Omit password field from the returned user object
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          rootDirId: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
-      res.send({ user: updatedUser });
+      res.status(200).send({ user: updatedUser, debugMsg: 'updated user' });
+      return updatedUser;
     } catch (error: any) {
-      if (error.code === 'P2015') {
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }
-      console.log(error);
       errorHandler.handleError(error, res);
     }
   },
@@ -147,10 +158,22 @@ const userControllers = {
         where: {
           id: userIdInt,
         },
+        // Omit password field from the returned user object
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          rootDirId: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
-      res.send({ user: user });
+      //  TODO: Delete related directory and files
+      res.status(200).send({ user: user });
     } catch (error: any) {
-      if (error.code === 'P2015') {
+      console.log(error);
+      if (error.code === 'P2025') {
         const message: string = 'A related User record could not be found.';
         error = errorHandler.UserNotFoundError(message);
       }

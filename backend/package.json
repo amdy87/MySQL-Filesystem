@@ -5,7 +5,7 @@
     "build": "tsc",
     "prisma-generate": "npx prisma generat",
     "prisma-migrate-init": "npx prisma migrate dev --name init",
-    "prisma-migrate-dev": "npx prisma migrate de",
+    "prisma-migrate-dev": "npx prisma migrate dev",
     "prisma-connect": "npm run prisma-generate && npm run prisma-migrate-init && npm run prisma-migrate-dev",
     "test": "jest --testPathPattern=user.test.ts",
     "dev-run": "npm run build && node dist/entrypoint.js",
