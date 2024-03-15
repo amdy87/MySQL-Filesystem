@@ -1,11 +1,11 @@
 import express from 'express';
 import path from 'path';
 
-import userRoutes from './routes/user';
-import directoryRoutes from './routes/directory';
-import permissionRoutes from './routes/permission';
-import { apiRoutes } from './routes/api';
-import { filesRouter } from './routes/file';
+import userRoute from './routes/user';
+import directoryRoute from './routes/directory';
+import permissionRoute from './routes/permission';
+import { apiRouter } from './routes/api';
+import { fileRouter } from './routes/file';
 
 const app = express();
 
@@ -17,10 +17,10 @@ app.get('/index.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend-dist', 'index.html'));
 });
 
-app.use('/api/dir', directoryRoutes);
-app.use('/api/permission', permissionRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api', apiRoutes);
-app.use('/api/file', filesRouter);
+app.use('/api/dir', directoryRoute);
+app.use('/api/permission', permissionRoute);
+app.use('/api/user', userRoute);
+app.use('/api', apiRouter);
+app.use('/api/file', fileRouter);
 
 export default app;

@@ -1,7 +1,27 @@
 import express from 'express';
-import userControllers from '../controllers/user';
+import { authAccessToken } from '../middlewares/auth';
+import {
+  userExist,
+  userIsAdmin,
+  userExistByEmail,
+  userExistParam,
+} from '../middlewares/user';
+
+import { userControllers } from '../controllers/user';
 
 const router = express.Router();
+
+/**
+ * Create all users
+ * @route GET /user/
+ * @access ADMIN
+ *
+ * @body
+ *  @requires
+ *  @field userId (number)
+ *  @desc id of a User
+ */
+router.get('/', userExist, userIsAdmin, userControllers.getUsers);
 
 /**
  * Create a new User Record
@@ -43,7 +63,7 @@ router.post('/signup', userControllers.signUp);
  *  @field password (string)
  *  @desc User provided password
  */
-router.post('/login', userControllers.loginWithPassword);
+router.post('/login', userExistByEmail, userControllers.loginWithPassword);
 
 /**
  * Update a user record
@@ -67,13 +87,31 @@ router.post('/login', userControllers.loginWithPassword);
  *  @field rootDirId (int)
  *  @desc id of the root direcotry owned by user
  */
-router.post('/update', userControllers.updateUserById);
+router.post('/update', userExist, userControllers.updateUserById);
 
 /**
  * Delete a user profile
- * @route DELETE /users/delete/:id
- * @access Authenticated user
+ * @route DELETE /user/:id
+ * @access Authenticated ADMIN user
+ *
+ * @body
+ *  @required
+ *  @field userId (number)
+ *  @desc User id of User who request to delete users
+ *
+ * @param id (number)
+ *  @required
+ *  @desc User id to be deleted
  */
-router.delete('/:id', userControllers.deleteUserById);
+
+router.delete(
+  '/:id',
+  userExist,
+  userIsAdmin,
+  userExistParam,
+  userControllers.deleteUserById,
+);
+
+// router.delete('/:id', userExist, userControllers.deleteUserById);
 
 export default router;

@@ -55,7 +55,7 @@ async function runPrismaCommands() {
   try {
     await waitForDatabase();
     // Run Prisma commands
-    const command = 'npx prisma migrate dev --skip-seed flag';
+    const command = 'npx prisma migrate dev --name init --skip-seed';
     const command2 = 'npx prisma db seed';
     exec(command, (error, stdout, stderr) => {
       if (error) {

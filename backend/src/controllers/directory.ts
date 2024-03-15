@@ -4,14 +4,23 @@ import { Prisma, PermissionType } from '@prisma/client';
 import { prisma } from '../entrypoint';
 import { errorHandler } from '../utils/errorHandler';
 
-const controller = {
+export const getAllPermissions = async () => {
+  const existingPermissions = await prisma.permission.findMany({
+    where: {
+      type: {
+        in: [PermissionType.READ, PermissionType.WRITE, PermissionType.EXECUTE],
+      },
+    },
+  });
+  return existingPermissions;
+};
+
+export const directoryController = {
   getDirectories: async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;
       if (!userId) {
-        throw errorHandler.InvalidParamError(
-          'userId is missing in the request body',
-        );
+        throw errorHandler.InvalidParamError('userId');
       }
 
       const directories = await prisma.directory.findMany({
@@ -29,8 +38,7 @@ const controller = {
           permissions: true,
         },
       });
-      res.status(201)
-        .send({ ownerId: userId, dirs: directories });
+      res.status(200).send({ ownerId: userId, dirs: directories });
     } catch (error: any) {
       errorHandler.handleError(error, res);
     }
@@ -43,7 +51,7 @@ const controller = {
         throw errorHandler.InvalidParamError('ownerId');
       }
 
-      // Check if user exists
+      // Check if user exists, TODO: move to middleware later
       const existingUser = await prisma.user.findUnique({
         where: { id: ownerId },
       });
@@ -54,17 +62,7 @@ const controller = {
         throw errorHandler.UserNotFoundError('User does not exist');
       }
       // Retrieve existing permission records from the database
-      const existingPermissions = await prisma.permission.findMany({
-        where: {
-          type: {
-            in: [
-              PermissionType.READ,
-              PermissionType.WRITE,
-              PermissionType.EXECUTE,
-            ],
-          },
-        },
-      });
+      const existingPermissions = await getAllPermissions();
 
       let directory: Prisma.DirectoryCreateInput;
       directory = {
@@ -97,6 +95,7 @@ const controller = {
       }
 
       // Check if user exists
+      // TODO: replace with auth middleware later
       const existingUser = await prisma.user.findUnique({
         where: { id: ownerId },
       });
@@ -108,19 +107,27 @@ const controller = {
       if (!parentId) {
         throw errorHandler.InvalidParamError('parentId');
       }
+
+      // Retrieve existing permission records from the database
+      const existingPermissions = await getAllPermissions();
+
       let directory: Prisma.DirectoryCreateInput;
       directory = {
         name: name,
         parentId: parentId,
         path: path,
         ownerId: ownerId,
+        permissions: {
+          connect: existingPermissions.map((permission) => ({
+            id: permission.id,
+          })),
+        },
       };
       const newDirectory = await prisma.directory.create({ data: directory });
-      res.status(201)
-          .send({
-              dir: newDirectory,
-              message: 'Successfully create a directory',
-            });
+      res.status(201).send({
+        dir: newDirectory,
+        message: 'Successfully create a directory',
+      });
     } catch (error: any) {
       if (error.code === 'P2002') {
         // TODO: Check with DB, does DB handle this correctly
@@ -130,6 +137,8 @@ const controller = {
       errorHandler.handleError(error, res);
     }
   },
-};
 
-export default controller;
+  // TODO: update
+
+  // TODO: deleteByOwnerId
+};
