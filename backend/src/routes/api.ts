@@ -2,9 +2,9 @@ import express, { Request, Response } from 'express';
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';
 
-export const apiRoutes = express.Router();
+export const apiRouter = express.Router();
 
-apiRoutes.get('/tree', (_req: Request, res: Response) => {
+apiRouter.get('/tree', (_req: Request, res: Response) => {
   const tmpFile: DbFile = {
     name: 'myfile',
     metadata: {

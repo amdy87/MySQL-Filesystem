@@ -8,17 +8,20 @@ describe(`POST ${BACKEND_DOMAIN}/api/user/signup`, () => {
   it('Insert all user from userData', async () => {
     for (const user of userData) {
       const response = await request(url).post('/user/signup').send(user);
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(201);
       const responseBody = response.body; // Extract the response body
-      const newUserId = responseBody.id; // Assuming the ID is in the 'id' field of the response body
+      // Assuming the ID is in the 'id' field of the response.body.user
+      const newUserId = responseBody.user.id;
       new_ids.push(newUserId);
     }
   });
-
   it('User Records created should be deleted now', async () => {
     for (const userId of new_ids) {
-      const response = await request(url).del(`/user/${userId}`);
-      expect(response.body.id).toBe(userId);
+      // console.log(userId);
+      const response = await request(url).del(`/user/${userId}`).send({
+        userId: 1, //only admin user can delete user records
+      });
+      expect(response.body.user.id).toBe(userId);
     }
   });
 });
@@ -28,9 +31,9 @@ describe('POST /api/user/login', () => {
   var newUserId: number;
   it('Insert one user from userData', async () => {
     const response = await request(url).post('/user/signup').send(user);
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
     const responseBody = response.body; // Extract the response body
-    newUserId = responseBody.id;
+    newUserId = responseBody.user.id;
   });
 
   it('Login using correct password', async () => {
@@ -39,7 +42,9 @@ describe('POST /api/user/login', () => {
   });
 
   it('User Record created should be deleted now', async () => {
-    const response = await request(url).del(`/user/${newUserId}`);
-    expect(response.body.id).toBe(newUserId);
+    const response = await request(url).del(`/user/${newUserId}`).send({
+      userId: 1,
+    });
+    expect(response.body.user.id).toBe(newUserId);
   });
 });

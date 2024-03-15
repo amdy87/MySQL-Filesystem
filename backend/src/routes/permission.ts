@@ -1,5 +1,5 @@
 import express from 'express';
-import permissionController from '../controllers/permission';
+import { permissionController } from '../controllers/permission';
 
 const router = express.Router();
 

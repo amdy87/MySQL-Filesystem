@@ -78,7 +78,12 @@ export const errorHandler = {
   },
 
   handleError: (error: Error, res: Response) => {
-    res.status(error.status);
-    res.send(error.message);
+    if (Object.values(ERROR).includes(error.name)) {
+      res.status(error.status);
+      res.send(error.message);
+    } else {
+      res.status(500);
+      res.send({ unknownError: error });
+    }
   },
 };

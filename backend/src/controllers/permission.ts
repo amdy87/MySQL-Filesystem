@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../entrypoint';
 import { errorHandler } from '../utils/errorHandler';
 
-const controller = {
+export const permissionController = {
   getPermissions: async (req: Request, res: Response) => {
     try {
       const permissions = await prisma.permission.findMany();
@@ -12,5 +12,3 @@ const controller = {
     }
   },
 };
-
-export default controller;

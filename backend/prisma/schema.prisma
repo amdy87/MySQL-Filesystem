@@ -23,6 +23,7 @@ model Permission {
   id          Int             @id @default(autoincrement())
   type        PermissionType
   directory   Directory[]    @relation("DirectoryPermissions")
+  file        File[]         @relation("FilePermissions")
 }
 
 model User {
@@ -46,6 +47,7 @@ model File {
   path            String
   parentId        Int
   ownerId         Int
+  permissions     Permission[]  @relation("FilePermissions")
 }
 
 

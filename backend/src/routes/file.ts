@@ -1,8 +1,37 @@
 import express, { Request, Response } from 'express';
-import { errorHandler } from '../utils/errorHandler';
-import { prisma } from '../entrypoint';
-import { Prisma } from '@prisma/client';
-export const filesRouter = express.Router();
+
+import { fileController } from '../controllers/file';
+
+export const fileRouter = express.Router();
+
+// ADD AUTH MIDDLEWARE after token is setup
+/**
+ * Get a list of all files owned by a user
+ * @route GET
+ * @access Any User
+ *
+ * @body
+ *  @requires
+ *  @field userId (int)
+ */
+
+fileRouter.get('/', fileController.getFiles);
+
+// ADD AUTH MIDDLEWARE after token is setup
+/**
+ * Get a list of all files owned by a user
+ * @route GET
+ * @access Any User
+ *
+ * @body
+ *  @requires
+ *  @field userId (int)
+ *
+ * @param parentDirId
+ * @desc directoryId, the parent directory of the file of this user
+ */
+
+fileRouter.get('/:parentDirId', fileController.getFilesByParentDir);
 
 /**
  * Create a file owned by a user
@@ -26,43 +55,10 @@ export const filesRouter = express.Router();
  *  @field parentId (number)
  *  @desc directoryId of the parent directory
  *
+ *  @optional
+ *  @field content (string)
+ *  @desc content written in this file
+ *
  */
 
-filesRouter.post('/add', async (req: Request, res: Response) => {
-  let { ownerId, name, path, parentId } = req.body;
-  if (!(ownerId && name && path && parentId)) {
-    res
-      .status(400)
-      .send(
-        'Missing parameter: make sure to specify ownerId, name, path, and parentId',
-      );
-    return;
-  }
-
-  try {
-    const _existingUser = await prisma.user.findUnique({
-      where: { id: ownerId },
-    });
-  } catch (err) {
-    res.status(403).send({ Error: `User with id ${ownerId} does not exist` });
-    return;
-  }
-
-  const fileData: Prisma.FileCreateInput = {
-    parentId,
-    ownerId,
-    name,
-    path,
-    content: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-  try {
-    const newFile = await prisma.file.create({
-      data: fileData,
-    });
-    res.status(201).send(newFile);
-  } catch (err) {
-    res.status(500).send({ Error: err });
-  }
-});
+fileRouter.post('/add', fileController.addFile);
