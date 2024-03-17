@@ -21,28 +21,25 @@ The customers for this software are the CS506 instructional staff and people nee
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| **R01**  |  Users should be able to create new files and directories where desired. |  high  | Open   |
-| **R02**  |  Users should be able to delete files and directories. |  high   | Open   |
-| **R03**  | Users should be able to move files to new locations or directories. |   high   | Open   |
-| **R04**  |  Users should be able to rename files and directories. |  medium     | Open   |
-| **R05**  | Users should have an account associated with the file system they are using.|  high    | Open   |
-| **R06**  | There should be a GUI to display the contents of a file and how they are organized.|   high   | Open   |
-| **R07**  | The user should be able to login to an account. |   high   | Open   |
-| **R08**  | The user should be able to logout of an account. |   high   | Open   |
-| **R09**  | Users and files associated to one account/file system should not be able to access file systems they do not have permission for|  high    | Open   |
-| **R10**  | Users should be able to view the contents of a selected file. |   medium   | Open   |
-| **R11**  | Users should be able to make basic edits to the contents of a file. |   low   | Open   |
-| **R12**  | Users should be able to view metadata about a selected file. |   medium   | Open   |
-| **R13**  | Users should be able to edit the metadata of a selected file.|  medium    | Open   |
-| **R14**  | System should be able to handle many different file systems and many files in each system. |   high   | Open   |
-| **R15**  | Users should be able to share/export files or directories. |  medium    | Open   |
-| **R16**  | Users should be able to import a file from their local machine. |  medium    | Open   |
-| **R17**  | System should be able to sort the files alphabetically by file name descending |   low   | Open   |
-| **R18**  | System should be able to sort the files alphabetically by file name ascending |    low  | Open   |
-| **R19**  | System should store sensitive information securely |   high   | Open   |
-| **R20**  | Users should be able to rename their file system |   low   | Open   |
-| **R21**  | Users should be able to delete their account. |   medium   | Open   |
-| **R22**  | Users should be able to access documentation about how the system is designed |  high    | Open   |
+| **R01**  |  Users must be able to create new files and directories within directories they have write permissions to. |  high  | Open   |
+| **R02**  |  Users must be able to delete files and directories that they have write permissions for. |  high   | Open   |
+| **R03**  | A user must be able to move a file or directory that is within a directory they have write access to to another directories that they have write access to within their filesystem. |   high   | Open   |
+| **R04**  |  Users must be able to rename files and directories that they have write access to. |  medium     | Open   |
+| **R05**  | In order to access a filesystem, a user must login to an account that has permissions that grant access to it. |  high    | Open   |
+| **R06**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
+| **R07**  | The user must be able to login to their account using a username and password. |   high   | Open   |
+| **R08**  | The user must be able to log out of an account, terminating their authenticated session. |   high   | Open   |
+| **R09**  | Users must not be able to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
+| **R10**  | Users must be able to edit the contents of a file they have write permission for (add and delete text). |   low   | Open   |
+| **R11**  | Users must be able to view metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories they have read access to. |   medium   | Open   |
+| **R12**  | Users must be able to edit the metadata of all files and directories that they own.|  medium    | Open   |
+| **R13**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Open   |
+| **R14**  | Users must be able to upload a file containing text from their local machine to the filesystem within any directory that they have write permission for. |  medium    | Open   |
+| **R15**  | System must be able to display the files and directories within a given directory alphabetically by filename (ascending and descending). |   low   | Open   |
+| **R16**  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Open   |
+| **R17**  | Users must be able to rename their top-level file system. |   low   | Open   |
+| **R18**  | Users must be able to delete their account. |   medium   | Open   |
+| **R19**  | Users must be able to access documentation about how the system is designed by viewing the README.md file stored on GitLab.  |  high    | Open   |
 
 ### User Stories
 
@@ -269,14 +266,14 @@ The customers for this software are the CS506 instructional staff and people nee
 
 - Linux machine on which to run Docker
 - 4 GB RAM
-- TODO <performance/speed_requirements (we need to decide how fast we want certain operations to be)
-    - LOGIN
-    - CREATE
-    - READ
-    - UPDATE
-    - DELETE
-    - LOAD tree view
-- TODO <data_capacity_requirements> (depends on how many users we plan to support)
+- Guaranteed p90 response times
+    - LOGIN - 5 seconds
+    - CREATE file/directory - 3 seconds
+    - UPDATE file/directory - 3 seconds
+    - DELETE file/directory - 3 seconds
+    - READ tree view - 4 seconds
+    - READ individual file view - 3 seconds
+- Supports 100+ separate filesystems with 100 files with a filesize of 1MB on average
 
 ## Specification
 
