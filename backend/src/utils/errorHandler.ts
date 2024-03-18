@@ -90,10 +90,10 @@ export const errorHandler = {
   handleError: (error: Error, res: Response) => {
     if (Object.values(ERROR).includes(error.name)) {
       res.status(error.status);
-      res.send(error.message);
+      res.json({ status: error.status, message: error.message });
     } else {
       res.status(500);
-      res.send({ unknownError: error });
+      res.json({ status: 500, message: `unknownError: ${error}` });
     }
   },
 };
