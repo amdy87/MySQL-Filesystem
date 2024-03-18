@@ -29,6 +29,7 @@ export default function LoginPage() {
         }
         login({password, email}).then((data) => {
             localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("authToken", JSON.stringify(data.authToken));
             navigate("/file");
         })
     }

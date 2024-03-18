@@ -35,6 +35,7 @@ export default function LoginPage() {
         }
         signup({name, email, password}).then((data) => {
             localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("authToken", JSON.stringify(data.authToken));
             navigate("/file");
         })
 

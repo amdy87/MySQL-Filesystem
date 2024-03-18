@@ -1,9 +1,20 @@
 import { HOSTNAME } from "@utils/const"
-async function request(url, options = {}) {
+import { useNavigate } from 'react-router-dom';
+
+async function request(url, options = {}, needAuth = false) {
+    const navigate = useNavigate();
     try {
         const defaultHeaders = {
             'Content-Type': 'application/json',
         };
+
+        if(needAuth){
+            token = localStorage.getItem("authToken");
+            if(!token){
+                navigate("");
+            }
+            defaultHeaders['Authorization'] = `Bearer ${token}`;
+        }
 
         const requestOptions = {
             ...options,

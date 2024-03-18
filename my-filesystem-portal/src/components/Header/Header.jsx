@@ -8,6 +8,7 @@ export default function Header({ username }) {
 
     const logout = () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("authToken");
         navigate("/")
     }
 
