@@ -1,19 +1,17 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event';
 import { describe, it, vi, expect } from 'vitest';
 import LoginPage from './LoginPage';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { login } from '@api/user';
 
-
-
 const mockedNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
-    const actualModule = await vi.importActual('react-router-dom');
-    return {
-        ...actualModule,
-        useNavigate: () => mockedNavigate,
-    };
+  const actualModule = await vi.importActual('react-router-dom');
+  return {
+    ...actualModule,
+    useNavigate: () => mockedNavigate,
+  };
 });
 
 vi.mock('@api/user', () => ({
@@ -27,7 +25,9 @@ describe('LoginPage', () => {
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /sign up/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /sign up/i }),
+    ).toBeInTheDocument();
   });
 
   it('navigates to /file on successful login', async () => {
@@ -62,31 +62,32 @@ describe('LoginPage', () => {
 
     userEvent.type(passwordInput, 'password').then(() => {
       expect(passwordInput.value).toBe('password');
-    })
+    });
   });
 
   it('shows an alert if email is missing', () => {
     global.alert = vi.fn();
-    
+
     render(<LoginPage />, { wrapper: MemoryRouter });
-    
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password' } });
-    fireEvent.click(screen.getByText("Login"));
-    
+
+    fireEvent.change(screen.getByLabelText(/password/i), {
+      target: { value: 'password' },
+    });
+    fireEvent.click(screen.getByText('Login'));
+
     expect(global.alert).toHaveBeenCalledWith('please input the email');
   });
 
   it('navigates to sign up page when Sign Up is clicked', () => {
-
     render(
       <MemoryRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
-    fireEvent.click(screen.getByText("Sign Up"));
+    fireEvent.click(screen.getByText('Sign Up'));
     expect(mockedNavigate).toHaveBeenCalledWith('/signup');
   });
 });

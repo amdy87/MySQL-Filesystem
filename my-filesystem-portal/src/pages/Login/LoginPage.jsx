@@ -1,79 +1,87 @@
-import './LoginPage.css'
-import React, { useEffect, useState } from 'react'
-import { Header } from '@components'
-import { Button, Row, Col, Form } from "react-bootstrap"
-import { login } from "@api/user"
+import './LoginPage.css';
+import React, { useEffect, useState } from 'react';
+import { Header } from '@components';
+import { Button, Row, Col, Form } from 'react-bootstrap';
+import { login } from '@api/user';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
-    const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const navigate = useNavigate();
-
-    const onEmailInput = (e) => setEmail(e.target.value.trim());
-    const onPasswordInput = (e) => setPassword(e.target.value);
-    useEffect(() => {
-        if(localStorage.getItem("user")){
-            navigate("/file");
-        }
-    },[])
-    const onLogin = () => {
-        if(email.length === 0){
-            alert("please input the email");
-            return;
-        }
-        if(password.length === 0){
-            alert("please input the password");
-            return;
-        }
-        login({password, email}).then((data) => {
-            localStorage.setItem("user", JSON.stringify(data.user));
-            localStorage.setItem("authToken", JSON.stringify(data.authToken));
-            navigate("/file");
-        })
+  const onEmailInput = (e) => setEmail(e.target.value.trim());
+  const onPasswordInput = (e) => setPassword(e.target.value);
+  useEffect(() => {
+    if (localStorage.getItem('user')) {
+      navigate('/file');
     }
-
-    const toSignUp = () => {
-        navigate("/signup");
-
+  }, []);
+  const onLogin = () => {
+    if (email.length === 0) {
+      alert('please input the email');
+      return;
     }
-    
-    return (
-        <div style={{ width: '100vw', height: '100vh' }}>
-            <Header style={{ width: 50 }}></Header>
-            <div className='container'>
-                <Row className="md-auto">
-                    <Col className="header">
-                        <div className="text">Welcome</div>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center md-6">
-                    <Col xs={12} md={6} lg={4}>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="loginForm.email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control data-testid="email-input" onInput={onEmailInput} value={email} type="email"/>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="loginForm.password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control onInput={onPasswordInput} value={password} type="password" />
-                            </Form.Group>
-                        </Form>
-                    </Col>
+    if (password.length === 0) {
+      alert('please input the password');
+      return;
+    }
+    login({ password, email }).then((data) => {
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('authToken', JSON.stringify(data.authToken));
+      navigate('/file');
+    });
+  };
 
-                </Row>
-                <Row className="justify-content-md-center md-6">
-                    <Col md={'auto'}>
-                        <Button variant="secondary" onClick={onLogin}>Login</Button>
+  const toSignUp = () => {
+    navigate('/signup');
+  };
 
-                    </Col>
-                    <Col md={'auto'}>
-                        <Button variant="secondary" onClick={toSignUp}>Sign Up</Button>
-                    </Col>
-                </Row>
-            </div>
-        </div>
-
-    )
+  return (
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <Header style={{ width: 50 }}></Header>
+      <div className="container">
+        <Row className="md-auto">
+          <Col className="header">
+            <div className="text">Welcome</div>
+          </Col>
+        </Row>
+        <Row className="justify-content-md-center md-6">
+          <Col xs={12} md={6} lg={4}>
+            <Form>
+              <Form.Group className="mb-3" controlId="loginForm.email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  data-testid="email-input"
+                  onInput={onEmailInput}
+                  value={email}
+                  type="email"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="loginForm.password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  onInput={onPasswordInput}
+                  value={password}
+                  type="password"
+                />
+              </Form.Group>
+            </Form>
+          </Col>
+        </Row>
+        <Row className="justify-content-md-center md-6">
+          <Col md={'auto'}>
+            <Button variant="secondary" onClick={onLogin}>
+              Login
+            </Button>
+          </Col>
+          <Col md={'auto'}>
+            <Button variant="secondary" onClick={toSignUp}>
+              Sign Up
+            </Button>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
 }

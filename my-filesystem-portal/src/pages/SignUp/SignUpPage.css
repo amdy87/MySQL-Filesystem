@@ -1,54 +1,53 @@
-.container{
-    display: flex;
-    flex-direction: column;
-    margin-top: 150px;
-    background: aqua;
-    padding-bottom: 150px;
-
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 150px;
+  background: aqua;
+  padding-bottom: 150px;
 }
 
-.header{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
 }
 
-.text{
-    background: aqua;
-    font-size: 60px;
-    font-weight: bold;
+.text {
+  background: aqua;
+  font-size: 60px;
+  font-weight: bold;
 }
 
-.info{
-    margin-top: 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.info {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.input{
-    display: flex;
-    align-items: center;
-    margin: auto;
-    background: azure;
+.input {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  background: azure;
 }
 
-.submit{
-    display: flex;
-    gap: 24px; 
-    margin: auto;
+.submit {
+  display: flex;
+  gap: 24px;
+  margin: auto;
 }
 
-.button{
-    display: flex;
-    align-items: center;
-    color:azure;
-    background:aquamarine;
-    cursor: pointer;
+.button {
+  display: flex;
+  align-items: center;
+  color: azure;
+  background: aquamarine;
+  cursor: pointer;
 }
 
-.azure{
-    background: lightblue;
-    color: azure;
+.azure {
+  background: lightblue;
+  color: azure;
 }
