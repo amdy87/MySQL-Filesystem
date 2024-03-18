@@ -16,6 +16,7 @@ async function request(url, options = {}) {
         const response = await fetch('http://' + HOSTNAME + "/backend" + url, requestOptions);
 
         if (!response.ok) {
+            alert(await response.text());
             throw new Error(`Error: ${response.status} ${response.statusText}`);
         }
 

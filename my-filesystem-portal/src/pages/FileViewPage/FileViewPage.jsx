@@ -8,17 +8,16 @@ export default function FileViewPage() {
 
     const [tree, setTree] = useState();
     const [displayedFiles, setDisplayedFiles] = useState();
-    const [username, setUsername] = useState();
+    const [user, setUser] = useState();
 
     useEffect(() => {
         getFileTree().then((data) => {
             setTree({
-                path: [data.name],
+                path: data.name,
                 files: data
             })
         });
-
-        setUsername(localStorage.getItem("username"));
+        setUser(JSON.parse(localStorage.getItem("user")));
     }, [])
 
     useEffect(() => {
@@ -71,7 +70,6 @@ export default function FileViewPage() {
 
     const clickDirectory = (name) => {
         const path = tree.path;
-        console.log(name)
         if(name === ".."){
             path.pop()
         }else{
@@ -95,7 +93,7 @@ export default function FileViewPage() {
 
 
     return <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-        <Header style={{ width: 50 }} username={username}></Header>
+        <Header style={{ width: 50 }} username={user?user.name:""}></Header>
         <Row>
             <Col className='m-3'><h1>{"Boyan Sun" + "'s FileSystem"}</h1></Col>
             <Col md="auto" className='m-3'>
