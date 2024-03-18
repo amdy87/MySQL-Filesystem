@@ -23,9 +23,9 @@ The customers for this software are the CS506 instructional staff and people nee
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | **R01**  |  Users must be able to create new files and directories within directories they have write permissions to. |  high  | Open   |
 | **R02**  |  Users must be able to delete files and directories that they have write permissions for. |  high   | Open   |
-| **R03**  | A user must be able to move a file or directory that is within a directory they have write access to to another directories that they have write access to within their filesystem. |   high   | Open   |
+| **R03**  | A user must be able to move a file or directory that is within a directory they have write access to to another directory that they have write access to within their filesystem. |   high   | Open   |
 | **R04**  |  Users must be able to rename files and directories that they have write access to. |  medium     | Open   |
-| **R05**  | In order to access a filesystem, a user must login to an account that has permissions that grant access to it. |  high    | Open   |
+| **R05**  | In order to access a filesystem, a user must login to an account that grants access to it. |  high    | Open   |
 | **R06**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
 | **R07**  | The user must be able to login to their account using a username and password. |   high   | Open   |
 | **R08**  | The user must be able to log out of an account, terminating their authenticated session. |   high   | Open   |
@@ -132,11 +132,6 @@ The customers for this software are the CS506 instructional staff and people nee
 (U21) 
 > If the credentials I entered are not allowed, the system displays an error message.
 
-##### File Export
-
-(U22) 
-> To export a file, I select the file and press the export button and the export file dialog appears.
-
 ##### File Import
 (U23) 
 > To import a file, I select the import button and the import file dialog is displayed.
@@ -152,7 +147,7 @@ The customers for this software are the CS506 instructional staff and people nee
 > I enter the new file name into the entry box and press confirm to rename a file
 
 (U27)
-> To cancel file creation, I press the cancel button in the "rename file" dialog
+> To cancel file renaming, I press the cancel button in the "rename file" dialog
 
 ##### logout
 (U28)
@@ -203,7 +198,7 @@ The customers for this software are the CS506 instructional staff and people nee
 - User wants to export a file (U22)
 - User wants to import a new file to the system (U23-U24)
 
-### User-Requirements Tracability
+### User-Requirements Traceability
 | Requirements  | User stories |
 | ------------  | ------------ |
 | [R01](#user-requirements) | [U01-U04](#file-creation)  |
@@ -216,18 +211,15 @@ The customers for this software are the CS506 instructional staff and people nee
 | [R08](#user-requirements) | [U27-U28](#logout) |
 | [R09](#user-requirements) | [Permissions Class](#class-diagram) |
 | [R10](#user-requirements) | [U07-U09](#file-reading) |
-| [R11](#user-requirements) | [] |
-| [R12](#user-requirements) | [U10-U11](#file-metadata) |
-| [R13](#user-requirements) | [U38-U40](#file-metadata) |
-| [R14](#user-requirements) | [Database](#database) |
-| [R15](#user-requirements) | [U22](#file-export) |
-| [R16](#user-requirements) | [U23-U24](#file-import) |
-| [R17](#user-requirements) | [U30](#file-sorting) |
-| [R18](#user-requirements) | [U31](#file-sorting) |
-| [R19](#user-requirements) | [Security](#security-requirements) |
-| [R20](#user-requirements) | [U33-U34](#file-system-renaming) |
-| [R21](#user-requirements) | [U35-U37](#account-deletion) |
-| [R22](#user-requirements) | [U32](#project-documentation) |
+| [R11](#user-requirements) | [U10-U11](#file-metadata) |
+| [R12](#user-requirements) | [U38-U40](#file-metadata) |
+| [R13](#user-requirements) | [System Requirements](#system-requirements) |
+| [R14](#user-requirements) | [U23-U24](#file-import) |
+| [R15](#user-requirements) | [U30-U31](#file-sorting) |
+| [R16](#user-requirements) | [Security](#security-requirements) |
+| [R17](#user-requirements) | [U33-U34](#file-system-renaming) |
+| [R18](#user-requirements) | [U35-U37](#account-deletion) |
+| [R19](#user-requirements) | [U32](#project-documentation) |
 
 
 
