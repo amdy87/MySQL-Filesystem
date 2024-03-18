@@ -1,25 +1,39 @@
-
 import './LoginPage.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from '@components'
-import { Button, Container, Row, Col, Form } from "react-bootstrap"
+import { Button, Row, Col, Form } from "react-bootstrap"
+import { login } from "@api/user"
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
 
     const [password, setPassword] = useState("");
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
-    const onUsernameInput = (e) => setUsername(e.target.value);
+    const onEmailInput = (e) => setEmail(e.target.value.trim());
     const onPasswordInput = (e) => setPassword(e.target.value);
-    const login = () => {
-        localStorage.setItem("username", username);
-        console.log(password, username);
-        navigate("/file");
+    useEffect(() => {
+        if(localStorage.getItem("user")){
+            navigate("/file");
+        }
+    },[])
+    const onLogin = () => {
+        if(email.length === 0){
+            alert("please input the email");
+            return;
+        }
+        if(password.length === 0){
+            alert("please input the password");
+            return;
+        }
+        login({password, email}).then((data) => {
+            localStorage.setItem("user", JSON.stringify(data.user));
+            navigate("/file");
+        })
     }
 
-    const signUp = () => {
+    const toSignUp = () => {
         navigate("/signup");
 
     }
@@ -36,9 +50,9 @@ export default function LoginPage() {
                 <Row className="justify-content-md-center md-6">
                     <Col xs={12} md={6} lg={4}>
                         <Form>
-                            <Form.Group className="mb-3" controlId="loginForm.username">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control onInput={onUsernameInput} value={username} />
+                            <Form.Group className="mb-3" controlId="loginForm.email">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control data-testid="email-input" onInput={onEmailInput} value={email} type="email"/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="loginForm.password">
                                 <Form.Label>Password</Form.Label>
@@ -50,11 +64,11 @@ export default function LoginPage() {
                 </Row>
                 <Row className="justify-content-md-center md-6">
                     <Col md={'auto'}>
-                        <Button variant="secondary" onClick={login}>Login</Button>
+                        <Button variant="secondary" onClick={onLogin}>Login</Button>
 
                     </Col>
                     <Col md={'auto'}>
-                        <Button variant="secondary" onClick={signUp}>Sign Up</Button>
+                        <Button variant="secondary" onClick={toSignUp}>Sign Up</Button>
                     </Col>
                 </Row>
             </div>

@@ -7,6 +7,7 @@ export default function Header({ username }) {
     const navigate = useNavigate();
 
     const logout = () => {
+        localStorage.removeItem("user");
         navigate("/")
     }
 
