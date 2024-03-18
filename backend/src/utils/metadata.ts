@@ -4,7 +4,7 @@ export type Metadata = {
   updatedAt: number;
 };
 
-type Perms = {
+export type Perms = {
   read: boolean;
   write: boolean;
   execute: boolean;

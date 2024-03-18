@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
+
 import { prisma } from '../entrypoint';
 import { errorHandler } from '../utils/errorHandler';
+
+// export const prismaPermissionsToPerms = (permissions: Prisma.Permission) => {
+
+// };
 
 export const permissionController = {
   getPermissions: async (req: Request, res: Response) => {

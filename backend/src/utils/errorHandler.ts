@@ -68,6 +68,16 @@ export const errorHandler = {
   },
 
   /**
+   * Thrown when a db record is not found
+   * by using the param on an API route
+   * @param message Message with error details
+   * @return UserNotFoundError
+   */
+  RecordNotFoundError: (message: string) => {
+    return { name: ERROR.UserNotFoundError, status: 404, message };
+  },
+
+  /**
    * Thrown when a authorization fail
    * by using the param on an API route
    * @param message Message with error details

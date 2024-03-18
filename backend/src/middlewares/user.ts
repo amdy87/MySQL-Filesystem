@@ -29,10 +29,10 @@ export const userExist = async (
   try {
     let user: Prisma.UserFindUniqueArgs;
     const { userId } = req.body;
-    user = { where: { id: userId } };
     if (!userId) {
       throw errorHandler.InvalidParamError('userId');
     }
+    user = { where: { id: userId } };
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
       throw errorHandler.UserNotFoundError(

@@ -1,9 +1,39 @@
 import { Request, Response } from 'express';
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 
 import { prisma } from '../entrypoint';
 import { getAllPermissions } from './directory';
 import { errorHandler } from '../utils/errorHandler';
+import { DbFile } from '../utils/file';
+import { Metadata, Perms } from '../utils/metadata';
+
+const updateFile = async (file: DbFile, res: Response) => {
+  try {
+    const updatedFile = await prisma.file.update({
+      where: { id: file.id },
+      data: {
+        ownerId: file.ownerId,
+        name: file.name,
+        parentId: file.parentId,
+        content: file.content,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        path: true,
+        parentId: true,
+        ownerId: true,
+        content: true,
+        permissions: true,
+      },
+    });
+    return updatedFile;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
 
 export const fileController = {
   getFiles: async (req: Request, res: Response) => {
@@ -25,6 +55,7 @@ export const fileController = {
           path: true,
           parentId: true,
           ownerId: true,
+          content: true,
           //   permissions: true,
         },
       });
@@ -116,6 +147,47 @@ export const fileController = {
   },
 
   // TODO: update
+  updateFileById: async (req: Request, res: Response) => {
+    try {
+      //  Doesn't support change permission yet
+      const { fileId, name, content, path, ownerId, permissions, parentId } =
+        req.body;
+
+      let file: Prisma.FileFindUniqueArgs;
+      if (!fileId) {
+        throw errorHandler.InvalidParamError('fileId');
+      }
+      file = { where: { id: fileId } };
+
+      const existFile = await prisma.file.findUnique(file);
+
+      if (!existFile) {
+        throw errorHandler.RecordNotFoundError('File does not exist');
+      }
+      let perms: Perms = { read: true, write: true, execute: true };
+      let metadata: Metadata = {
+        // TODO: perms: existFile.permissions,
+        perms: perms,
+        createdAt: existFile.createdAt.getTime(),
+        updatedAt: Date.now(),
+      };
+      // Update file record in the database
+      const updatedFile = await updateFile(
+        {
+          id: fileId,
+          name: name || existFile.name, // Update name if provided, otherwise keep existing value
+          parentId: parentId || existFile.parentId,
+          content: content || existFile.content,
+          ownerId: ownerId || existFile.ownerId,
+          metadata: metadata,
+        },
+        res,
+      );
+      res.status(200).send({ file: updatedFile });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
 
   // TODO: deleteByOwnerId
 };
