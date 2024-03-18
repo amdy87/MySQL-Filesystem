@@ -28,6 +28,7 @@ describe('addUser', () => {
       userData[0].password,
       userData[0].role,
     );
+
     expect(newUser.name).toEqual(userData[0].name);
     expect(newUser.email).toEqual(userData[0].email);
     expect(newUser.role).toEqual(userData[0].role);
@@ -46,15 +47,15 @@ describe('addDirectory', () => {
       directoryData[0].ownerId,
       directoryData[0].permissions,
     );
+
     expect(newDir.name).toEqual(directoryData[0].name);
     expect(newDir.path).toEqual(directoryData[0].path);
     expect(newDir.parentId).toEqual(directoryData[0].parentId);
     expect(newDir.ownerId).toEqual(directoryData[0].ownerId);
     directoryData[0].id = newDir.id;
   });
+
   it('should add a new directory for the user with the same name, so should fail', async () => {
-    // const newDir = await addDirectory(directoryData[0].name, directoryData[0].path, directoryData[0].parentId, directoryData[0].ownerId, directoryData[0].permissions)
-    // expect(newDir.name).rejects.toThrow();
     await expect(() =>
       addDirectory(
         directoryData[0].name,
@@ -85,9 +86,8 @@ describe('addFile', () => {
     expect(newFile.content).toEqual(fileData[0].content);
     fileData[0].id = newFile.id;
   });
+  
   it('should add a new file for the user with the same name, so should fail', async () => {
-    // const newFile = await addFile(fileData[0].name, fileData[0].path, fileData[0].parentId, fileData[0].ownerId, fileData[0].content, fileData[0].permissions)
-    // expect(newFile).rejects.toThrow();
     await expect(() =>
       addFile(
         fileData[0].name,
@@ -104,8 +104,7 @@ describe('addFile', () => {
 describe('readFile', () => {
   it('should read file for the user', async () => {
     const fileRead = await readFile(fileData[0].ownerId);
-
-    expect(fileRead[0].name).toEqual(fileData[0].name);
+    expect(fileRead[0].content).toEqual(fileData[0].content);
   });
 });
 
