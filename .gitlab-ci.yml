@@ -36,14 +36,14 @@ format_backend:
   script:
     - cd backend
     - npm install
-    - prettier -c .
+    - npx prettier -c .
     - cd ..
     
 format_frontend:
   script:
     - cd my-filesystem-portal
     - npm install
-    - prettier -c .
+    - npx prettier -c .
     - cd ..
 
 lint_frontend:
