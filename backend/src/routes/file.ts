@@ -60,5 +60,36 @@ fileRouter.get('/:parentDirId', fileController.getFilesByParentDir);
  *  @desc content written in this file
  *
  */
-
+//  TODO: add authToken after frontend setup token storage
 fileRouter.post('/add', fileController.addFile);
+
+/**
+ * Update a file
+ * @route POST /file/update
+ * @access Owner of the user
+ *
+ * @body
+ *  @requires
+ *  @field fileId (number)
+ *  @desc fileId of the User who creates this file
+ *
+ *  @optional
+ *  @field name (string)
+ *  @desc name of the file
+ *
+ *  @optional
+ *  @field path (string)
+ *  @desc absolute path of the file
+ *
+ *  @optional
+ *  @field parentId (number)
+ *  @desc directoryId of the parent directory
+ *
+ *  @optional
+ *  @field content (string)
+ *  @desc content written in this file
+ *
+ */
+
+//  TODO: add authToken after frontend setup token storage
+fileRouter.post('/update', fileController.updateFileById);

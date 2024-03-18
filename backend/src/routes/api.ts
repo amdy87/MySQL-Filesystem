@@ -6,6 +6,7 @@ export const apiRouter = express.Router();
 
 apiRouter.get('/tree', (_req: Request, res: Response) => {
   const tmpFile: DbFile = {
+    id: 4,
     name: 'myfile',
     metadata: {
       createdAt: 123,
@@ -18,6 +19,7 @@ apiRouter.get('/tree', (_req: Request, res: Response) => {
     },
   };
   const tmpFile2: DbFile = {
+    id: 3,
     name: 'another file',
     metadata: {
       createdAt: 12344,
@@ -30,6 +32,7 @@ apiRouter.get('/tree', (_req: Request, res: Response) => {
     },
   };
   const subDir: DbDirectory = {
+    id: 2,
     name: 'root',
     metadata: {
       createdAt: 223,
@@ -44,6 +47,7 @@ apiRouter.get('/tree', (_req: Request, res: Response) => {
     directories: [],
   };
   const dir: DbDirectory = {
+    id: 1,
     name: 'root',
     metadata: {
       createdAt: 123,

@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 import { Prisma, Role } from '@prisma/client';
 
 import { prisma } from '../entrypoint';
-import { JWT_SECRET } from '../utils/config';
 import { errorHandler } from '../utils/errorHandler';
 
 // Define a custom property 'user' on the Request object
@@ -30,10 +29,10 @@ export const userExist = async (
   try {
     let user: Prisma.UserFindUniqueArgs;
     const { userId } = req.body;
-    user = { where: { id: userId } };
     if (!userId) {
       throw errorHandler.InvalidParamError('userId');
     }
+    user = { where: { id: userId } };
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
       throw errorHandler.UserNotFoundError(
