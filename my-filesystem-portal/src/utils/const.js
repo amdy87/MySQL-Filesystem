@@ -1,5 +1,3 @@
-const HOSTNAME = process.env.MYFILESYSTEM_BACKEND_HOST
+const HOSTNAME = process.env.MYFILESYSTEM_BACKEND_HOST;
 
-
-
-export { HOSTNAME }
+export { HOSTNAME };
