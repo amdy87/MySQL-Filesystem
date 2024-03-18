@@ -197,7 +197,6 @@ export const userControllers = {
       const { password, ...user } = existUser;
 
       const inputPassword: string = req.body.password;
-      console.log(inputPassword);
       const result = await bcrypt.compare(inputPassword, password);
 
       if (result) {
