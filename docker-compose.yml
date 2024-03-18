@@ -24,10 +24,12 @@ services:
     hostname: server
     build:
       context: ./backend
+      args:
+        - JWT_SECRET=03cef2fd6d0b1ca7
+        - BACKEND_DOMAIN=http://localhost:3000
+        - DATABASE_URL=mysql://root:password@db:3306/db
     ports:
       - 3000:3000
-    environment:
-      - DATABASE_URL=mysql://root:password@db:3306/db
 
   adminer:
     image: adminer
