@@ -63,12 +63,18 @@ router.post('/signup', userControllers.signUp);
  *  @field password (string)
  *  @desc User provided password
  */
+
 router.post('/login', userExistByEmail, userControllers.loginWithPassword);
 
 /**
  * Update a user record
  * @route POST /user/update
  * @access Everyone
+ *
+ * @header
+ *  @required
+ *  @field Authorization
+ *  @desc Bearer token
  *
  * @body
  *  @required
@@ -87,12 +93,22 @@ router.post('/login', userExistByEmail, userControllers.loginWithPassword);
  *  @field rootDirId (int)
  *  @desc id of the root direcotry owned by user
  */
-router.post('/update', userExist, userControllers.updateUserById);
+router.post(
+  '/update',
+  authAccessToken,
+  userExist,
+  userControllers.updateUserById,
+);
 
 /**
  * Delete a user profile
  * @route DELETE /user/:id
  * @access Authenticated ADMIN user
+ *
+ * @header
+ *  @required
+ *  @field Authorization
+ *  @desc Bearer token
  *
  * @body
  *  @required
@@ -106,9 +122,10 @@ router.post('/update', userExist, userControllers.updateUserById);
 
 router.delete(
   '/:id',
-  userExist,
+  authAccessToken,
+  userExist, //check whom request
   userIsAdmin,
-  userExistParam,
+  userExistParam, //check who's being deleted
   userControllers.deleteUserById,
 );
 

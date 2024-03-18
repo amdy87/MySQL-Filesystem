@@ -1,11 +1,82 @@
-import { Request, Response } from 'express';
-import { Prisma } from '@prisma/client';
+import { CookieOptions, Request, Response } from 'express';
+import { $Enums, Prisma } from '@prisma/client';
+import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import ms from 'ms';
 
 import { prisma } from '../entrypoint';
 import { directoryController } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
+import { TOKEN } from '../utils/config';
+import { Role } from '../utils/config';
+import { JWT_SECRET } from '../utils/config';
+
+/**
+ * Set refresh token to cookie
+ * [Not in used yet]
+ * @param res: Response
+ *
+ * @return void
+ */
+const setRefreshTokenCookie = (
+  req: Request,
+  res: Response,
+  refreshToken: string,
+) => {
+  const options: CookieOptions = {
+    maxAge: ms(TOKEN.Refresh.limit),
+    httpOnly: true,
+    signed: true,
+    sameSite: 'strict',
+  };
+  res.cookie(TOKEN.Refresh.name, refreshToken, options as CookieOptions);
+};
+
+/**
+ * Clear refresh token cookie
+ * @param res: Response
+ *
+ * @return void
+ */
+const clearRefreshTokenCookie = (res: Response) => {
+  res.clearCookie(TOKEN.Refresh.name);
+};
+
+/**
+ * Generate access token
+ * @param userId: number
+ * @param name: number
+ * @param userRole: Role
+ *
+ * @return Signed access token
+ */
+const generateAccessToken = (userId: number, name: string, userRole: Role) => {
+  return jwt.sign(
+    { id: userId.toString(), name: name, role: userRole },
+    JWT_SECRET as jwt.Secret,
+    {
+      expiresIn: TOKEN.Access.limit,
+    },
+  );
+};
+
+const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
+  if ($Enums.Role.ADMIN === prismaUserRole) {
+    return Role.ADMIN;
+  } else {
+    return Role.USER;
+  }
+};
+
+/**
+ * Verify a signed token
+ * @param token
+ * @return Token content
+ */
+const verifyToken = (token: string) => {
+  return jwt.verify(token, JWT_SECRET as jwt.Secret);
+};
 
 const updateUser = async (user: User, res: Response) => {
   // Update user record in the database
@@ -82,6 +153,12 @@ export const userControllers = {
       };
       const newUser = await prisma.user.create({ data: user });
 
+      // Generate new tokens
+      const accessToken = generateAccessToken(
+        newUser.id,
+        newUser.name,
+        convertPrismaRole(newUser.role),
+      );
       // Create a root directory for new user
       const newRootDir = await createRootDir(
         {
@@ -102,8 +179,9 @@ export const userControllers = {
         },
         res,
       );
-      res.status(201).send({ user: updatedUser });
+      res.status(201).send({ authToken: accessToken, user: updatedUser });
     } catch (error: any) {
+      console.log(error);
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
         error = errorHandler.DuplicationError(message);
@@ -123,8 +201,15 @@ export const userControllers = {
       const result = await bcrypt.compare(inputPassword, password);
 
       if (result) {
+        // Generate new tokens
+        const accessToken = generateAccessToken(
+          existUser.id,
+          existUser.name,
+          existUser.role,
+        );
         res.json({
           message: `${existUser?.name} LOG IN successfully`,
+          authToken: accessToken,
           user: user,
         });
       } else {

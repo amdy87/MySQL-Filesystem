@@ -27,14 +27,15 @@ export const authAccessToken = (
     }
 
     // Verify access token and extract user data
+    // Assume authHeader is a string with format "Bearer <token>"
     const [_, token] = authHeader.split(' ');
     if (!(token && JWT_SECRET)) {
       const message = 'Access token is not set.';
       throw errorHandler.UnauthorizedError(message);
     }
 
-    const payload = jwt.verify(token, JWT_SECRET as jwt.Secret);
-    req.user = payload as JwtPayloadWithUser;
+    const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret);
+    req.user = decoded as JwtPayloadWithUser;
     next();
   } catch (error: any) {
     const message = 'Token Invalid or expired';

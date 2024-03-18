@@ -3,7 +3,6 @@ import * as jwt from 'jsonwebtoken';
 import { Prisma, Role } from '@prisma/client';
 
 import { prisma } from '../entrypoint';
-import { JWT_SECRET } from '../utils/config';
 import { errorHandler } from '../utils/errorHandler';
 
 // Define a custom property 'user' on the Request object
