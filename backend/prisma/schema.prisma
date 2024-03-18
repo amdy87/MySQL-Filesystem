@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 enum Role {
   ADMIN
   USER
@@ -48,9 +47,8 @@ model File {
   parentId        Int
   ownerId         Int
   permissions     Permission[]  @relation("FilePermissions")
+  @@unique([name, ownerId])
 }
-
-
 
 model Directory {
   id              Int       @id @default(autoincrement())
@@ -61,5 +59,5 @@ model Directory {
   parentId        Int?
   ownerId         Int
   permissions     Permission[]  @relation("DirectoryPermissions")
+  @@unique([name, ownerId])
 }
-
