@@ -1,5 +1,10 @@
 module.exports = {
   root: true,
+  globals: {
+    __dirname: true,
+    process: true,
+    global: true,
+  },
   env: { browser: true, es2020: true },
   extends: [
     'eslint:recommended',
@@ -17,5 +22,12 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'no-unused-vars': [
+      'error',
+      {
+        varsIgnorePattern: 'React',
+      },
+    ],
+    'react/prop-types': 'off',
   },
 };

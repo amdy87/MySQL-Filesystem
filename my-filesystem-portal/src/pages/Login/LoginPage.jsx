@@ -16,7 +16,7 @@ export default function LoginPage() {
     if (localStorage.getItem('user')) {
       navigate('/file');
     }
-  }, []);
+  }, [navigate]);
   const onLogin = () => {
     if (email.length === 0) {
       alert('please input the email');

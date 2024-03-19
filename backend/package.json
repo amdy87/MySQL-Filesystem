@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
+    "format": "npx prettier -w .",
     "prisma-generate": "npx prisma generate",
     "prisma-migrate-init": "npx prisma migrate dev --name init",
     "prisma-migrate-dev": "npx prisma migrate dev",
