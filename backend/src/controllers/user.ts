@@ -1,10 +1,10 @@
 import { CookieOptions, Request, Response } from 'express';
-import { $Enums, Prisma } from '@prisma/client';
+import { $Enums, Prisma, PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import ms from 'ms';
 
-import { prisma } from '../entrypoint';
+import { prisma } from '../connectPrisma';
 import { directoryController } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
@@ -51,7 +51,11 @@ const clearRefreshTokenCookie = (res: Response) => {
  *
  * @return Signed access token
  */
-const generateAccessToken = (userId: number, name: string, userRole: Role) => {
+export const generateAccessToken = (
+  userId: number,
+  name: string,
+  userRole: Role,
+) => {
   return jwt.sign(
     { id: userId.toString(), name: name, role: userRole },
     JWT_SECRET as jwt.Secret,
@@ -129,11 +133,16 @@ const createRootDir = async (user: User, req: Request, res: Response) => {
   }
 };
 
+export const hashPassword = (password: string) => {
+  return bcrypt.hashSync(password, 12);
+};
+
 export const userControllers = {
   //List of users
   getUsers: async (req: Request, res: Response) => {
     try {
       const users = await prisma.user.findMany();
+      console.log(`res: ${users}`);
       res.send({ user: users });
     } catch (error: any) {
       errorHandler.handleError(error, res);
@@ -145,7 +154,7 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
-      const hashedPassword = bcrypt.hashSync(password, 12);
+      const hashedPassword = hashPassword(password);
       user = {
         name: name,
         email: email,

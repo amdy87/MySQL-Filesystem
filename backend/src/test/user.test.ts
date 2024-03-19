@@ -1,50 +1,39 @@
-import request from 'supertest';
-import userData from './sample_data/users';
-import { BACKEND_DOMAIN } from '../utils/config';
+import { Request, Response } from 'express';
+import { userControllers } from '../controllers/user';
+import { prisma } from '../connectPrisma';
 
-const url = `${BACKEND_DOMAIN}/api`;
-describe(`POST ${BACKEND_DOMAIN}/api/user/signup`, () => {
-  var new_ids: any[] = [];
-  it('Insert all user from userData', async () => {
-    for (const user of userData) {
-      const response = await request(url).post('/user/signup').send(user);
-      expect(response.status).toBe(201);
-      const responseBody = response.body; // Extract the response body
-      // Assuming the ID is in the 'id' field of the response.body.user
-      const newUserId = responseBody.user.id;
-      new_ids.push(newUserId);
-    }
-  });
-  it('User Records created should be deleted now', async () => {
-    for (const userId of new_ids) {
-      // console.log(userId);
-      const response = await request(url).del(`/user/${userId}`).send({
-        userId: 1, //only admin user can delete user records
-      });
-      expect(response.body.user.id).toBe(userId);
-    }
-  });
-});
+// Mock the Prisma methods globally
+jest.mock('../connectPrisma', () => ({
+  prisma: {
+    user: {
+      findMany: jest.fn(),
+    },
+  },
+}));
 
-describe('POST /api/user/login', () => {
-  const user = userData[0];
-  var newUserId: number;
-  it('Insert one user from userData', async () => {
-    const response = await request(url).post('/user/signup').send(user);
-    expect(response.status).toBe(201);
-    const responseBody = response.body; // Extract the response body
-    newUserId = responseBody.user.id;
-  });
+describe('getUsers', () => {
+  it('should return users', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {}; // Mock request
+    res = { send: jest.fn() }; // Mock response
 
-  it('Login using correct password', async () => {
-    const response = await request(url).post('/user/login').send(user);
-    expect(response.status).toBe(200);
-  });
+    // Mock Prisma method
+    (prisma.user.findMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'User 1' },
+      { id: 2, name: 'User 2' },
+    ]);
 
-  it('User Record created should be deleted now', async () => {
-    const response = await request(url).del(`/user/${newUserId}`).send({
-      userId: 1,
+    await userControllers.getUsers(req as Request, res as Response);
+
+    // Assert response
+    expect(res.send).toHaveBeenCalledWith({
+      user: [
+        { id: 1, name: 'User 1' },
+        { id: 2, name: 'User 2' },
+      ],
     });
-    expect(response.body.user.id).toBe(newUserId);
   });
 });

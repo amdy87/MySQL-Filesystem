@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { $Enums, Prisma } from '@prisma/client';
 
-import { prisma } from '../entrypoint';
+import { prisma } from '../connectPrisma';
 import { getAllPermissions } from './directory';
 import { errorHandler } from '../utils/errorHandler';
 import { DbFile } from '../utils/file';
