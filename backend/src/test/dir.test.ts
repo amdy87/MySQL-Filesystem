@@ -1,4 +1,7 @@
 import { Request, Response } from 'express';
+
+process.env.DATABASE_URL = 'default_value';
+
 import { directoryController } from '../controllers/directory';
 import { prisma } from '../connectPrisma';
 

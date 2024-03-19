@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-process.env.DATABASE_URL = 'your_database_url_here';
+process.env.DATABASE_URL = 'default_value';
 process.env.JWT_SECRET = 'iiiiedsfsdf';
 
 import { userControllers } from '../controllers/user';
