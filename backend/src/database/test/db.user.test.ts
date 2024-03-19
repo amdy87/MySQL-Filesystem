@@ -15,7 +15,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // hardcode in database_URL
-process.env.DATABASE_URL = "mysql://root:password@localhost:53306/db?schema=public";
+process.env.DATABASE_URL = "mysql://root:password@localhost:3306/db?schema=public";
 
 
 describe('deleteEverything', () => {
