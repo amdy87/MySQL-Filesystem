@@ -1,8 +1,7 @@
 import { HOSTNAME } from '@utils/const';
-import { useNavigate } from 'react-router-dom';
+import { INVALID_TOKEN_ERROR, HTTP_ERROR } from '@utils/error';
 
 async function useRequest(url, options = {}, needAuth = false) {
-  const navigate = useNavigate();
   try {
     const defaultHeaders = {
       'Content-Type': 'application/json',
@@ -11,7 +10,9 @@ async function useRequest(url, options = {}, needAuth = false) {
     if (needAuth) {
       const token = localStorage.getItem('authToken');
       if (!token) {
-        navigate('');
+        throw {
+          name: INVALID_TOKEN_ERROR,
+        };
       }
       defaultHeaders['Authorization'] = `Bearer ${token}`;
     }
@@ -30,8 +31,10 @@ async function useRequest(url, options = {}, needAuth = false) {
     );
 
     if (!response.ok) {
-      alert(await response.text());
-      throw new Error(`Error: ${response.status} ${response.statusText}`);
+      throw {
+        name: HTTP_ERROR,
+        response: response,
+      };
     }
 
     return await response.json();
