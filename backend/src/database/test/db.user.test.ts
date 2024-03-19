@@ -1,5 +1,4 @@
 import { describe, it, expect } from '@jest/globals';
-import { PrismaClient } from '@prisma/client';
 import {
   addUser,
   addDirectory,
@@ -10,9 +9,11 @@ import {
   deleteAllData,
   removeDirectory,
 } from '../query';
+import {prisma} from '../../connectPrisma'
 import { userData, directoryData, fileData } from '../sample';
+
 jest.mock('../../connectPrisma', () => ({
-  prisma: {
+  prisma: jest.fn(()=> ({
     user: {
       create: jest.fn(),
       findMany: jest.fn(),
@@ -30,7 +31,7 @@ jest.mock('../../connectPrisma', () => ({
     permission: {
       create: jest.fn(),
     },
-  },
+  })),
 }));
 
 process.env.DATABASE_URL = "mysql://root:password@localhost:3306/db?schema=public";
@@ -38,6 +39,7 @@ process.env.DATABASE_URL = "mysql://root:password@localhost:3306/db?schema=publi
 describe('deleteEverything', () => {
   it('should clear database', async () => {
     const deleteData = await deleteAllData();
+    expect(deleteData);
   });
 });
 
