@@ -15,7 +15,9 @@ import { JWT_SECRET } from '../utils/config';
 /**
  * Set refresh token to cookie
  * [Not in used yet]
+ * @param req: Request
  * @param res: Response
+ * @param refreshToken: string
  *
  * @return void
  */
@@ -65,6 +67,12 @@ export const generateAccessToken = (
   );
 };
 
+/**
+ * Convert prisma Role enum type to ENUM Role
+ * @param prismaUserRole: $Enums.Role
+ *
+ * @return backend ENUM `Role`
+ */
 const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
   if ($Enums.Role.ADMIN === prismaUserRole) {
     return Role.ADMIN;
@@ -78,10 +86,19 @@ const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
  * @param token
  * @return Token content
  */
-const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET as jwt.Secret);
-};
+// const verifyToken = (token: string) => {
+//   return jwt.verify(token, JWT_SECRET as jwt.Secret);
+// };
 
+/**
+ * Process new user data
+ * and use is to update user
+ * @param user: User
+ * @param res: Response
+ *
+ * @return updatedUser
+ *
+ */
 const updateUser = async (user: User, res: Response) => {
   // Update user record in the database
   try {
@@ -110,6 +127,18 @@ const updateUser = async (user: User, res: Response) => {
   }
 };
 
+/**
+ * Create a new request for creating root directory
+ * and use is to call addRootDirectory
+ * @param user: User
+ * @param req: Request
+ * @param res: Response
+ *
+ * @return newRootDir
+ *
+ * @throws ForbiddenError
+ *
+ */
 const createRootDir = async (user: User, req: Request, res: Response) => {
   const addRootDirRequest = Object.assign({}, req, {
     ...req,
@@ -160,7 +189,6 @@ export const userControllers = {
         email: email,
         password: hashedPassword,
       };
-
       const newUser = await prisma.user.create({ data: user });
       // Generate new tokens
       const accessToken = generateAccessToken(
@@ -168,7 +196,6 @@ export const userControllers = {
         newUser.name,
         convertPrismaRole(newUser.role),
       );
-
       // Create a root directory for new user
       const newRootDir = await createRootDir(
         {
@@ -179,7 +206,6 @@ export const userControllers = {
         req,
         res,
       );
-
       const updatedUser = await updateUser(
         {
           id: newUser.id,
@@ -189,8 +215,10 @@ export const userControllers = {
         },
         res,
       );
+
       res.status(201).send({ authToken: accessToken, user: updatedUser });
     } catch (error: any) {
+      console.log(`${error}`);
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
         error = errorHandler.DuplicationError(message);

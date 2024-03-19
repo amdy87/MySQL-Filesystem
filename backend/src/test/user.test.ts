@@ -1,4 +1,8 @@
 import { Request, Response } from 'express';
+
+process.env.DATABASE_URL = 'your_database_url_here';
+process.env.JWT_SECRET = 'iiiiedsfsdf';
+
 import { userControllers } from '../controllers/user';
 import { prisma } from '../connectPrisma';
 import userData from './sample_data/users';
@@ -61,7 +65,7 @@ describe('User signup and login', () => {
         json: jest.fn().mockReturnThis(),
       }; // Mock response
 
-      // Mock Prisma user create method
+      // Mock Prisma user methods
       (prisma.user.create as jest.Mock).mockResolvedValueOnce({
         id: index + 1, // Assuming user IDs start from 1
         ...user,
@@ -86,10 +90,7 @@ describe('User signup and login', () => {
         ownerId: index + 1,
       });
 
-      const response = await userControllers.signUp(
-        req as Request,
-        res as Response,
-      );
+      await userControllers.signUp(req as Request, res as Response);
 
       // Assert user creation
       expect(res.status).toHaveBeenCalledWith(201);
