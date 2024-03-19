@@ -10,13 +10,14 @@ import {
   removeDirectory,
 } from '../query';
 import { userData, directoryData, fileData } from '../sample';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+process.env.DATABASE_URL =
+  'mysql://root:password@localhost:3306/db?schema=public';
 
 describe('deleteEverything', () => {
   it('should clear database', async () => {
     const deleteData = await deleteAllData();
+    expect(deleteData);
   });
 });
 
@@ -52,12 +53,8 @@ describe('addDirectory', () => {
     expect(newDir.ownerId).toEqual(directoryData[0].ownerId);
     directoryData[0].id = newDir.id;
   });
-});
 
-describe('addDirectory2', () => {
   it('should add a new directory for the user with the same name, so should fail', async () => {
-    // const newDir = await addDirectory(directoryData[0].name, directoryData[0].path, directoryData[0].parentId, directoryData[0].ownerId, directoryData[0].permissions)
-    // expect(newDir.name).rejects.toThrow();
     await expect(() =>
       addDirectory(
         directoryData[0].name,
@@ -88,12 +85,8 @@ describe('addFile', () => {
     expect(newFile.content).toEqual(fileData[0].content);
     fileData[0].id = newFile.id;
   });
-});
 
-describe('addFile2', () => {
   it('should add a new file for the user with the same name, so should fail', async () => {
-    // const newFile = await addFile(fileData[0].name, fileData[0].path, fileData[0].parentId, fileData[0].ownerId, fileData[0].content, fileData[0].permissions)
-    // expect(newFile).rejects.toThrow();
     await expect(() =>
       addFile(
         fileData[0].name,
@@ -110,8 +103,8 @@ describe('addFile2', () => {
 describe('readFile', () => {
   it('should read file for the user', async () => {
     const fileRead = await readFile(fileData[0].ownerId);
-
     expect(fileRead[0].name).toEqual(fileData[0].name);
+    expect(fileRead[0].content).toEqual(fileData[0].content);
   });
 });
 
