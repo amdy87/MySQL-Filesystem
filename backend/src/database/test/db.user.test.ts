@@ -1,4 +1,5 @@
 import { describe, it, expect } from '@jest/globals';
+import { PrismaClient } from '@prisma/client';
 import {
   addUser,
   addDirectory,
@@ -10,13 +11,29 @@ import {
   removeDirectory,
 } from '../query';
 import { userData, directoryData, fileData } from '../sample';
-import { PrismaClient } from '@prisma/client';
+jest.mock('../../connectPrisma', () => ({
+  prisma: {
+    user: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+      delete: jest.fn(),
+    },
+    directory: {
+      create: jest.fn(),
+      delete: jest.fn(),
+    },
+    file: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+      delete: jest.fn(),
+    },
+    permission: {
+      create: jest.fn(),
+    },
+  },
+}));
 
-const prisma = new PrismaClient();
-
-// hardcode in database_URL
 process.env.DATABASE_URL = "mysql://root:password@localhost:3306/db?schema=public";
-
 
 describe('deleteEverything', () => {
   it('should clear database', async () => {
@@ -57,16 +74,16 @@ describe('addDirectory', () => {
 })
 
 describe('addFile', () => {
-    it('should add a new file for the user', async () => {
-      const newFile = await addFile(fileData[0].name, fileData[0].path, fileData[0].parentId, fileData[0].ownerId, fileData[0].content, fileData[0].permissions)
-    
-      expect(newFile.name).toEqual(fileData[0].name);
-      expect(newFile.path).toEqual(fileData[0].path);
-      expect(newFile.parentId).toEqual(fileData[0].parentId);
-      expect(newFile.ownerId).toEqual(fileData[0].ownerId);
-      expect(newFile.content).toEqual(fileData[0].content);  
-      fileData[0].id = newFile.id;
-    })
+  it('should add a new file for the user', async () => {
+    const newFile = await addFile(fileData[0].name, fileData[0].path, fileData[0].parentId, fileData[0].ownerId, fileData[0].content, fileData[0].permissions)
+
+    expect(newFile.name).toEqual(fileData[0].name);
+    expect(newFile.path).toEqual(fileData[0].path);
+    expect(newFile.parentId).toEqual(fileData[0].parentId);
+    expect(newFile.ownerId).toEqual(fileData[0].ownerId);
+    expect(newFile.content).toEqual(fileData[0].content);
+    fileData[0].id = newFile.id;
+  })
 })
 
 describe('addFile2', () => {
@@ -83,7 +100,7 @@ describe('readFile', () => {
     const fileRead = await readFile(fileData[0].ownerId);
 
     expect(fileRead[0].name).toEqual(fileData[0].name);
-        
+
   })
 })
 
