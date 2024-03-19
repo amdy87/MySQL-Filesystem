@@ -112,7 +112,7 @@ async function removeFile(fileId: number) {
     const rmFile = await prisma.file.delete({
       where: { id: fileId },
     });
-    console.log(`file with ID ${fileId} was deleted successgully`);
+    console.log(`file with ID ${fileId} was deleted successfully`);
     return rmFile;
   } catch (error) {
     console.error('error removing file:', error);
@@ -126,7 +126,7 @@ async function removeDirectory(directoryId: number) {
     const rmDirectory = await prisma.directory.delete({
       where: { id: directoryId },
     });
-    console.log(`directory with ID ${directoryId} was deleted successgully`);
+    console.log(`directory with ID ${directoryId} was deleted successfully`);
     return rmDirectory;
   } catch (error) {
     console.error('error removing directory:', error);
@@ -140,7 +140,7 @@ async function removeUser(userId: number) {
     const rmUser = await prisma.user.delete({
       where: { id: userId },
     });
-    console.log(`User with ID ${userId} was deleted successgully`);
+    console.log(`User with ID ${userId} was deleted successfully`);
     return rmUser;
   } catch (error) {
     console.error('error removing user:', error);

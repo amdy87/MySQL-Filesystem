@@ -20,7 +20,7 @@ enum PermissionType {
 
 model Permission {
   id          Int             @id @default(autoincrement())
-  type        PermissionType
+  type        PermissionType  
   directory   Directory[]    @relation("DirectoryPermissions")
   file        File[]         @relation("FilePermissions")
 }
