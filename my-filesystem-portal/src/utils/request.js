@@ -1,7 +1,7 @@
 import { HOSTNAME } from '@utils/const';
 import { useNavigate } from 'react-router-dom';
 
-async function request(url, options = {}, needAuth = false) {
+async function useRequest(url, options = {}, needAuth = false) {
   const navigate = useNavigate();
   try {
     const defaultHeaders = {
@@ -9,7 +9,7 @@ async function request(url, options = {}, needAuth = false) {
     };
 
     if (needAuth) {
-      token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('authToken');
       if (!token) {
         navigate('');
       }
@@ -41,4 +41,4 @@ async function request(url, options = {}, needAuth = false) {
   }
 }
 
-export { request };
+export { useRequest as request };
