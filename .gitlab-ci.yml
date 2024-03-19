@@ -52,11 +52,11 @@ lint_frontend:
     - npm install
     - npm run lint
     
-test_backend:
+test_api:
   script:
     - cd backend
     - npm install
-    - npm run test
+    - npm run test-api
     - cd ..
 
 # deploy:
