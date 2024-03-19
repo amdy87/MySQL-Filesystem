@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 
-import { prisma } from '../entrypoint';
+import { prisma } from '../connectPrisma';
 import { errorHandler } from '../utils/errorHandler';
 
 // export const prismaPermissionsToPerms = (permissions: Prisma.Permission) => {

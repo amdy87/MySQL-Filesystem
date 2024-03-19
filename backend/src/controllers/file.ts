@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { $Enums, Prisma } from '@prisma/client';
 
-import { prisma } from '../entrypoint';
+import { prisma } from '../connectPrisma';
 import { getAllPermissions } from './directory';
 import { errorHandler } from '../utils/errorHandler';
 import { DbFile } from '../utils/file';
@@ -116,7 +116,6 @@ export const fileController = {
 
       // Default file has all 3 permissions
       const existingPermissions = await getAllPermissions();
-      console.log(existingPermissions);
       // Prisma File record to be created in the database
       const fileData: Prisma.FileCreateInput = {
         parentId,
