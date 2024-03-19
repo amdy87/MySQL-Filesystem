@@ -7,7 +7,7 @@
     "prisma-migrate-init": "npx prisma migrate dev --name init",
     "prisma-migrate-dev": "npx prisma migrate dev",
     "prisma-connect": "npm run prisma-generate && npm run prisma-migrate-init && npm run prisma-migrate-dev",
-    "test": "jest --testPathPattern=user.test.ts",
+    "test": "jest",
     "dev-run": "npm run build && node dist/entrypoint.js",
     "dev-test": "npm run build && npm run test"
   },

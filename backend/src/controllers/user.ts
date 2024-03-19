@@ -142,7 +142,6 @@ export const userControllers = {
   getUsers: async (req: Request, res: Response) => {
     try {
       const users = await prisma.user.findMany();
-      console.log(`res: ${users}`);
       res.send({ user: users });
     } catch (error: any) {
       errorHandler.handleError(error, res);
@@ -154,20 +153,22 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
+
       const hashedPassword = hashPassword(password);
       user = {
         name: name,
         email: email,
         password: hashedPassword,
       };
-      const newUser = await prisma.user.create({ data: user });
 
+      const newUser = await prisma.user.create({ data: user });
       // Generate new tokens
       const accessToken = generateAccessToken(
         newUser.id,
         newUser.name,
         convertPrismaRole(newUser.role),
       );
+
       // Create a root directory for new user
       const newRootDir = await createRootDir(
         {
@@ -190,7 +191,6 @@ export const userControllers = {
       );
       res.status(201).send({ authToken: accessToken, user: updatedUser });
     } catch (error: any) {
-      console.log(error);
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
         error = errorHandler.DuplicationError(message);
