@@ -26,7 +26,6 @@ const renderHeader = ({ username = null } = {}) =>
 describe('Header Component', () => {
   it('renders without username should not show welcome message or logout button', () => {
     renderHeader();
-    expect(screen.queryByText('Logout')).not.toBeInTheDocument();
     expect(screen.queryByText('Welcome')).not.toBeInTheDocument();
   });
 

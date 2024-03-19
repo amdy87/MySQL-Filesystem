@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 import { Header, FileTableRow } from '@components';
 import { useEffect, useState } from 'react';
-import { getFileTree } from '@api/file';
+import { getFileTree, sendFile } from '@api/file';
 
 export default function FileViewPage() {
   const [tree, setTree] = useState();
@@ -16,14 +16,19 @@ export default function FileViewPage() {
   const [user, setUser] = useState();
 
   useEffect(() => {
+    updateFileTree(); // Initial fetch of the file tree
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }, []);
+
+  // Refreshes the tree files
+  const updateFileTree = () => {
     getFileTree().then((data) => {
       setTree({
-        path: data.name,
+        path: [data.name],
         files: data,
       });
     });
-    setUser(JSON.parse(localStorage.getItem('user')));
-  }, []);
+  };
 
   useEffect(() => {
     if (tree) {
@@ -80,6 +85,52 @@ export default function FileViewPage() {
     }
   }, [tree]);
 
+  const handleFileChange = async (event) => {
+    console.log('Collecting file data');
+    const file = event.target.files[0];
+
+    let formData = {};
+
+    let path = '';
+    // Collecting the tree path to the file
+    for (let i = 0; i < tree.path.length; i++) {
+      path = path + '/' + tree.path[i];
+    }
+
+    // Adding file info to formData
+    formData['ownerId'] = 1;
+    formData['name'] = file.name;
+    formData['path'] = path;
+    formData['parentId'] = 1;
+
+    // Collecting txt file contents as a string to send to api
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const content = e.target.result;
+
+      formData['content'] = content;
+
+      // sending formData to file.js for the api POST call
+      let response = sendFile(formData);
+
+      // If the response of the sendFile is true then refresh the file tree
+      if (response) {
+        updateFileTree();
+      }
+    };
+    reader.onerror = (error) => {
+      // Log the file reading error
+      console.log('Error reading file:', error);
+    };
+    reader.readAsText(file);
+  };
+
+  // Redirects the click action to the hiddenFileInput
+  const handleClick = () => {
+    console.log('Handled');
+    document.getElementById('hiddenFileInput').click();
+  };
+
   const clickDirectory = (name) => {
     const path = tree.path;
     if (name === '..') {
@@ -109,7 +160,19 @@ export default function FileViewPage() {
           <h1>{'Boyan Sun' + "'s FileSystem"}</h1>
         </Col>
         <Col md="auto" className="m-3">
-          <Button>AddFile</Button>
+          <input
+            type="file"
+            id="hiddenFileInput"
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+          <Button
+            variant="secondary"
+            style={{ marginLeft: 20 }}
+            onClick={handleClick}
+          >
+            Add File
+          </Button>
         </Col>
       </Row>
       <Breadcrumb className="m-3">
