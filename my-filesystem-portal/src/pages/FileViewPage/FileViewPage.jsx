@@ -146,9 +146,11 @@ export default function FileViewPage() {
           </thead>
           <tbody>
             {displayedFiles
-              ? displayedFiles.map((file) => {
+              ? displayedFiles.map((file, idx) => {
                   return (
                     <FileTableRow
+                      // TODO: give this a better key?
+                      key={idx}
                       {...file}
                       clickDirectory={clickDirectory}
                     ></FileTableRow>
