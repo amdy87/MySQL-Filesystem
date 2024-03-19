@@ -8,7 +8,7 @@
     "prisma-migrate-init": "npx prisma migrate dev --name init",
     "prisma-migrate-dev": "npx prisma migrate dev",
     "prisma-connect": "npm run prisma-generate && npm run prisma-migrate-init && npm run prisma-migrate-dev",
-    "test": "jest --testPathPattern=user.test.ts",
+    "test": "jest",
     "dev-run": "npm run build && node dist/entrypoint.js",
     "dev-test": "npm run build && npm run test"
   },
@@ -21,7 +21,8 @@
     "@types/jest": "^29.5.12",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
-    "prettier": "3.2.4",
+    "jest-mock-extended": "^3.0.5",
+    "prettier": "3.2.5",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",

@@ -1,50 +1,108 @@
-import request from 'supertest';
-import userData from './sample_data/users';
-import { BACKEND_DOMAIN } from '../utils/config';
+import { Request, Response } from 'express';
 
-const url = `${BACKEND_DOMAIN}/api`;
-describe(`POST ${BACKEND_DOMAIN}/api/user/signup`, () => {
-  var new_ids: any[] = [];
-  it('Insert all user from userData', async () => {
-    for (const user of userData) {
-      const response = await request(url).post('/user/signup').send(user);
-      expect(response.status).toBe(201);
-      const responseBody = response.body; // Extract the response body
-      // Assuming the ID is in the 'id' field of the response.body.user
-      const newUserId = responseBody.user.id;
-      new_ids.push(newUserId);
-    }
-  });
-  it('User Records created should be deleted now', async () => {
-    for (const userId of new_ids) {
-      // console.log(userId);
-      const response = await request(url).del(`/user/${userId}`).send({
-        userId: 1, //only admin user can delete user records
-      });
-      expect(response.body.user.id).toBe(userId);
-    }
+process.env.DATABASE_URL = 'default_value';
+process.env.JWT_SECRET = 'iiiiedsfsdf';
+
+import { userControllers } from '../controllers/user';
+import { prisma } from '../connectPrisma';
+import userData from './sample_data/users';
+
+// Mock the Prisma methods globally
+// When you use jest.mock at the top level of your test file,
+// Jest replaces all exports of the mocked module with mock functions,
+// and Jest resets those mock functions before each test automatically.
+// This means that each test will start with a fresh set of mock functions, preventing interference between tests.
+jest.mock('../connectPrisma', () => ({
+  prisma: {
+    user: {
+      findMany: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      findUnique: jest.fn(),
+    },
+    directory: {
+      create: jest.fn(),
+    },
+  },
+}));
+
+describe('getUsers', () => {
+  it('should return users', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {}; // Mock request
+    res = { send: jest.fn() }; // Mock response
+
+    // Mock Prisma method
+    (prisma.user.findMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'User 1' },
+      { id: 2, name: 'User 2' },
+    ]);
+
+    await userControllers.getUsers(req as Request, res as Response);
+
+    // Assert response
+    expect(res.send).toHaveBeenCalledWith({
+      user: [
+        { id: 1, name: 'User 1' },
+        { id: 2, name: 'User 2' },
+      ],
+    });
   });
 });
 
-describe('POST /api/user/login', () => {
-  const user = userData[0];
-  var newUserId: number;
-  it('Insert one user from userData', async () => {
-    const response = await request(url).post('/user/signup').send(user);
-    expect(response.status).toBe(201);
-    const responseBody = response.body; // Extract the response body
-    newUserId = responseBody.user.id;
-  });
+describe('User signup and login', () => {
+  userData.forEach((user, index) => {
+    it(`should create user ${user.name}`, async () => {
+      const req: Partial<Request> = {
+        body: { name: user.name, email: user.email, password: user.password },
+      }; // Mock request
+      const res: Partial<Response> = {
+        send: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      }; // Mock response
 
-  it('Login using correct password', async () => {
-    const response = await request(url).post('/user/login').send(user);
-    expect(response.status).toBe(200);
-  });
+      // Mock Prisma user methods
+      (prisma.user.create as jest.Mock).mockResolvedValueOnce({
+        id: index + 1, // Assuming user IDs start from 1
+        ...user,
+      });
 
-  it('User Record created should be deleted now', async () => {
-    const response = await request(url).del(`/user/${newUserId}`).send({
-      userId: 1,
+      (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce({
+        id: index + 1, // Assuming user IDs start from 1
+        name: user.name,
+      });
+
+      (prisma.user.update as jest.Mock).mockResolvedValueOnce({
+        id: index + 1, // Assuming user IDs start from 1
+        name: user.name,
+        rootDirId: index + 1,
+      });
+
+      // Mock Prisma user create method
+      (prisma.directory.create as jest.Mock).mockResolvedValueOnce({
+        id: index + 1, // Assuming dir IDs start from 1
+        name: `${user.name}_root`,
+        path: '.',
+        ownerId: index + 1,
+      });
+
+      await userControllers.signUp(req as Request, res as Response);
+
+      // Assert user creation
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.send).toHaveBeenCalledWith(
+        expect.objectContaining({
+          user: {
+            id: index + 1, // Assuming user IDs start from 1
+            name: user.name,
+            rootDirId: index + 1,
+          },
+        }),
+      );
     });
-    expect(response.body.user.id).toBe(newUserId);
   });
 });

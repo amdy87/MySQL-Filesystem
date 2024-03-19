@@ -1,10 +1,10 @@
 import { CookieOptions, Request, Response } from 'express';
-import { $Enums, Prisma } from '@prisma/client';
+import { $Enums, Prisma, PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import ms from 'ms';
 
-import { prisma } from '../entrypoint';
+import { prisma } from '../connectPrisma';
 import { directoryController } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
@@ -15,7 +15,9 @@ import { JWT_SECRET } from '../utils/config';
 /**
  * Set refresh token to cookie
  * [Not in used yet]
+ * @param req: Request
  * @param res: Response
+ * @param refreshToken: string
  *
  * @return void
  */
@@ -51,7 +53,11 @@ const clearRefreshTokenCookie = (res: Response) => {
  *
  * @return Signed access token
  */
-const generateAccessToken = (userId: number, name: string, userRole: Role) => {
+export const generateAccessToken = (
+  userId: number,
+  name: string,
+  userRole: Role,
+) => {
   return jwt.sign(
     { id: userId.toString(), name: name, role: userRole },
     JWT_SECRET as jwt.Secret,
@@ -61,6 +67,12 @@ const generateAccessToken = (userId: number, name: string, userRole: Role) => {
   );
 };
 
+/**
+ * Convert prisma Role enum type to ENUM Role
+ * @param prismaUserRole: $Enums.Role
+ *
+ * @return backend ENUM `Role`
+ */
 const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
   if ($Enums.Role.ADMIN === prismaUserRole) {
     return Role.ADMIN;
@@ -74,10 +86,19 @@ const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
  * @param token
  * @return Token content
  */
-const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET as jwt.Secret);
-};
+// const verifyToken = (token: string) => {
+//   return jwt.verify(token, JWT_SECRET as jwt.Secret);
+// };
 
+/**
+ * Process new user data
+ * and use is to update user
+ * @param user: User
+ * @param res: Response
+ *
+ * @return updatedUser
+ *
+ */
 const updateUser = async (user: User, res: Response) => {
   // Update user record in the database
   try {
@@ -106,6 +127,18 @@ const updateUser = async (user: User, res: Response) => {
   }
 };
 
+/**
+ * Create a new request for creating root directory
+ * and use is to call addRootDirectory
+ * @param user: User
+ * @param req: Request
+ * @param res: Response
+ *
+ * @return newRootDir
+ *
+ * @throws ForbiddenError
+ *
+ */
 const createRootDir = async (user: User, req: Request, res: Response) => {
   const addRootDirRequest = Object.assign({}, req, {
     ...req,
@@ -129,6 +162,10 @@ const createRootDir = async (user: User, req: Request, res: Response) => {
   }
 };
 
+export const hashPassword = (password: string) => {
+  return bcrypt.hashSync(password, 12);
+};
+
 export const userControllers = {
   //List of users
   getUsers: async (req: Request, res: Response) => {
@@ -145,14 +182,14 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
-      const hashedPassword = bcrypt.hashSync(password, 12);
+
+      const hashedPassword = hashPassword(password);
       user = {
         name: name,
         email: email,
         password: hashedPassword,
       };
       const newUser = await prisma.user.create({ data: user });
-
       // Generate new tokens
       const accessToken = generateAccessToken(
         newUser.id,
@@ -169,7 +206,6 @@ export const userControllers = {
         req,
         res,
       );
-
       const updatedUser = await updateUser(
         {
           id: newUser.id,
@@ -179,9 +215,10 @@ export const userControllers = {
         },
         res,
       );
+
       res.status(201).send({ authToken: accessToken, user: updatedUser });
     } catch (error: any) {
-      console.log(error);
+      console.log(`${error}`);
       if (error.code === 'P2002') {
         const message = 'User with the same email already exists.';
         error = errorHandler.DuplicationError(message);

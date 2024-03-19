@@ -2,9 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import { exec } from 'child_process';
 
 import app from './server';
+import { prisma } from './connectPrisma';
 import { PORT } from './utils/config';
-
-export const prisma = new PrismaClient();
 
 async function waitForConnection(
   predicate: () => Promise<boolean>,
