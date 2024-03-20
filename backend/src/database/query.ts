@@ -7,8 +7,8 @@ const prisma = new PrismaClient();
  * @param email: string,
  * @param name: string,
  * @param password: string,
- * @param role: Role, 
- * 
+ * @param role: Role,
+ *
  * @return created user
  */
 async function addUser(
@@ -30,13 +30,13 @@ async function addUser(
 }
 
 /**
- * 
+ *
  * @param name : string
  * @param path : string
  * @param parentId : number
  * @param ownerId : number
  * @param permissions : PermissionType[]
- * 
+ *
  * @returns newDir, the new directory
  */
 async function addDirectory(
@@ -72,7 +72,7 @@ async function addDirectory(
 }
 
 /**
- * 
+ *
  * @param name : string
  * @param path : string
  * @param parentId : number
@@ -115,7 +115,7 @@ async function addFile(
 }
 
 /**
- * 
+ *
  * @param userId : number
  * @returns files that match the userId
  */
@@ -135,7 +135,7 @@ async function readFile(userId: number) {
 }
 
 /**
- * 
+ *
  * @param fileId : number
  * @returns file that was removed
  */
@@ -153,7 +153,7 @@ async function removeFile(fileId: number) {
 }
 
 /**
- * 
+ *
  * @param directoryId : number
  * @returns directory that was deleted
  */
@@ -171,7 +171,7 @@ async function removeDirectory(directoryId: number) {
 }
 
 /**
- * 
+ *
  * @param userId : number
  * @returns user that was deleted
  */
