@@ -1,5 +1,8 @@
 import { PrismaClient, Role, PermissionType } from '@prisma/client';
 
+/**
+ * userData contains input data to create a new user.
+ */
 export const userData: any[] = [
   {
     name: 'Alice',
@@ -10,6 +13,9 @@ export const userData: any[] = [
   },
 ];
 
+/**
+ * directoryData contains input data to create a new directory.
+ */
 export const directoryData: any[] = [
   {
     name: 'directory',
@@ -25,6 +31,9 @@ export const directoryData: any[] = [
   },
 ];
 
+/**
+ * fileData contains input data to create a new file.
+ */
 export const fileData: any[] = [
   {
     name: 'file',

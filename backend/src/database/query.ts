@@ -2,9 +2,15 @@ import { PrismaClient, Role, PermissionType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// TODO: add user permissions for Directory and Files
-
-// adding a new user
+/**
+ * Function to add a new user
+ * @param email: string,
+ * @param name: string,
+ * @param password: string,
+ * @param role: Role,
+ *
+ * @return created user
+ */
 async function addUser(
   email: string,
   name: string,
@@ -23,7 +29,16 @@ async function addUser(
   }
 }
 
-// creating a directory
+/**
+ *
+ * @param name : string
+ * @param path : string
+ * @param parentId : number
+ * @param ownerId : number
+ * @param permissions : PermissionType[]
+ *
+ * @returns newDir, the new directory
+ */
 async function addDirectory(
   name: string,
   path: string,
@@ -56,7 +71,16 @@ async function addDirectory(
   }
 }
 
-// creating a file
+/**
+ *
+ * @param name : string
+ * @param path : string
+ * @param parentId : number
+ * @param ownerId : number
+ * @param content : string
+ * @param permissions : permission type
+ * @returns newFile, the new file created
+ */
 async function addFile(
   name: string,
   path: string,
@@ -90,7 +114,11 @@ async function addFile(
   }
 }
 
-// reading contents of a file
+/**
+ *
+ * @param userId : number
+ * @returns files that match the userId
+ */
 async function readFile(userId: number) {
   try {
     const files = await prisma.file.findMany({
@@ -106,7 +134,11 @@ async function readFile(userId: number) {
   }
 }
 
-// deleting a file
+/**
+ *
+ * @param fileId : number
+ * @returns file that was removed
+ */
 async function removeFile(fileId: number) {
   try {
     const rmFile = await prisma.file.delete({
@@ -120,7 +152,11 @@ async function removeFile(fileId: number) {
   }
 }
 
-// deleting a directory
+/**
+ *
+ * @param directoryId : number
+ * @returns directory that was deleted
+ */
 async function removeDirectory(directoryId: number) {
   try {
     const rmDirectory = await prisma.directory.delete({
@@ -134,7 +170,11 @@ async function removeDirectory(directoryId: number) {
   }
 }
 
-// deleting a user
+/**
+ *
+ * @param userId : number
+ * @returns user that was deleted
+ */
 async function removeUser(userId: number) {
   try {
     const rmUser = await prisma.user.delete({
@@ -148,7 +188,9 @@ async function removeUser(userId: number) {
   }
 }
 
-// delete everything?
+/**
+ * deletes everything from all tables
+ */
 async function deleteAllData() {
   try {
     await prisma.user.deleteMany({});
