@@ -8,7 +8,6 @@ async function getFileTree() {
 // Posts all the file data to the backend
 async function sendFile(data) {
   try {
-    console.log('Sending file');
     const response = await fetch('/backend/api/file/add', {
       method: 'POST',
       headers: {
@@ -31,7 +30,6 @@ async function sendFile(data) {
 // Posts the new file name to the backend
 async function fileRename(data) {
   try {
-    console.log('Renaming file');
     const response = await fetch('/backend/api/file/update', {
       method: 'POST',
       headers: {
