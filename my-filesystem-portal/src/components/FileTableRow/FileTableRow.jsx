@@ -1,4 +1,7 @@
 import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import FileRenamePopup from '../FileRenamePopup/FileRenamePopup';
+import { fileRename } from '../../api/file';
 
 export default function FileTableRow({
   fileName,
@@ -7,12 +10,26 @@ export default function FileTableRow({
   updatedAt,
   clickDirectory,
 }) {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const click = () => {
     if (fileType == 'directory') {
       clickDirectory(fileName);
     } else {
       // TODO: popup the text file
     }
+  };
+
+  const handleRename = (name) => {
+    let renameData = {};
+
+    // TODO: Collect the fileId from the file tree.
+
+    renameData['fileId'] = 1;
+    renameData['name'] = name;
+
+    fileRename(renameData);
+    setIsPopupOpen(false);
   };
 
   return (
@@ -45,7 +62,19 @@ export default function FileTableRow({
           <Button variant="dark" className="mx-3">
             Delete
           </Button>
-          <Button variant="dark">Rename</Button>
+          <Button
+            variant="dark"
+            className="mx-3"
+            onClick={() => setIsPopupOpen(true)}
+          >
+            Rename
+          </Button>
+          <FileRenamePopup
+            isOpen={isPopupOpen}
+            onClose={() => setIsPopupOpen(false)}
+            onRename={handleRename}
+            fileName={fileName}
+          />
         </div>
       </td>
     </tr>
