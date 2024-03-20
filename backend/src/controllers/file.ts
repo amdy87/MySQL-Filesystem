@@ -35,7 +35,7 @@ const updateFile = async (file: DbFile, res: Response) => {
   }
 };
 
-export const fileController = {
+export const fileControllers = {
   getFiles: async (req: Request, res: Response) => {
     try {
       // const { userId } = req.body;

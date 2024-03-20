@@ -8,7 +8,7 @@ import { errorHandler } from '../utils/errorHandler';
 
 // };
 
-export const permissionController = {
+export const permissionControllers = {
   getPermissions: async (req: Request, res: Response) => {
     try {
       const permissions = await prisma.permission.findMany();

@@ -1,5 +1,5 @@
 import express from 'express';
-import { permissionController } from '../controllers/permission';
+import { permissionControllers } from '../controllers/permission';
 
 const router = express.Router();
 
@@ -10,6 +10,6 @@ const router = express.Router();
  *
  */
 
-router.get('/', permissionController.getPermissions);
+router.get('/', permissionControllers.getPermissions);
 
 export default router;

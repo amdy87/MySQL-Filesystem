@@ -15,7 +15,7 @@ export const getAllPermissions = async () => {
   return existingPermissions;
 };
 
-export const directoryController = {
+export const directoryControllers = {
   getDirectories: async (req: Request, res: Response) => {
     try {
       const { userId } = req.body;

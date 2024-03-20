@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import ms from 'ms';
 
 import { prisma } from '../connectPrisma';
-import { directoryController } from './directory';
+import { directoryControllers } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
 import { TOKEN } from '../utils/config';
@@ -149,7 +149,7 @@ const createRootDir = async (user: User, req: Request, res: Response) => {
     },
   }) as Request;
   try {
-    const newRootDir = await directoryController.addRootDirectory(
+    const newRootDir = await directoryControllers.addRootDirectory(
       addRootDirRequest,
       res,
     );

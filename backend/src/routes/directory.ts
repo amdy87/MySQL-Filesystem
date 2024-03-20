@@ -1,5 +1,5 @@
 import express from 'express';
-import { directoryController } from '../controllers/directory';
+import { directoryControllers } from '../controllers/directory';
 
 const router = express.Router();
 
@@ -32,7 +32,7 @@ const router = express.Router();
  *
  */
 
-router.post('/add', directoryController.addDirectory);
+router.post('/add', directoryControllers.addDirectory);
 
 /**
  * Get a list of all directories owned by a user
@@ -44,6 +44,6 @@ router.post('/add', directoryController.addDirectory);
  *  @field userId (int)
  */
 
-router.get('/', directoryController.getDirectories);
+router.get('/', directoryControllers.getDirectories);
 
 export default router;

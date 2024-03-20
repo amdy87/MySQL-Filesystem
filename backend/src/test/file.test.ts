@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 process.env.DATABASE_URL = 'default_value';
 
-import { directoryControllers } from '../controllers/directory';
+import { fileControllers } from '../controllers/file';
 import { prisma } from '../connectPrisma';
 
 // Mock the Prisma methods globally

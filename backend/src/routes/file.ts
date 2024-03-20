@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 
-import { fileController } from '../controllers/file';
+import { fileControllers } from '../controllers/file';
 
 export const fileRouter = express.Router();
 
@@ -15,7 +15,7 @@ export const fileRouter = express.Router();
  *  @description userId (int)
  */
 
-fileRouter.get('/', fileController.getFiles);
+fileRouter.get('/', fileControllers.getFiles);
 
 // ADD AUTH MIDDLEWARE after token is setup
 /**
@@ -30,7 +30,7 @@ fileRouter.get('/', fileController.getFiles);
  * @description parentDirId: the parent directory of the file of this user
  */
 
-fileRouter.get('/', fileController.getFilesByParentDir);
+fileRouter.get('/', fileControllers.getFilesByParentDir);
 
 /**
  * Create a file owned by a user
@@ -60,7 +60,7 @@ fileRouter.get('/', fileController.getFilesByParentDir);
  *
  */
 //  TODO: add authToken after frontend setup token storage
-fileRouter.post('/add', fileController.addFile);
+fileRouter.post('/add', fileControllers.addFile);
 
 /**
  * Update a file
@@ -91,4 +91,4 @@ fileRouter.post('/add', fileController.addFile);
  */
 
 //  TODO: add authToken after frontend setup token storage
-fileRouter.post('/update', fileController.updateFileById);
+fileRouter.post('/update', fileControllers.updateFileById);
