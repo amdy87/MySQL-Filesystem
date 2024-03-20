@@ -28,4 +28,26 @@ async function sendFile(data) {
   }
 }
 
-export { getFileTree, sendFile };
+// Posts the new file name to the backend
+async function fileRename(data) {
+  try {
+    console.log('Renaming file');
+    const response = await fetch('/backend/api/file/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data), // Backend requires JSON format
+    });
+
+    if (response.ok) {
+      console.log('File renamed successfully');
+    } else {
+      console.error('Rename failed');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+export { getFileTree, sendFile, fileRename };
