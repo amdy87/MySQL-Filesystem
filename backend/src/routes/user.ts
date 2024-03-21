@@ -21,7 +21,13 @@ const router = express.Router();
  *  @field userId (number)
  *  @desc id of a User
  */
-router.get('/', userExist, userIsAdmin, userControllers.getUsers);
+router.get(
+  '/',
+  authAccessToken,
+  userExist,
+  userIsAdmin,
+  userControllers.getUsers,
+);
 
 /**
  * Create a new User Record

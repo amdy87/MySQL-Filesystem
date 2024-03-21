@@ -1,6 +1,12 @@
 import express, { Request, Response } from 'express';
 
 import { fileControllers } from '../controllers/file';
+import { authAccessToken } from '../middlewares/auth';
+import {
+  checkReadPerm,
+  checkWritePerm,
+  checkExecutePerm,
+} from '../middlewares/file';
 
 export const fileRouter = express.Router();
 
@@ -23,14 +29,21 @@ fileRouter.get('/', fileControllers.getFiles);
  * @route GET
  * @access Any User
  *
- * @param userId
- * @description userId (int)
+ * @header req.headers.authorization
+ *  @requires
+ *  @description authentication token
  *
- * @param parentDirId
- * @description parentDirId: the parent directory of the file of this user
+ * @param {number} userId
+ *  @requires
+ *  @description id of the owner user
+ *
+ * @param {number} parentId
+ *  @requires
+ *  @description parentId: the parent directory of the file of this user
  */
 
-fileRouter.get('/', fileControllers.getFilesByParentDir);
+fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
+// fileRouter.get('/', fileControllers.getFilesByParentDir);
 
 /**
  * Create a file owned by a user
@@ -65,7 +78,7 @@ fileRouter.post('/add', fileControllers.addFile);
 /**
  * Update a file
  * @route POST /file/update
- * @access Owner of the user
+ * @access Owner of the file
  *
  * @body
  *  @requires
@@ -92,3 +105,12 @@ fileRouter.post('/add', fileControllers.addFile);
 
 //  TODO: add authToken after frontend setup token storage
 fileRouter.post('/update', fileControllers.updateFileById);
+
+/**
+ * delete a file by its fildId
+ * @route DEL /file/
+ * @access Owner of the file
+ *
+ * @param fileId: number
+ */
+fileRouter.delete('/', fileControllers.deleteFileById);

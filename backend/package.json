@@ -11,8 +11,7 @@
     "test": "jest",
     "test-api": "jest --testPathPattern=src/test",
     "test-db": "jest --testPathPattern=src/database/test",
-    "dev-run": "npm run build && node dist/entrypoint.js",
-    "dev-test": "npm run build && npm run test"
+    "dev-run": "npm run build && node dist/entrypoint.js"
   },
   "prisma": {
     "seed": "ts-node ./prisma/seeds/seed.ts"

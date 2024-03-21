@@ -1,3 +1,8 @@
+/**
+ * Unit Test written for User API
+ * @packageDocumentation
+ */
+
 import { Request, Response } from 'express';
 
 process.env.DATABASE_URL = 'default_value';

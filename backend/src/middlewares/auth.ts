@@ -1,3 +1,8 @@
+/**
+ * Middleware used in authentication
+ * @pakageDocumentation
+ */
+
 import { Response, Request, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 

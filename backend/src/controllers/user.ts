@@ -230,7 +230,7 @@ export const userControllers = {
   // Authenticate a user using email/password
   loginWithPassword: async (req: Request, res: Response) => {
     try {
-      const existUser = req.user;
+      const existUser = req.authenticatedUser;
       const { password, ...user } = existUser;
 
       const inputPassword: string = req.body.password;
@@ -262,7 +262,7 @@ export const userControllers = {
       // Extract updated user data from request body
       const { name, email, userId, rootDirId } = req.body;
 
-      const existingUser = req.user;
+      const existingUser = req.authenticatedUser;
 
       // Update user record in the database
       const updatedUser = await updateUser(
