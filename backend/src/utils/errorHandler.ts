@@ -1,3 +1,8 @@
+/**
+ * Error Types Definitions and Error Handler
+ * @pakageDocumentation
+ */
+
 import { Response } from 'express';
 
 // Error enum

@@ -1,3 +1,8 @@
+/**
+ * Routes for User API
+ * @pakageDocumentation
+ */
+
 import express from 'express';
 import { authAccessToken } from '../middlewares/auth';
 import {

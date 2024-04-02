@@ -1,3 +1,8 @@
+/**
+ * Routes for Tree API
+ * @pakageDocumentation
+ */
+
 import express, { Request, Response } from 'express';
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';

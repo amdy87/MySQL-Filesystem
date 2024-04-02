@@ -1,3 +1,8 @@
+/**
+ * DbDirectory interface definition
+ * @pakageDocumentation
+ */
+
 import { DbFile } from './file';
 import { Metadata } from './metadata';
 

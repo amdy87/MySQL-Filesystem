@@ -1,3 +1,8 @@
+/**
+ * Routes for File API
+ * @pakageDocumentation
+ */
+
 import express, { Request, Response } from 'express';
 
 import { fileControllers } from '../controllers/file';

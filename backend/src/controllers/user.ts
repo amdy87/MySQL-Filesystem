@@ -13,9 +13,9 @@ import { prisma } from '../connectPrisma';
 import { directoryControllers } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
-import { TOKEN } from '../utils/config';
-import { Role } from '../utils/config';
-import { JWT_SECRET } from '../utils/config';
+import { TOKEN } from '../utils/constants';
+import { Role } from '../utils/constants';
+import { JWT_SECRET } from '../utils/constants';
 
 /**
  * Set refresh token to cookie

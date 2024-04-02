@@ -1,3 +1,8 @@
+/**
+ * Controllers used in Permission API
+ * @pakageDocumentation
+ */
+
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 

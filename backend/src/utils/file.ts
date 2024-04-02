@@ -1,3 +1,8 @@
+/**
+ * DbFile interface definition
+ * @pakageDocumentation
+ */
+
 import { Metadata } from './metadata';
 
 export interface DbFile {

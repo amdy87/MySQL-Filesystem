@@ -1,3 +1,8 @@
+/**
+ * Routes for Permission API
+ * @pakageDocumentation
+ */
+
 import express from 'express';
 import { permissionControllers } from '../controllers/permission';
 

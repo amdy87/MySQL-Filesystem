@@ -1,3 +1,8 @@
+/**
+ * Routes for Directory API
+ * @pakageDocumentation
+ */
+
 import express from 'express';
 import { directoryControllers } from '../controllers/directory';
 

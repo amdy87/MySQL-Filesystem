@@ -1,3 +1,8 @@
+/**
+ * Controllers used in Directory API
+ * @pakageDocumentation
+ */
+
 import { Request, Response } from 'express';
 import { Prisma, PermissionType } from '@prisma/client';
 

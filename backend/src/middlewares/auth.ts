@@ -6,7 +6,7 @@
 import { Response, Request, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../utils/config';
+import { JWT_SECRET } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
 
 // Interface extending JwtPayload with a 'user' property

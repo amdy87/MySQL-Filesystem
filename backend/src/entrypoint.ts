@@ -1,9 +1,14 @@
+/**
+ * Entrypoint file in docker
+ * @pakageDocumentation
+ */
+
 import { PrismaClient } from '@prisma/client';
 import { exec } from 'child_process';
 
 import app from './server';
 import { prisma } from './connectPrisma';
-import { PORT } from './utils/config';
+import { PORT } from './utils/constants';
 
 async function waitForConnection(
   predicate: () => Promise<boolean>,
