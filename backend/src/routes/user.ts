@@ -19,7 +19,7 @@ const router = express.Router();
  * @body
  *  @requires
  *  @field userId (number)
- *  @desc id of a User
+ *  @description id of a User
  */
 router.get(
   '/',
@@ -37,15 +37,15 @@ router.get(
  * @body
  *  @requires
  *  @field name (string)
- *  @desc User name
+ *  @description User name
  *
  *  @requires
  *  @field email (string)
- *  @desc User email
+ *  @description User email
  *
  *  @requires
  *  @field password (string)
- *  @desc User password
+ *  @description User password
  *  * Password must:
  *  * contain at least an uppercase letter
  *  * contain at least an lowercase letter
@@ -63,11 +63,11 @@ router.post('/signup', userControllers.signUp);
  * @body
  *  @required
  *  @field email (string)
- *  @desc User registered email
+ *  @description User registered email
  *
  *  @required
  *  @field password (string)
- *  @desc User provided password
+ *  @description User provided password
  */
 
 router.post('/login', userExistByEmail, userControllers.loginWithPassword);
@@ -80,24 +80,24 @@ router.post('/login', userExistByEmail, userControllers.loginWithPassword);
  * @header
  *  @required
  *  @field Authorization
- *  @desc Bearer token
+ *  @description Bearer token
  *
  * @body
  *  @required
  *  @field userId (int)
- *  @desc User id
+ *  @description User id
  *
  *  @optional
  *  @field email (string)
- *  @desc User new email
+ *  @description User new email
  *
  *  @optional
  *  @field name (string)
- *  @desc User new name
+ *  @description User new name
  *
  *  @optional
  *  @field rootDirId (int)
- *  @desc id of the root direcotry owned by user
+ *  @description id of the root direcotry owned by user
  */
 router.post(
   '/update',
@@ -114,16 +114,16 @@ router.post(
  * @header
  *  @required
  *  @field Authorization
- *  @desc Bearer token
+ *  @description Bearer token
  *
  * @body
  *  @required
  *  @field userId (number)
- *  @desc User id of User who request to delete users
+ *  @description User id of User who request to delete users
  *
  * @param id (number)
  *  @required
- *  @desc User id to be deleted
+ *  @description User id to be deleted
  */
 
 router.delete(

@@ -1,3 +1,8 @@
+/**
+ * Controllers used in User API
+ * @pakageDocumentation
+ */
+
 import { CookieOptions, Request, Response } from 'express';
 import { $Enums, Prisma, PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';

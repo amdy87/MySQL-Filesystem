@@ -11,23 +11,23 @@ const router = express.Router();
  * @body
  *  @requires
  *  @field isRoot (bool)
- *  @desc whether this is a root directory
+ *  @description whether this is a root directory
  *
  *  @requires
  *  @field ownerId (int)
- *  @desc userId of the User who creates this directory
+ *  @description userId of the User who creates this directory
  *
  *  @requires
  *  @field name (string)
- *  @desc name the directory
+ *  @description name the directory
  *
  *  @requires
  *  @field path (string)
- *  @desc absolute path of the directory
+ *  @description absolute path of the directory
  *
  *  @requires
  *  @field parentId (int)
- *  @desc directoryId of the parent directory
+ *  @description directoryId of the parent directory
  *        None if this is the root dir
  *
  */

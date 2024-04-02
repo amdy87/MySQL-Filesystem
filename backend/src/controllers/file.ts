@@ -98,29 +98,15 @@ export const fileControllers = {
 
   getFilesByParentDir: async (req: Request, res: Response) => {
     try {
-      if (!(req.query.userId && req.query.parentId)) {
-        throw errorHandler.InvalidParamError('userId and parentId');
+      if (!(req.query?.userId && req.query?.parentId)) {
+        throw errorHandler.InvalidParamError('userId or/and parentId');
       }
       // const { userId } = req.body;
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
 
-      const files = await prisma.file.findMany({
-        where: {
-          ownerId: userId,
-          parentId: parentId,
-        },
-        select: {
-          id: true,
-          createdAt: true,
-          updatedAt: true,
-          name: true,
-          path: true,
-          parentId: true,
-          ownerId: true,
-          //   permissions: true,
-        },
-      });
+      const files = await getFilesByParent(userId, parentId);
+
       res.status(200).send({ ownerId: userId, files: files });
     } catch (error: any) {
       if (error.code === 'P2025') {
@@ -251,4 +237,24 @@ export const fileControllers = {
       errorHandler.handleError(error, res);
     }
   },
+};
+
+export const getFilesByParent = async (userId: number, parentId: number) => {
+  const files = await prisma.file.findMany({
+    where: {
+      ownerId: userId,
+      parentId: parentId,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return files;
 };

@@ -1,8 +1,16 @@
 import express, { Request, Response } from 'express';
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';
+import { treeControllers } from '../controllers/tree';
+import { authAccessToken } from '../middlewares/auth';
 
 export const apiRouter = express.Router();
+
+apiRouter.get(
+  '/treeByParent',
+  authAccessToken,
+  treeControllers.getTreeByParentDirId,
+);
 
 apiRouter.get('/tree', (_req: Request, res: Response) => {
   const tmpFile: DbFile = {

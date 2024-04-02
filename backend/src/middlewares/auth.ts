@@ -40,7 +40,7 @@ export const authAccessToken = (
     }
 
     const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret);
-    req.user = decoded as JwtPayloadWithUser;
+    req.authenticatedUser = decoded as JwtPayloadWithUser;
     next();
   } catch (error: any) {
     const message = 'Token Invalid or expired';

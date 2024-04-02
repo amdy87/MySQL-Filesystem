@@ -52,23 +52,23 @@ fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
  *
  * @body
  *  @requires
- *  @field ownerId (number)
+ *  @field ownerId {number}
  *  @description userId of the User who creates this file
  *
  *  @requires
- *  @field name (string)
+ *  @field name {string}
  *  @description name of the file
  *
  *  @requires
- *  @field path (string)
+ *  @field path {string}
  *  @description absolute path of the file
  *
  *  @requires
- *  @field parentId (number)
+ *  @field parentId {number}
  *  @description directoryId of the parent directory
  *
  *  @optional
- *  @field content (string)
+ *  @field content {string}
  *  @description content written in this file
  *
  */

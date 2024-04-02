@@ -18,10 +18,10 @@ export const getAllPermissions = async () => {
 export const directoryControllers = {
   getDirectories: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.body;
-      if (!userId) {
+      if (!req.query?.userId) {
         throw errorHandler.InvalidParamError('userId');
       }
+      const userId = parseInt(req.query.userId as string);
 
       const directories = await prisma.directory.findMany({
         where: {
@@ -38,6 +38,21 @@ export const directoryControllers = {
           permissions: true,
         },
       });
+      res.status(200).send({ ownerId: userId, dirs: directories });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
+
+  getDirsByParentDir: async (req: Request, res: Response) => {
+    try {
+      if (!(req.query?.userId && req.query?.parentId)) {
+        throw errorHandler.InvalidParamError('userId or/and parentId');
+      }
+      const userId = parseInt(req.query.userId as string);
+      const parentId = parseInt(req.query.parentId as string);
+
+      const directories = await getDirsByParent(userId, parentId);
       res.status(200).send({ ownerId: userId, dirs: directories });
     } catch (error: any) {
       errorHandler.handleError(error, res);
@@ -141,4 +156,43 @@ export const directoryControllers = {
   // TODO: update
 
   // TODO: deleteByOwnerId
+};
+
+export const getDirsByParent = async (userId: number, parentId: number) => {
+  const directories = await prisma.directory.findMany({
+    where: {
+      ownerId: userId,
+      parentId: parentId,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return directories;
+};
+
+export const getDirById = async (dirId: number) => {
+  const dir = await prisma.directory.findUnique({
+    where: {
+      id: dirId,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return dir;
 };
