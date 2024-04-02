@@ -515,19 +515,25 @@ deactivate Express Backend
 
 # Code Standards
 
-This document outlined the code standard for writing our project: MySQL-based Filesystem. The project uses React.js as frontend and Typescript as backend. 
+This document outlined the code standard for writing our project: MySQL-based Filesystem. The project uses JavaScript and React.js on the frontend and Typescript with Express.js and Prisma on the backend. 
 
-## React.js standards
+### Naming Conventions
 
-[Project Structure](#project-structure)
+- **Components:** Use PascalCase for React components and hooks. For example, `<UserProfile />` in `UserProfile.js`.
+- **Classes:** Use PascalCase. For example, `SomeKlass`.
+- **Files:** Use camelCase for all files that do not export React components. For example, `userProfileHelpers.js`.
+- **Methods & Variables:** Use camelCase for methods and variables. For instance, `getUserData`.
+- **Constants:** Use all uppercase and separate words by underscore. For example, `SOME_CONSTANT`.
 
-[Naming Conventions](#naming-conventions)
+## Frontend standards
+
+[Structure](#structure)
 
 [State Management](#state-management)
 
 [Styling](#styling)
 
-### Project Structure
+### Structure
 - src/
     - components/: reusable components without state.
         - sample/: page directory 
@@ -546,12 +552,6 @@ This document outlined the code standard for writing our project: MySQL-based Fi
     - stores/: Global state store using Redux
     - assets/: Static assets like images and icons.
 
-### Naming Conventions
-
-- **Components:** Use PascalCase for React components. For example, `UserProfile.js`.
-- **Files:** Use camelCase for other files. For example, `userProfileHelpers.js`.
-- **Methods & Variables:** Use camelCase for methods and variables. For instance, `getUserData`.
-
 ### State Management
 
 - Prefer local state management with hooks (`useState`, `useReducer`) for simple state logic.
@@ -561,24 +561,38 @@ This document outlined the code standard for writing our project: MySQL-based Fi
 ### Styling
 - Use React Bootstrap to keep project styling consistent.
 - Keep styling props minimal and use class names for static style.
+- Use [prettier](https://prettier.io/) for automatic code formatting
 
 ### Testing
-- Write unit tests for components using React Testing Library.
+- Write unit tests for components using React Testing Library and Vitest.
 - Test both the UI and interaction logic.
 - Each file will have associated unit test files
 - Maintain above 60% coverage
+- GUI will be tested manually to ensure correct functionality and desired appearance
 
-# Typescript Standards
+# Backend Standards
+
+### Directory Structure
+- `/database`
+    - `/test` -> contains all database integration tests
+    - `query.ts` -> contains all Prisma Queries
+    - `sample.ts` -> contains example data for database tests
+- `/middlewares` -> contains all Express middleware (e.g. user authentication middleware)
+- `/routes` -> contains express routers that define available routes and delegate them to the appropriate controller
+- `/controllers` -> contains all controllers, which serve as a layer to implement business logic between the routers and the database
+- `/test` -> contains all Jest tests for the backend API
+- `/utils` -> contains type definitions, environment variables, and helper functions
+
 
 ### Source File Structure
 Files consist of the following, in order:
 
-1. JSDoc with `@fileoverview`, if present
-2. Imports, if present
+1. JSDoc with `@fileoverview`
+2. Imports
 3. The file’s implementation
 
 ### `@fileoverview` JSDoc
-A file may have a @fileoverview JSDoc. It should provide a description of the file's content.
+A file must have a @fileoverview JSDoc to provide a description of the file's content.
 
 ```
 /**
@@ -586,14 +600,10 @@ A file may have a @fileoverview JSDoc. It should provide a description of the fi
  */
 ```
 
-### Naming Conventions
-- **Classes:** Use UpperCamelCase. For example, `FirstProjectFile`.
-- **Constants:** Use all uppercase and separate words by underscore. For example, `SOME_CONSTANT`.
-- **Files:** Use camelCase for other files. For example, `userProfile.ts`.
-- **Functions & Variables:** Use camelCase for functions and variables. For instance, `getUserData`.
+### Styling
+- Use [prettier](https://prettier.io/) for automatic code formatting
 
 ### Testing
-- Test that everything we need is being pulled from the database.
+- Test that the API returns the expected response and that everything we need is being pulled from the database using the Jest testing framework.
 - Maintain above 60% coverage
 - Each file will have associated unit test files for automated Testing
-- GUI will be tested manually to ensure correct functionality and desired appearance
