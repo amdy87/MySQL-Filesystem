@@ -37,7 +37,7 @@ describe('getDirectories', () => {
     // Create a mock instance of PrismaClient
     let req: Partial<Request>;
     let res: Partial<Response>;
-    req = { body: { userId: 1 } }; // Mock request
+    req = { query: { userId: '1' } }; // Mock request
     res = {
       send: jest.fn(),
       status: jest.fn().mockReturnThis(),
