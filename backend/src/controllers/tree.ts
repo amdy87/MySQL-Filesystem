@@ -9,9 +9,7 @@ import { Prisma, PermissionType } from '@prisma/client';
 
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';
-import { TreeNode } from '../utils/tree';
 
-import { prisma } from '../connectPrisma';
 import { errorHandler } from '../utils/errorHandler';
 import { getFilesByParent } from './file';
 import { getDirsByParent, getDirById } from './directory';
@@ -20,13 +18,34 @@ export const treeControllers = {
   getTreeByParentDirId: async (req: Request, res: Response) => {
     try {
       if (!(req.query.userId && req.query.parentId)) {
-        throw errorHandler.InvalidParamError('userId or/and parentId');
+        throw errorHandler.InvalidQueryParamError('userId or/and parentId');
       }
+
       // Get userId and parentDirId from query
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
 
-      //   TODO: get children dirs recursively
+      if (req.authenticatedUser?.id != userId) {
+        throw errorHandler.UnauthorizedError(
+          'Token does not matched with user',
+        );
+      }
+
+      const currDir = await getDirById(parentId);
+
+      if (!currDir) {
+        throw errorHandler.RecordNotFoundError(
+          `parentDirId ${parentId} does not exist`,
+        );
+      }
+
+      if (currDir.ownerId != userId) {
+        throw errorHandler.UnauthorizedError(
+          'User does not own this directory',
+        );
+      }
+
+      // get all dirs  and files recursively
       const tree = await getDocsByParent(userId, parentId);
       res.status(200).send(tree);
     } catch (error: any) {
@@ -35,12 +54,26 @@ export const treeControllers = {
   },
 };
 
-// const recursiveGetFiles
-
 /** Convert the list of permissions stored in a Prisma File object
  * to the perms format that frontend can handle
  */
-const prismaPermissionsToPerms = (permissions: any) => {};
+export const prismaPermissionsToPerms = (permissions: any) => {
+  let perms = {
+    read: false,
+    write: false,
+    execute: false,
+  };
+  permissions.map((p: any) => {
+    if (p.type == PermissionType.READ) {
+      perms.read = true;
+    } else if (p.type == PermissionType.WRITE) {
+      perms.write = true;
+    } else if (p.type == PermissionType.EXECUTE) {
+      perms.execute = true;
+    }
+  });
+  return perms;
+};
 
 /**
  *
@@ -55,14 +88,9 @@ const getDocsByParent = async (userId: number, parentId: number) => {
     metadata: {
       createdAt: new Date(file.createdAt || '').getTime(),
       updatedAt: new Date(file.updatedAt || '').getTime(),
-      perms: {
-        read: true,
-        write: true,
-        execute: true,
-      },
+      perms: prismaPermissionsToPerms(file.permissions),
     },
   }));
-
   const currDir = await getDirById(parentId);
 
   const result: DbDirectory = {
@@ -74,11 +102,7 @@ const getDocsByParent = async (userId: number, parentId: number) => {
     metadata: {
       createdAt: new Date(currDir?.createdAt || '').getTime(),
       updatedAt: new Date(currDir?.updatedAt || '').getTime(),
-      perms: {
-        read: true,
-        write: true,
-        execute: true,
-      },
+      perms: prismaPermissionsToPerms(currDir?.permissions),
     },
   };
 

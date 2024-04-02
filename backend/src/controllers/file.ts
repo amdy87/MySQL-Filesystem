@@ -70,7 +70,7 @@ export const fileControllers = {
   getFiles: async (req: Request, res: Response) => {
     try {
       if (!req.query?.userId) {
-        throw errorHandler.InvalidParamError('userId');
+        throw errorHandler.InvalidQueryParamError('userId');
       }
 
       const userId = parseInt(req.query.userId as string);
@@ -99,7 +99,7 @@ export const fileControllers = {
   getFilesByParentDir: async (req: Request, res: Response) => {
     try {
       if (!(req.query?.userId && req.query?.parentId)) {
-        throw errorHandler.InvalidParamError('userId or/and parentId');
+        throw errorHandler.InvalidQueryParamError('userId or/and parentId');
       }
       // const { userId } = req.body;
       const userId = parseInt(req.query.userId as string);
@@ -122,7 +122,7 @@ export const fileControllers = {
     content = content || '';
     try {
       if (!(ownerId && name && path && parentId)) {
-        throw errorHandler.InvalidParamError(
+        throw errorHandler.InvalidBodyParamError(
           'One of (ownerId, name, path, or parentId) ',
         );
       }
@@ -174,7 +174,7 @@ export const fileControllers = {
 
       let file: Prisma.FileFindUniqueArgs;
       if (!fileId) {
-        throw errorHandler.InvalidParamError('fileId');
+        throw errorHandler.InvalidBodyParamError('fileId');
       }
       file = { where: { id: fileId } };
 
@@ -211,7 +211,7 @@ export const fileControllers = {
   deleteFileById: async (req: Request, res: Response) => {
     try {
       if (!req.params?.fileId) {
-        throw errorHandler.InvalidParamError('fileId');
+        throw errorHandler.InvalidQueryParamError('fileId');
       }
       const fileId = parseInt(req.params.fileId as string);
       const fileExist = await existFileId(fileId);

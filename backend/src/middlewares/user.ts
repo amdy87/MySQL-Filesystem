@@ -32,9 +32,9 @@ export const userExist = async (
 ) => {
   try {
     let user: Prisma.UserFindUniqueArgs;
-    const userId = req.authenticatedUser?.id;
+    const userId = parseInt(req.authenticatedUser?.id);
     if (!userId) {
-      throw errorHandler.InvalidParamError('userId');
+      throw errorHandler.UnauthorizedError('Middleware auth failed');
     }
     user = {
       where: { id: userId },
@@ -74,7 +74,7 @@ export const userExistParam = async (
     const userId = parseInt(req.params.id);
     user = { where: { id: userId } };
     if (!userId) {
-      throw errorHandler.InvalidParamError('userId');
+      throw errorHandler.UnauthorizedError('Middleware auth failed');
     }
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
@@ -115,7 +115,7 @@ export const userExistByEmail = async (
       },
     };
     if (!email) {
-      throw errorHandler.InvalidParamError('email');
+      throw errorHandler.InvalidBodyParamError('email');
     }
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {

@@ -27,7 +27,7 @@ export const authAccessToken = (
     // Read auth header
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      const message = 'Access token is not set.';
+      const message = 'Access token is not set';
       throw errorHandler.UnauthorizedError(message);
     }
 
@@ -35,7 +35,8 @@ export const authAccessToken = (
     // Assume authHeader is a string with format "Bearer <token>"
     const [_, token] = authHeader.split(' ');
     if (!(token && JWT_SECRET)) {
-      const message = 'Access token is not set.';
+      const message =
+        'Access token is set but not in correct "Bearer <token>" format';
       throw errorHandler.UnauthorizedError(message);
     }
 
@@ -43,7 +44,8 @@ export const authAccessToken = (
     req.authenticatedUser = decoded as JwtPayloadWithUser;
     next();
   } catch (error: any) {
-    const message = 'Token Invalid or expired';
-    errorHandler.handleError(errorHandler.UnauthorizedError(message), res);
+    console.log(error);
+    error.message = error.message || 'Token Invalid or expired';
+    errorHandler.handleError(error, res);
   }
 };

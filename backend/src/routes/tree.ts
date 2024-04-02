@@ -4,15 +4,15 @@ import { DbDirectory } from '../utils/directory';
 import { treeControllers } from '../controllers/tree';
 import { authAccessToken } from '../middlewares/auth';
 
-export const apiRouter = express.Router();
+export const treeRouter = express.Router();
 
-apiRouter.get(
+treeRouter.get(
   '/treeByParent',
   authAccessToken,
   treeControllers.getTreeByParentDirId,
 );
 
-apiRouter.get('/tree', (_req: Request, res: Response) => {
+treeRouter.get('/sampleData', (_req: Request, res: Response) => {
   const tmpFile: DbFile = {
     id: 4,
     name: 'myfile',

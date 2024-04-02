@@ -3,7 +3,8 @@ import { Response } from 'express';
 // Error enum
 const ERROR = {
   ValidationError: 'ValidationError',
-  InvalidParamError: 'InvalidParamError',
+  InvalidBodyParamError: 'InvalidBodyParamError',
+  InvalidQueryParamError: 'InvalidQueryParamError',
   UnauthorizedError: 'UnauthorizedError',
   ForbiddenError: 'ForbiddenError',
   UserNotFoundError: 'UserNotFoundError',
@@ -32,12 +33,22 @@ export const errorHandler = {
 
   /**
    * Thrown when input parameter is invalid
-   * @return InvalidParamError
+   * @return InvalidBodyParamError
    */
-  InvalidParamError: (param: string) => {
+  InvalidBodyParamError: (param: string) => {
     const message: string = `${param} is invalid or missing in the body`;
-    return { name: ERROR.InvalidParamError, status: 400, message };
+    return { name: ERROR.InvalidBodyParamError, status: 400, message };
   },
+
+  /**
+   * Thrown when input parameter is invalid
+   * @return InvalidQueryParamError
+   */
+  InvalidQueryParamError: (param: string) => {
+    const message: string = `${param} is invalid or missing in the query`;
+    return { name: ERROR.InvalidQueryParamError, status: 400, message };
+  },
+
   /**
    * Thrown when a document with duplicate
    * value on a unique field is inserted

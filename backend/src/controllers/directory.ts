@@ -19,7 +19,7 @@ export const directoryControllers = {
   getDirectories: async (req: Request, res: Response) => {
     try {
       if (!req.query?.userId) {
-        throw errorHandler.InvalidParamError('userId');
+        throw errorHandler.InvalidQueryParamError('userId');
       }
       const userId = parseInt(req.query.userId as string);
 
@@ -47,7 +47,7 @@ export const directoryControllers = {
   getDirsByParentDir: async (req: Request, res: Response) => {
     try {
       if (!(req.query?.userId && req.query?.parentId)) {
-        throw errorHandler.InvalidParamError('userId or/and parentId');
+        throw errorHandler.InvalidQueryParamError('userId or/and parentId');
       }
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
@@ -63,7 +63,7 @@ export const directoryControllers = {
     try {
       var { ownerId, name, path } = req.body;
       if (!ownerId) {
-        throw errorHandler.InvalidParamError('ownerId');
+        throw errorHandler.InvalidBodyParamError('ownerId');
       }
 
       // Check if user exists, TODO: move to middleware later
@@ -106,7 +106,7 @@ export const directoryControllers = {
     try {
       var { ownerId, parentId, name, path } = req.body;
       if (!ownerId) {
-        throw errorHandler.InvalidParamError('ownerId');
+        throw errorHandler.InvalidBodyParamError('ownerId');
       }
 
       // Check if user exists
@@ -120,7 +120,7 @@ export const directoryControllers = {
       }
 
       if (!parentId) {
-        throw errorHandler.InvalidParamError('parentId');
+        throw errorHandler.InvalidBodyParamError('parentId');
       }
 
       // Retrieve existing permission records from the database

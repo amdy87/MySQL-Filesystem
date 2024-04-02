@@ -16,10 +16,10 @@ const router = express.Router();
  * @route GET /user/
  * @access ADMIN
  *
- * @body
+ * @header
  *  @requires
- *  @field userId (number)
- *  @description id of a User
+ *  @field authorization (string)
+ *  @description authorization token
  */
 router.get(
   '/',
