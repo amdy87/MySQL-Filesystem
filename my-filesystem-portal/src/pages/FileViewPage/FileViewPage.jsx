@@ -44,7 +44,7 @@ export default function FileViewPage() {
           );
         }
       }
-      console.log(currentDir);
+
       files.push({
         fileName: '.',
         fileType: 'directory',
@@ -80,13 +80,11 @@ export default function FileViewPage() {
           };
         }),
       );
-      console.log(files);
       setDisplayedFiles(files);
     }
   }, [tree]);
 
   const handleFileChange = async (event) => {
-    console.log('Collecting file data');
     const file = event.target.files[0];
 
     let formData = {};
@@ -127,7 +125,6 @@ export default function FileViewPage() {
 
   // Redirects the click action to the hiddenFileInput
   const handleClick = () => {
-    console.log('Handled');
     document.getElementById('hiddenFileInput').click();
   };
 
