@@ -1,5 +1,6 @@
 import { request } from '@utils/request';
 
+// Requests all the directories and files for the user
 async function getFileTree() {
   const data = await request('/api/tree');
   return data;
@@ -13,7 +14,7 @@ async function sendFile(data) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data), // Puts file data in JSON format
     });
 
     if (response.ok) {
@@ -23,6 +24,7 @@ async function sendFile(data) {
       console.error('Upload failed');
     }
   } catch (error) {
+    // Print out error message in console
     console.error('Error:', error);
   }
 }
@@ -48,4 +50,30 @@ async function fileRename(data) {
   }
 }
 
-export { getFileTree, sendFile, fileRename };
+// Gets the user content
+async function collectUserContent(userId) {
+  try {
+    // Puts GET info into a query to send to backend
+    const url = new URL('/backend/api/file/', 'http://localhost');
+    url.searchParams.set('userId', userId);
+
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      console.log('User data collected successfully');
+      const data = await response.json();
+      return data; // returns response data in json format
+    } else {
+      console.error('Collection failed');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+export { getFileTree, sendFile, fileRename, collectUserContent };
