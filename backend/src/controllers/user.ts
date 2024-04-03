@@ -1,6 +1,6 @@
 /**
  * Controllers used in User API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { CookieOptions, Request, Response } from 'express';
@@ -288,7 +288,10 @@ export const userControllers = {
   // Delete a user with the specified id and all related data
   // Only ADMIN user has authority to do so
   deleteUserById: async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.id);
+    if (!req.query?.userId) {
+      throw errorHandler.InvalidQueryParamError('userId');
+    }
+    const userId = parseInt(req.query?.userId as string);
     try {
       const user = await prisma.user.delete({
         where: {

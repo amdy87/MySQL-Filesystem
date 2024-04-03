@@ -1,6 +1,6 @@
 /**
  * Routes for Directory API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import express from 'express';
@@ -14,10 +14,6 @@ const router = express.Router();
  * @access Any User
  *
  * @body
- *  @requires
- *  @field isRoot (bool)
- *  @description whether this is a root directory
- *
  *  @requires
  *  @field ownerId (int)
  *  @description userId of the User who creates this directory

@@ -1,6 +1,6 @@
 /**
  * Metadata and Perms interface definition
- * @pakageDocumentation
+ * @fileoverview
  */
 
 export type Metadata = {

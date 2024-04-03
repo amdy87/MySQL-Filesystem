@@ -1,6 +1,6 @@
 /**
  * Middleware used in authentication
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Response, Request, NextFunction } from 'express';

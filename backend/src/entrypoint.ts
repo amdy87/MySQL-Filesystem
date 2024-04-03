@@ -1,6 +1,6 @@
 /**
  * Entrypoint file in docker
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { PrismaClient } from '@prisma/client';

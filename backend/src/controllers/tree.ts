@@ -1,7 +1,7 @@
 /**
  * Controllers used in API to return files and directorys
  * under a parent directory owned by a user
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Request, Response } from 'express';

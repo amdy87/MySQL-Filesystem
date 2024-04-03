@@ -1,6 +1,6 @@
 /**
  * User interface definition
- * @pakageDocumentation
+ * @fileoverview
  */
 
 // import { $Enums } from '@prisma/client';

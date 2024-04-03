@@ -1,6 +1,6 @@
 /**
  * Prisma Connection used in backend
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { PrismaClient } from '@prisma/client';

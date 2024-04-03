@@ -1,6 +1,6 @@
 /**
  * Middleware used in File API endpoints
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Response, Request, NextFunction } from 'express';

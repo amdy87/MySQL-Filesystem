@@ -1,6 +1,6 @@
 /**
  * Controllers used in Directory API
- * @pakageDocumentation
+ * @@fileoverview
  */
 
 import { Request, Response } from 'express';
@@ -110,8 +110,10 @@ export const directoryControllers = {
   addDirectory: async (req: Request, res: Response) => {
     try {
       var { ownerId, parentId, name, path } = req.body;
-      if (!ownerId) {
-        throw errorHandler.InvalidBodyParamError('ownerId');
+      if (!(ownerId && parentId && name && path)) {
+        throw errorHandler.InvalidBodyParamError(
+          'One of (ownerId , parentId , name , path )',
+        );
       }
 
       // Check if user exists

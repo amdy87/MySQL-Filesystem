@@ -1,6 +1,6 @@
 /**
  * Load and setup constants used in backend
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import dotenv from 'dotenv';

@@ -1,6 +1,6 @@
 /**
  * Error Types Definitions and Error Handler
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Response } from 'express';

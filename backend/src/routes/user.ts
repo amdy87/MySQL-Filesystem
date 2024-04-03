@@ -1,6 +1,6 @@
 /**
  * Routes for User API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import express from 'express';
@@ -118,21 +118,17 @@ router.post(
  *
  * @header
  *  @required
- *  @field Authorization
- *  @description Bearer token
+ *  @param {string} Authorization
+ *  @description Bearer <token> of the user who requests
  *
- * @body
+ * @param {number} userId
  *  @required
- *  @field userId (number)
  *  @description User id of User who request to delete users
  *
- * @param id (number)
- *  @required
- *  @description User id to be deleted
  */
 
 router.delete(
-  '/:id',
+  '/',
   authAccessToken,
   userExist, //check whom request
   userIsAdmin,

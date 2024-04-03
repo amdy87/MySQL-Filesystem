@@ -1,6 +1,6 @@
 /**
  * Routes for Permission API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import express from 'express';

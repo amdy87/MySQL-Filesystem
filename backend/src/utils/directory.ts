@@ -1,6 +1,6 @@
 /**
  * DbDirectory interface definition
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { DbFile } from './file';

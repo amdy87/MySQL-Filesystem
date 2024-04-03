@@ -1,6 +1,6 @@
 /**
  * Routes for File API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import express, { Request, Response } from 'express';
@@ -21,12 +21,29 @@ export const fileRouter = express.Router();
  * @route GET
  * @access Any User
  *
- * @params
+ * @param {number} userId
  *  @requires
- *  @description userId (int)
+ *  @description {number} userId
  */
 
 fileRouter.get('/', fileControllers.getFiles);
+
+/**
+ * Get file content by fileId
+ * @route GET
+ * @access User has read access to the file
+ *
+ * @header req.headers.authorization
+ *  @requires
+ *  @description authentication token; from authenticating this token,
+ *                we know who's the user putting in this request
+ *
+ * @param {number} fileId
+ *  @requires
+ *  @description {number} fileId
+ */
+//  TODO: add middleware to autheticate token, and authorize the user
+fileRouter.get('/content', fileControllers.getFileContent);
 
 // ADD AUTH MIDDLEWARE after token is setup
 /**

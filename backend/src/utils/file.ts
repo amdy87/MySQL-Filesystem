@@ -1,6 +1,6 @@
 /**
  * DbFile interface definition
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Metadata } from './metadata';

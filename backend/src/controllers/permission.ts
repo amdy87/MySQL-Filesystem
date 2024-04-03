@@ -1,6 +1,6 @@
 /**
  * Controllers used in Permission API
- * @pakageDocumentation
+ * @fileoverview
  */
 
 import { Request, Response } from 'express';
