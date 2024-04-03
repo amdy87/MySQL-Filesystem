@@ -1,5 +1,5 @@
 /**
- * Middleware used in File API endpoints
+ * Middleware used in Directory API endpoints
  * @fileoverview
  */
 
@@ -11,13 +11,13 @@ import { prisma } from '../connectPrisma';
 /**
  * This middleware is called if token is valid
  *  (after authenticated in middleware/auth.ts/authAccessToken)
- * Checks whether authenticated user has read permission of this file
+ * Checks whether authenticated user has read permission of this directory
  * Used in cases:
- * 1) get file content by fileId
+ * 1) get directory by directoryId
  *
  * @param {Request} req
  *    @param {Object} req.authenticatedUser : {id: <useId>} - set by a successful token authentication
- *    @param {string} req.query.fileId : id of a file record
+ *    @param {string} req.query.directoryId : id of a directory record
  * @param {Response} res
  * @param {NextFunction} next
  *
@@ -28,24 +28,24 @@ export const checkReadPerm = async (
   res: Response,
   next: NextFunction,
 ) => {
-  // Get permissions of this file for this user
+  // Get permissions of this directory for this user
   try {
-    const file = await prisma.file.findUnique({
-      where: { id: parseInt(req.query?.fileId as string) },
+    const directory = await prisma.directory.findUnique({
+      where: { id: parseInt(req.query?.directoryId as string) },
       select: {
         permissions: true,
       },
     });
     let canRead = false;
-    console.log(file);
-    file?.permissions.map((p: any) => {
+    console.log(directory);
+    directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.READ) {
         canRead = true;
       }
     });
     if (!canRead) {
       throw errorHandler.UnauthorizedError(
-        'User has no Read Permission on file',
+        'User has no Read Permission on directory',
       );
     }
     next();
@@ -57,14 +57,14 @@ export const checkReadPerm = async (
 /**
  * This middleware is called if token is valid
  * (after authenticated in middleware/auth.ts/authAccessToken)
- * Checks whether authenticated user has write permission of this file
+ * Checks whether authenticated user has write permission of this directory
  * Used in cases:
- * 1) update file by fileId
- * 2) delete file by fileId
+ * 1) update directory by directoryId
+ * 2) delete directory by directoryId
  *
  * @param {Request} req
  * @param {Object} req.authenticatedUser : {id: <useId>} - set by a successful token authentication
- * @param {number} req.body.fileId : id of a file record
+ * @param {number} req.body.directoryId : id of a directory record
  * @param {Response} res
  * @param {NextFunction} next
  *
@@ -76,15 +76,15 @@ export const checkWritePerm = async (
   next: NextFunction,
 ) => {
   try {
-    const file = await prisma.file.findUnique({
-      where: { id: req.body?.fileId },
+    const directory = await prisma.directory.findUnique({
+      where: { id: req.body?.directoryId },
       select: {
         permissions: true,
       },
     });
     let canWrite = false;
-    console.log(file);
-    file?.permissions.map((p: any) => {
+    console.log(directory);
+    directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.WRITE) {
         canWrite = true;
       }
@@ -92,7 +92,7 @@ export const checkWritePerm = async (
     console.log(`canWrite: ${canWrite}`);
     if (!canWrite) {
       throw errorHandler.UnauthorizedError(
-        'User has no WRITE Permission on file',
+        'User has no WRITE Permission on directory',
       );
     }
     next();
@@ -104,13 +104,13 @@ export const checkWritePerm = async (
 /**
  * This middleware is called if token is valid
  * (after authenticated in middleware/auth.ts/authAccessToken)
- * Checks whether authenticated user has execute permission of this file
+ * Checks whether authenticated user has execute permission of this directory
  * Used in cases:
  * 1) ???
  *
  * @param {Request} req
  * @param {Object} req.authenticatedUser : {id: <useId>} - set by a successful token authentication
- * @param {string} req.body.fileId : id of a file record
+ * @param {string} req.body.directoryId : id of a directory record
  * @param {Response} res
  * @param {NextFunction} next
  *
@@ -122,22 +122,22 @@ export const checkExecutePerm = async (
   next: NextFunction,
 ) => {
   try {
-    const file = await prisma.file.findUnique({
-      where: { id: req.body?.fileId },
+    const directory = await prisma.directory.findUnique({
+      where: { id: req.body?.directoryId },
       select: {
         permissions: true,
       },
     });
     let canExecute = false;
-    console.log(file);
-    file?.permissions.map((p: any) => {
+    console.log(directory);
+    directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.EXECUTE) {
         canExecute = true;
       }
     });
     if (!canExecute) {
       throw errorHandler.UnauthorizedError(
-        'User has no EXECUTE Permission on file',
+        'User has no EXECUTE Permission on directory',
       );
     }
     next();

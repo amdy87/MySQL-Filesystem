@@ -4,7 +4,9 @@
  */
 
 import express from 'express';
+import { authAccessToken } from '../middlewares/auth';
 import { directoryControllers } from '../controllers/directory';
+import { checkWritePerm } from '../middlewares/directory';
 
 const router = express.Router();
 
@@ -37,7 +39,7 @@ router.post('/add', directoryControllers.addDirectory);
 
 /**
  * Get a list of all directories owned by a user
- * @route GET
+ * @route GET /dir/
  * @access Any User
  *
  * @body
@@ -48,14 +50,14 @@ router.post('/add', directoryControllers.addDirectory);
 router.get('/', directoryControllers.getDirectories);
 
 /**
- * Update a file
- * @route POST /file/update
- * @access Owner of the file
+ * Update a dir
+ * @route POST /dir/update
+ * @access Owner of the dir
  *
  * @body
  *  @requires
- *  @field fileId (number)
- *  @description fileId of the User who creates this file
+ *  @field directoryId (number)
+ *  @description dirId of the User who creates this file
  *
  *  @optional
  *  @field name (string)
@@ -69,13 +71,14 @@ router.get('/', directoryControllers.getDirectories);
  *  @field parentId (number)
  *  @description directoryId of the parent directory
  *
- *  @optional
- *  @field content (string)
- *  @description content written in this file
  *
  */
 
-//  TODO: add authToken after frontend setup token storage
-router.post('/update', directoryControllers.updateDirById);
+router.post(
+  '/update',
+  authAccessToken,
+  checkWritePerm,
+  directoryControllers.updateDirById,
+);
 
 export default router;

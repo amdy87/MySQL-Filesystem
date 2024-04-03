@@ -126,7 +126,12 @@ fileRouter.post('/add', fileControllers.addFile);
  */
 
 //  TODO: add authToken after frontend setup token storage
-fileRouter.post('/update', fileControllers.updateFileById);
+fileRouter.post(
+  '/update',
+  authAccessToken,
+  checkWritePerm,
+  fileControllers.updateFileById,
+);
 
 /**
  * delete a file by its fildId
