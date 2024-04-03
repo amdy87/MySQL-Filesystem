@@ -38,14 +38,15 @@ const updateFile = async (file: DbFile, res: Response) => {
 export const fileController = {
   getFiles: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.body;
+      // const { userId } = req.body;
+      const userId = req.query.userId as string;
       if (!userId) {
         throw errorHandler.InvalidParamError('userId');
       }
 
       const files = await prisma.file.findMany({
         where: {
-          ownerId: userId,
+          ownerId: parseInt(userId),
         },
         select: {
           id: true,
@@ -67,8 +68,9 @@ export const fileController = {
 
   getFilesByParentDir: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.body;
-      const parentDirId = parseInt(req.params.parentDirId);
+      // const { userId } = req.body;
+      const userId = req.query.userId as string;
+      const parentDirId = req.query.parentDirId as string;
 
       if (!(userId && parentDirId)) {
         throw errorHandler.InvalidParamError('userId and parentDirId');
@@ -76,8 +78,8 @@ export const fileController = {
 
       const files = await prisma.file.findMany({
         where: {
-          ownerId: userId,
-          parentId: parentDirId,
+          ownerId: parseInt(userId),
+          parentId: parseInt(parentDirId),
         },
         select: {
           id: true,
