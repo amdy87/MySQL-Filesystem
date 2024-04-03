@@ -1,5 +1,14 @@
 /**
- * Controllers used in Directory API
+ * Define Controllers used in Directory API
+ *  directoryControllers.getDirectories
+ *  directoryControllers.getDirsByParentDir
+ *  directoryControllers.addRootDirectory
+ *  directoryControllers.addDirectory
+ *
+ * Functions:
+ *  getAllPermissions
+ *  deleteFilesOwnedByUserId
+ *
  * @@fileoverview
  */
 
@@ -18,6 +27,13 @@ export const getAllPermissions = async () => {
     },
   });
   return existingPermissions;
+};
+
+/**
+ * TODO: Change to account for PERMISSIONSSSSSSS!
+ */
+export const deleteFilesOwnedByUserId = async (userId: number) => {
+  await prisma.file.deleteMany({ where: { ownerId: userId } });
 };
 
 export const directoryControllers = {
