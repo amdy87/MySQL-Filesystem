@@ -23,7 +23,7 @@ import { prisma } from '../connectPrisma';
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkReadPerm = async (
+export const checkDirReadPerm = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -70,7 +70,7 @@ export const checkReadPerm = async (
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkWritePerm = async (
+export const checkDirWritePerm = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -116,7 +116,7 @@ export const checkWritePerm = async (
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkExecutePerm = async (
+export const checkDirExecutePerm = async (
   req: Request,
   res: Response,
   next: NextFunction,

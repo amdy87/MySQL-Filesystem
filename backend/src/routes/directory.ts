@@ -6,7 +6,7 @@
 import express from 'express';
 import { authAccessToken } from '../middlewares/auth';
 import { directoryControllers } from '../controllers/directory';
-import { checkWritePerm } from '../middlewares/directory';
+import { checkDirWritePerm } from '../middlewares/directory';
 
 const router = express.Router();
 
@@ -77,7 +77,7 @@ router.get('/', directoryControllers.getDirectories);
 router.post(
   '/update',
   authAccessToken,
-  checkWritePerm,
+  checkDirWritePerm,
   directoryControllers.updateDirById,
 );
 

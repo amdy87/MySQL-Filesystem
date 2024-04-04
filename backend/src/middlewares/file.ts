@@ -23,7 +23,7 @@ import { prisma } from '../connectPrisma';
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkReadPerm = async (
+export const checkFileReadPerm = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -37,7 +37,9 @@ export const checkReadPerm = async (
       },
     });
     let canRead = false;
-    console.log(file);
+    if (!file) {
+      throw errorHandler.RecordNotFoundError('File does not exist');
+    }
     file?.permissions.map((p: any) => {
       if (p.type == PermissionType.READ) {
         canRead = true;
@@ -70,7 +72,7 @@ export const checkReadPerm = async (
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkWritePerm = async (
+export const checkFileWritePerm = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -83,7 +85,9 @@ export const checkWritePerm = async (
       },
     });
     let canWrite = false;
-    console.log(file);
+    if (!file) {
+      throw errorHandler.RecordNotFoundError('File does not exist');
+    }
     file?.permissions.map((p: any) => {
       if (p.type == PermissionType.WRITE) {
         canWrite = true;
@@ -116,7 +120,7 @@ export const checkWritePerm = async (
  *
  * @throw UnauthorizedError, status 401
  */
-export const checkExecutePerm = async (
+export const checkFileExecutePerm = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -129,7 +133,9 @@ export const checkExecutePerm = async (
       },
     });
     let canExecute = false;
-    console.log(file);
+    if (!file) {
+      throw errorHandler.RecordNotFoundError('File does not exist');
+    }
     file?.permissions.map((p: any) => {
       if (p.type == PermissionType.EXECUTE) {
         canExecute = true;

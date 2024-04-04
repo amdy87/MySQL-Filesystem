@@ -8,9 +8,9 @@ import express, { Request, Response } from 'express';
 import { fileControllers } from '../controllers/file';
 import { authAccessToken } from '../middlewares/auth';
 import {
-  checkReadPerm,
-  checkWritePerm,
-  checkExecutePerm,
+  checkFileReadPerm,
+  checkFileWritePerm,
+  checkFileExecutePerm,
 } from '../middlewares/file';
 
 export const fileRouter = express.Router();
@@ -67,7 +67,7 @@ fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
 fileRouter.get(
   '/fileById',
   authAccessToken,
-  checkReadPerm,
+  checkFileReadPerm,
   fileControllers.getFilesById,
 );
 
@@ -131,7 +131,7 @@ fileRouter.post('/add', fileControllers.addFile);
 fileRouter.post(
   '/update',
   authAccessToken,
-  checkWritePerm,
+  checkFileWritePerm,
   fileControllers.updateFileById,
 );
 

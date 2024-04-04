@@ -126,6 +126,10 @@ export const fileControllers = {
 
       const file = await getFilesById(fileId);
 
+      if (!file) {
+        throw errorHandler.RecordNotFoundError('File not found');
+      }
+
       res.status(200).send({ file: file });
     } catch (error: any) {
       if (error.code === 'P2025') {
@@ -277,7 +281,7 @@ export const getFilesByParent = async (userId: number, parentId: number) => {
 };
 
 export const getFilesById = async (fileId: number) => {
-  const files = await prisma.file.findUnique({
+  const file = await prisma.file.findUnique({
     where: {
       id: fileId,
     },
@@ -293,5 +297,6 @@ export const getFilesById = async (fileId: number) => {
       permissions: true,
     },
   });
-  return files;
+
+  return file;
 };
