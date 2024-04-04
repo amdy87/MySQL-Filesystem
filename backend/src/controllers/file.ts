@@ -49,6 +49,27 @@ const updateFile = async (file: DbFile, res: Response) => {
 
 /**
  * Helper function
+ *
+ * delete file by Id
+ * @param fileId
+ *
+ * @returns file object
+ */
+const deleteFile = async (fileId: number) => {
+  const deletedFile = await prisma.file.delete({
+    where: {
+      id: fileId,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+  return deletedFile;
+};
+
+/**
+ * Helper function
  * Check whether fileId exist
  * @param req
  * @param res
@@ -225,30 +246,24 @@ export const fileControllers = {
 
   deleteFileById: async (req: Request, res: Response) => {
     try {
-      if (!req.params?.fileId) {
-        throw errorHandler.InvalidQueryParamError('fileId');
+      if (!req.body?.fileId) {
+        throw errorHandler.InvalidBodyParamError('fileId');
       }
-      const fileId = parseInt(req.params.fileId as string);
+      const fileId = parseInt(req.body.fileId as string);
       const fileExist = await existFileId(fileId);
       if (fileExist) {
-        const deletedFile = await prisma.file.delete({
-          where: {
-            id: fileId,
-          },
-          select: {
-            id: true,
-            name: true,
-          },
-        });
+        const deletedFile = await deleteFile(fileId);
         res.status(200).send({
           message: `file ${fileId} has been deleted`,
           file: deletedFile,
         });
       } else {
-        throw errorHandler.RecordNotFoundError(`${fileId} is not a valid id`);
+        throw errorHandler.RecordNotFoundError(
+          `${fileId} is not a valid File id`,
+        );
       }
     } catch (error: any) {
-      console.log(`${error}`);
+      console.log(`${error.name}`);
       errorHandler.handleError(error, res);
     }
   },

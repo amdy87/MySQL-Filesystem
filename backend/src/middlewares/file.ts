@@ -30,8 +30,14 @@ export const checkFileReadPerm = async (
 ) => {
   // Get permissions of this file for this user
   try {
+    let fileId: number = -1;
+    if (req.body?.fileId) {
+      fileId = parseInt(req.body?.fileId as string);
+    } else if (req.query?.fileId) {
+      fileId = parseInt(req.query?.fileId as string);
+    }
     const file = await prisma.file.findUnique({
-      where: { id: parseInt(req.query?.fileId as string) },
+      where: { id: fileId },
       select: {
         permissions: true,
       },
@@ -78,8 +84,14 @@ export const checkFileWritePerm = async (
   next: NextFunction,
 ) => {
   try {
+    let fileId: number = -1;
+    if (req.body?.fileId) {
+      fileId = parseInt(req.body?.fileId as string);
+    } else if (req.query?.fileId) {
+      fileId = parseInt(req.query?.fileId as string);
+    }
     const file = await prisma.file.findUnique({
-      where: { id: req.body?.fileId },
+      where: { id: fileId },
       select: {
         permissions: true,
       },
@@ -126,8 +138,14 @@ export const checkFileExecutePerm = async (
   next: NextFunction,
 ) => {
   try {
+    let fileId: number = -1;
+    if (req.body?.fileId) {
+      fileId = parseInt(req.body?.fileId as string);
+    } else if (req.query?.fileId) {
+      fileId = parseInt(req.query?.fileId as string);
+    }
     const file = await prisma.file.findUnique({
-      where: { id: req.body?.fileId },
+      where: { id: fileId },
       select: {
         permissions: true,
       },

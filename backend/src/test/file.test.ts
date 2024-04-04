@@ -271,7 +271,7 @@ describe('create a File, update it, and then delete', () => {
     let res: Partial<Response>;
     const sampleFileId = 1;
     req = {
-      params: {
+      body: {
         fileId: `${sampleFileId}`,
       },
     }; // Mock request
