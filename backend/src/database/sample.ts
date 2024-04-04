@@ -1,3 +1,7 @@
+/**
+ * Sample data for database tests
+ */
+
 import { PrismaClient, Role, PermissionType } from '@prisma/client';
 
 /**
