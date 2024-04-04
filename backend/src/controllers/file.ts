@@ -117,6 +117,25 @@ export const fileControllers = {
     }
   },
 
+  getFileById: async (req: Request, res: Response) => {
+    try {
+      if (!req.query?.fileId) {
+        throw errorHandler.InvalidQueryParamError('fileId');
+      }
+      const fileId = parseInt(req.query.fileId as string);
+
+      const file = await getFileById(fileId);
+
+      if (!file) {
+        throw errorHandler.RecordNotFoundError('File not found');
+      }
+
+      res.status(200).send({ file: file });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
+
   addFile: async (req: Request, res: Response) => {
     let { ownerId, name, path, parentId, content } = req.body;
     content = content || '';
@@ -156,7 +175,6 @@ export const fileControllers = {
       });
       res.status(201).send(newFile);
     } catch (error: any) {
-      console.log(error);
       // Error code of Prisma when record not found
       if (error.code === 'P2025') {
         const message: string = `User with id ${ownerId} does not exist`;
@@ -169,9 +187,7 @@ export const fileControllers = {
   updateFileById: async (req: Request, res: Response) => {
     try {
       //  Doesn't support change permission yet
-      const { fileId, name, content, path, ownerId, permissions, parentId } =
-        req.body;
-
+      const { fileId, name, content, path, permissions, parentId } = req.body;
       let file: Prisma.FileFindUniqueArgs;
       if (!fileId) {
         throw errorHandler.InvalidBodyParamError('fileId');
@@ -196,7 +212,6 @@ export const fileControllers = {
           name: name || existFile.name, // Update name if provided, otherwise keep existing value
           parentId: parentId || existFile.parentId,
           content: content || existFile.content,
-          ownerId: ownerId || existFile.ownerId,
           metadata: metadata,
         },
         res,
@@ -257,4 +272,25 @@ export const getFilesByParent = async (userId: number, parentId: number) => {
     },
   });
   return files;
+};
+
+export const getFileById = async (fileId: number) => {
+  const file = await prisma.file.findUnique({
+    where: {
+      id: fileId,
+    },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+
+  return file;
 };

@@ -17,7 +17,13 @@ import { Prisma, PermissionType } from '@prisma/client';
 
 import { prisma } from '../connectPrisma';
 import { errorHandler } from '../utils/errorHandler';
+import { Metadata, Perms } from '../utils/metadata';
+import { DbDirectory } from '../utils/directory';
 
+/**
+ * A Helper function
+ * @returns all Permission records
+ */
 export const getAllPermissions = async () => {
   const existingPermissions = await prisma.permission.findMany({
     where: {
@@ -30,13 +36,73 @@ export const getAllPermissions = async () => {
 };
 
 /**
+<<<<<<< HEAD
  * TODO: Change to account for PERMISSIONSSSSSSS!
  */
 export const deleteFilesOwnedByUserId = async (userId: number) => {
   await prisma.file.deleteMany({ where: { ownerId: userId } });
+=======
+ * A Helper function
+ * Update a Directory record in database
+ * @param {DbDirectory} dir
+ * @param {Response} res
+ * @returns updated Directory in json
+ */
+const updateDirectory = async (dir: DbDirectory, res: Response) => {
+  try {
+    const updatedDirectory = await prisma.directory.update({
+      where: { id: dir.id },
+      data: {
+        ownerId: dir.ownerId,
+        name: dir.name,
+        parentId: dir.parentId,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        path: true,
+        parentId: true,
+        ownerId: true,
+        permissions: true,
+      },
+    });
+    return updatedDirectory;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+>>>>>>> jane/directory-update
 };
 
 export const directoryControllers = {
+  getDirectory: async (req: Request, res: Response) => {
+    try {
+      if (!req.query?.directoryId) {
+        throw errorHandler.InvalidQueryParamError('directoryId');
+      }
+      const directoryId = parseInt(req.query.directoryId as string);
+
+      const directory = await prisma.directory.findUnique({
+        where: {
+          id: directoryId,
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          name: true,
+          path: true,
+          parentId: true,
+          ownerId: true,
+          permissions: true,
+        },
+      });
+      res.status(200).send({ dir: directory });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
   getDirectories: async (req: Request, res: Response) => {
     try {
       if (!req.query?.userId) {
@@ -176,7 +242,44 @@ export const directoryControllers = {
     }
   },
 
-  // TODO: update
+  updateDirById: async (req: Request, res: Response) => {
+    try {
+      //  Doesn't support change permission yet
+      const { directoryId, name, path, permissions, parentId } = req.body;
+
+      let dir: Prisma.DirectoryFindUniqueArgs;
+      if (!directoryId) {
+        throw errorHandler.InvalidBodyParamError('directoryId');
+      }
+      dir = { where: { id: directoryId } };
+
+      const existDirectory = await prisma.directory.findUnique(dir);
+      if (!existDirectory) {
+        throw errorHandler.RecordNotFoundError('Directory does not exist');
+      }
+      let perms: Perms = { read: true, write: true, execute: true };
+      let metadata: Metadata = {
+        // TODO: perms: existDirectory.permissions,
+        perms: perms,
+        createdAt: existDirectory.createdAt.getTime(),
+        updatedAt: Date.now(),
+      };
+      // Update file record in the database
+      const updatedDirectory = await updateDirectory(
+        {
+          id: directoryId,
+          name: name || existDirectory.name, // Update name if provided, otherwise keep existing value
+          parentId: parentId || existDirectory.parentId,
+          metadata: metadata,
+        },
+        res,
+      );
+      res.status(200).send({ directory: updatedDirectory });
+    } catch (error: any) {
+      console.log(error);
+      errorHandler.handleError(error, res);
+    }
+  },
 
   // TODO: deleteByOwnerId
 };

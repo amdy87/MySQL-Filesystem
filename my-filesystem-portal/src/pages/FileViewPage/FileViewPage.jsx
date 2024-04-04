@@ -44,7 +44,7 @@ export default function FileViewPage() {
           );
         }
       }
-      console.log(currentDir);
+
       files.push({
         fileName: '.',
         fileType: 'directory',
@@ -80,13 +80,12 @@ export default function FileViewPage() {
           };
         }),
       );
-      console.log(files);
       setDisplayedFiles(files);
     }
   }, [tree]);
 
   const handleFileChange = async (event) => {
-    console.log('Collecting file data');
+    // Collect file
     const file = event.target.files[0];
 
     let formData = {};
@@ -98,7 +97,7 @@ export default function FileViewPage() {
     }
 
     // Adding file info to formData
-    formData['ownerId'] = 1;
+    formData['ownerId'] = user.id;
     formData['name'] = file.name;
     formData['path'] = path;
     formData['parentId'] = 1;
@@ -127,7 +126,6 @@ export default function FileViewPage() {
 
   // Redirects the click action to the hiddenFileInput
   const handleClick = () => {
-    console.log('Handled');
     document.getElementById('hiddenFileInput').click();
   };
 
@@ -214,6 +212,8 @@ export default function FileViewPage() {
                     <FileTableRow
                       // TODO: give this a better key?
                       key={idx}
+                      userId={user.id}
+                      fileId={1} // TODO: Change this when the file tree is real
                       {...file}
                       clickDirectory={clickDirectory}
                     ></FileTableRow>

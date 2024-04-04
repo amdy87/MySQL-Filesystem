@@ -11,8 +11,9 @@ import {
 } from '../query';
 import { userData, directoryData, fileData } from '../sample';
 
-process.env.DATABASE_URL =
-  'mysql://root:password@localhost:3306/db?schema=public';
+process.env.DATABASE_URL = process.env.CI
+  ? 'mysql://root:password@mysql:3306/db?schema=public'
+  : 'mysql://root:password@localhost:3306/db?schema=public';
 
 describe('deleteEverything', () => {
   it('should clear database', async () => {

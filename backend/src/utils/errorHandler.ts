@@ -13,6 +13,7 @@ const ERROR = {
   UnauthorizedError: 'UnauthorizedError',
   ForbiddenError: 'ForbiddenError',
   UserNotFoundError: 'UserNotFoundError',
+  RecordNotFoundError: 'RecordNotFoundError',
   InvalidOperationError: 'InvalidOperationError',
   DuplicationError: 'DuplicationError',
 };
@@ -90,7 +91,7 @@ export const errorHandler = {
    * @return UserNotFoundError
    */
   RecordNotFoundError: (message: string) => {
-    return { name: ERROR.UserNotFoundError, status: 404, message };
+    return { name: ERROR.RecordNotFoundError, status: 404, message };
   },
 
   /**
@@ -106,10 +107,18 @@ export const errorHandler = {
   handleError: (error: Error, res: Response) => {
     if (Object.values(ERROR).includes(error.name)) {
       res.status(error.status);
-      res.json({ status: error.status, message: error.message });
+      res.json({
+        error: error.name,
+        status: error.status,
+        message: error.message,
+      });
     } else {
       res.status(500);
-      res.json({ status: 500, message: `unknownError: ${error}` });
+      res.json({
+        error: 'UNKNOWN ERROR',
+        status: 500,
+        message: `unknownError: ${error}`,
+      });
     }
   },
 };
