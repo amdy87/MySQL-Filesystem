@@ -1,3 +1,8 @@
+/**
+ * DbFile interface definition
+ * @fileoverview
+ */
+
 import { Metadata } from './metadata';
 
 export interface DbFile {

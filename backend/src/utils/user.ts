@@ -1,7 +1,12 @@
+/**
+ * User interface definition
+ * @fileoverview
+ */
+
 // import { $Enums } from '@prisma/client';
 import { DbDirectory } from './directory';
 import { DbFile } from './file';
-import { Role } from './config';
+import { Role } from './constants';
 
 export interface User {
   name: string;

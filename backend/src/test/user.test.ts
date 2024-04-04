@@ -1,5 +1,11 @@
+/**
+ * Unit Test written for User API
+ * @packageDocumentation
+ */
+
 import { Request, Response } from 'express';
 
+// Mocked env variables only need to be non-null
 process.env.DATABASE_URL = 'default_value';
 process.env.JWT_SECRET = 'iiiiedsfsdf';
 

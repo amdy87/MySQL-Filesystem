@@ -1,3 +1,8 @@
+/**
+ * Controllers used in Permission API
+ * @fileoverview
+ */
+
 import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 
@@ -8,7 +13,7 @@ import { errorHandler } from '../utils/errorHandler';
 
 // };
 
-export const permissionController = {
+export const permissionControllers = {
   getPermissions: async (req: Request, res: Response) => {
     try {
       const permissions = await prisma.permission.findMany();

@@ -1,3 +1,8 @@
+/**
+ * Metadata and Perms interface definition
+ * @fileoverview
+ */
+
 export type Metadata = {
   perms: Perms;
   createdAt: number;
