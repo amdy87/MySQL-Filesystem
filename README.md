@@ -567,7 +567,6 @@ This document outlined the code standard for writing our project: MySQL-based Fi
 - Write unit tests for components using React Testing Library and Vitest.
 - Test both the UI and interaction logic.
 - Each file will have associated unit test files
-- Maintain above 60% coverage
 - GUI will be tested manually to ensure correct functionality and desired appearance
 
 # Backend Standards
@@ -605,5 +604,6 @@ A file must have a @fileoverview JSDoc to provide a description of the file's co
 
 ### Testing
 - Test that the API returns the expected response and that everything we need is being pulled from the database using the Jest testing framework.
-- Maintain above 60% coverage
+- Write at least one test for each database query
+- Write at least one test for each API route
 - Each file will have associated unit test files for automated Testing
