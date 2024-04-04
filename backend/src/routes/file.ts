@@ -28,23 +28,6 @@ export const fileRouter = express.Router();
 
 fileRouter.get('/', fileControllers.getFiles);
 
-// /**
-//  * Get file content by fileId
-//  * @route GET
-//  * @access User has read access to the file
-//  *
-//  * @header req.headers.authorization
-//  *  @requires
-//  *  @description authentication token; from authenticating this token,
-//  *                we know who's the user putting in this request
-//  *
-//  * @param {number} fileId
-//  *  @requires
-//  *  @description {number} fileId
-//  */
-// //  TODO: add middleware to autheticate token, and authorize the user
-// fileRouter.get('/content', fileControllers.getFileContent);
-
 // ADD AUTH MIDDLEWARE after token is setup
 /**
  * Get a list of all files owned by a user
@@ -66,6 +49,27 @@ fileRouter.get('/', fileControllers.getFiles);
 
 fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
 // fileRouter.get('/', fileControllers.getFilesByParentDir);
+
+/**
+ * Get a file record by fileId
+ * @route GET
+ * @access User who has READ permission
+ *
+ * @header req.headers.authorization
+ *  @requires
+ *  @description authentication token
+ *
+ * @param {number} fileId
+ *  @requires
+ *  @description id of the file
+ */
+
+fileRouter.get(
+  '/fileById',
+  authAccessToken,
+  checkReadPerm,
+  fileControllers.getFilesById,
+);
 
 /**
  * Create a file owned by a user
@@ -94,7 +98,6 @@ fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
  *  @description content written in this file
  *
  */
-//  TODO: add authToken after frontend setup token storage
 fileRouter.post('/add', fileControllers.addFile);
 
 /**
@@ -125,7 +128,6 @@ fileRouter.post('/add', fileControllers.addFile);
  *
  */
 
-//  TODO: add authToken after frontend setup token storage
 fileRouter.post(
   '/update',
   authAccessToken,

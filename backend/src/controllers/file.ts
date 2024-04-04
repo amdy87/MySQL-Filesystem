@@ -117,6 +117,25 @@ export const fileControllers = {
     }
   },
 
+  getFilesById: async (req: Request, res: Response) => {
+    try {
+      if (!req.query?.fileId) {
+        throw errorHandler.InvalidQueryParamError('fileId');
+      }
+      const fileId = parseInt(req.query.fileId as string);
+
+      const file = await getFilesById(fileId);
+
+      res.status(200).send({ file: file });
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        const message: string = 'A related File record could not be found.';
+        error = errorHandler.UserNotFoundError(message);
+      }
+      errorHandler.handleError(error, res);
+    }
+  },
+
   addFile: async (req: Request, res: Response) => {
     let { ownerId, name, path, parentId, content } = req.body;
     content = content || '';
@@ -245,6 +264,26 @@ export const getFilesByParent = async (userId: number, parentId: number) => {
     },
     select: {
       id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return files;
+};
+
+export const getFilesById = async (fileId: number) => {
+  const files = await prisma.file.findUnique({
+    where: {
+      id: fileId,
+    },
+    select: {
+      id: true,
+      content: true,
       createdAt: true,
       updatedAt: true,
       name: true,
