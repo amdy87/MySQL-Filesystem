@@ -8,6 +8,7 @@ describe('FileRenamePopup', () => {
     const mockOnClose = vi.fn();
     const mockOnRename = vi.fn();
     const fileName = 'testFile.txt';
+    const fileType = 'file';
 
     render(
       <FileRenamePopup
@@ -15,6 +16,7 @@ describe('FileRenamePopup', () => {
         onClose={mockOnClose}
         onRename={mockOnRename}
         fileName={fileName}
+        fileType={fileType}
       />,
     );
 
@@ -28,6 +30,7 @@ describe('FileRenamePopup', () => {
         onClose={() => {}}
         onRename={() => {}}
         fileName="testFile.txt"
+        fileType="file"
       />,
     );
     expect(container).toBeEmptyDOMElement();
@@ -37,6 +40,7 @@ describe('FileRenamePopup', () => {
     const mockOnRename = vi.fn();
     const mockOnClose = vi.fn();
     const fileName = 'testFile.txt';
+    const fileType = 'file';
 
     render(
       <FileRenamePopup
@@ -44,6 +48,7 @@ describe('FileRenamePopup', () => {
         onClose={mockOnClose}
         onRename={mockOnRename}
         fileName={fileName}
+        fileType={fileType}
       />,
     );
 
@@ -52,7 +57,7 @@ describe('FileRenamePopup', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /rename/i }));
 
-    expect(mockOnRename).toHaveBeenCalledWith('newFileName.txt');
+    expect(mockOnRename).toHaveBeenCalledWith('newFileName.txt', fileType);
   });
 
   it('calls onClose when the Cancel button is clicked', () => {
@@ -63,6 +68,7 @@ describe('FileRenamePopup', () => {
         onClose={mockOnClose}
         onRename={() => {}}
         fileName="testFile.txt"
+        fileType="file"
       />,
     );
 
