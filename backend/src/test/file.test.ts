@@ -71,6 +71,33 @@ describe('get Files By userId', () => {
   });
 });
 
+describe('get Files By fileId', () => {
+  it('should return a file with the fileId', async () => {
+    // Create a mock instance of PrismaClient
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: { fileId: '1' } }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    // Mock Prisma method
+    (prisma.file.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: '1',
+      name: 'file 1',
+      content: 'hi',
+      createdAt: new Date(),
+    });
+
+    await fileControllers.getFileById(req as Request, res as Response);
+
+    // Assert response
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
 describe('Get File without userId', () => {
   it('should return 400 status', async () => {
     let req: Partial<Request>;
@@ -138,7 +165,7 @@ describe('Get File without userId or parentId', () => {
   });
 });
 
-describe('create a File', () => {
+describe('create a File, update it, and then delete', () => {
   // Mock Prisma method
   const sampleFileId = 1;
   const sampleOwnerId = 1;

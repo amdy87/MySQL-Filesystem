@@ -68,7 +68,7 @@ fileRouter.get(
   '/fileById',
   authAccessToken,
   checkFileReadPerm,
-  fileControllers.getFilesById,
+  fileControllers.getFileById,
 );
 
 /**

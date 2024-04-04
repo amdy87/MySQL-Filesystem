@@ -117,14 +117,14 @@ export const fileControllers = {
     }
   },
 
-  getFilesById: async (req: Request, res: Response) => {
+  getFileById: async (req: Request, res: Response) => {
     try {
       if (!req.query?.fileId) {
         throw errorHandler.InvalidQueryParamError('fileId');
       }
       const fileId = parseInt(req.query.fileId as string);
 
-      const file = await getFilesById(fileId);
+      const file = await getFileById(fileId);
 
       if (!file) {
         throw errorHandler.RecordNotFoundError('File not found');
@@ -132,10 +132,6 @@ export const fileControllers = {
 
       res.status(200).send({ file: file });
     } catch (error: any) {
-      if (error.code === 'P2025') {
-        const message: string = 'A related File record could not be found.';
-        error = errorHandler.UserNotFoundError(message);
-      }
       errorHandler.handleError(error, res);
     }
   },
@@ -179,7 +175,6 @@ export const fileControllers = {
       });
       res.status(201).send(newFile);
     } catch (error: any) {
-      console.log(error);
       // Error code of Prisma when record not found
       if (error.code === 'P2025') {
         const message: string = `User with id ${ownerId} does not exist`;
@@ -193,7 +188,6 @@ export const fileControllers = {
     try {
       //  Doesn't support change permission yet
       const { fileId, name, content, path, permissions, parentId } = req.body;
-
       let file: Prisma.FileFindUniqueArgs;
       if (!fileId) {
         throw errorHandler.InvalidBodyParamError('fileId');
@@ -280,7 +274,7 @@ export const getFilesByParent = async (userId: number, parentId: number) => {
   return files;
 };
 
-export const getFilesById = async (fileId: number) => {
+export const getFileById = async (fileId: number) => {
   const file = await prisma.file.findUnique({
     where: {
       id: fileId,
