@@ -37,7 +37,9 @@ export const checkDirReadPerm = async (
       },
     });
     let canRead = false;
-    console.log(directory);
+    if (!directory) {
+      throw errorHandler.RecordNotFoundError('directory does not exist');
+    }
     directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.READ) {
         canRead = true;
@@ -83,7 +85,9 @@ export const checkDirWritePerm = async (
       },
     });
     let canWrite = false;
-    console.log(directory);
+    if (!directory) {
+      throw errorHandler.RecordNotFoundError('directory does not exist');
+    }
     directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.WRITE) {
         canWrite = true;
@@ -129,7 +133,9 @@ export const checkDirExecutePerm = async (
       },
     });
     let canExecute = false;
-    console.log(directory);
+    if (!directory) {
+      throw errorHandler.RecordNotFoundError('directory does not exist');
+    }
     directory?.permissions.map((p: any) => {
       if (p.type == PermissionType.EXECUTE) {
         canExecute = true;
