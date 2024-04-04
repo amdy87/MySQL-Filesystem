@@ -67,7 +67,7 @@ export const directoryControllers = {
       }
       const directoryId = parseInt(req.query.directoryId as string);
 
-      const directory = await prisma.directory.findMany({
+      const directory = await prisma.directory.findUnique({
         where: {
           id: directoryId,
         },
