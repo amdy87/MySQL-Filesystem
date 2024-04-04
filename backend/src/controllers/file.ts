@@ -76,7 +76,7 @@ export const fileControllers = {
       const userId = parseInt(req.query.userId as string);
       const files = await prisma.file.findMany({
         where: {
-          ownerId: parseInt(userId),
+          ownerId: userId,
         },
         select: {
           id: true,
