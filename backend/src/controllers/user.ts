@@ -10,6 +10,8 @@ import bcrypt from 'bcrypt';
 import ms from 'ms';
 
 import { prisma } from '../connectPrisma';
+import { deleteFilesByOwner } from './file';
+import { deleteDirsByOwner } from './directory';
 import { directoryControllers } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
@@ -288,11 +290,11 @@ export const userControllers = {
   // Delete a user with the specified id and all related data
   // Only ADMIN user has authority to do so
   deleteUserById: async (req: Request, res: Response) => {
-    if (!req.query?.userId) {
-      throw errorHandler.InvalidQueryParamError('userId');
-    }
-    const userId = parseInt(req.query?.userId as string);
     try {
+      if (!req.query?.userId) {
+        throw errorHandler.InvalidQueryParamError('userId');
+      }
+      const userId = parseInt(req.query?.userId as string);
       const user = await prisma.user.delete({
         where: {
           id: userId,
@@ -306,8 +308,14 @@ export const userControllers = {
           role: true,
         },
       });
-      //  TODO: Delete related directory and files
-      res.status(200).send({ user: user });
+      deleteFilesByOwner(userId, res);
+      deleteDirsByOwner(userId, res);
+      // TODO: Delete related records in Permission table
+
+      res.status(200).send({
+        message: `${user.name} and related records are deleted`,
+        user: user,
+      });
     } catch (error: any) {
       errorHandler.handleError(error, res);
     }

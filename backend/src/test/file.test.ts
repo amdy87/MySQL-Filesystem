@@ -369,7 +369,6 @@ describe('Create File without required fields in req.body', () => {
     }; // Mock response
 
     await fileControllers.addFile(req as Request, res as Response);
-
     // Assert response
     expect(res.status).toHaveBeenCalledWith(400);
   });

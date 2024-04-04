@@ -55,17 +55,42 @@ const updateFile = async (file: DbFile, res: Response) => {
  *
  * @returns file object
  */
-const deleteFile = async (fileId: number) => {
-  const deletedFile = await prisma.file.delete({
-    where: {
-      id: fileId,
-    },
-    select: {
-      id: true,
-      name: true,
-    },
-  });
-  return deletedFile;
+const deleteFile = async (fileId: number, res: Response) => {
+  try {
+    const deletedFile = await prisma.file.delete({
+      where: {
+        id: fileId,
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    return deletedFile;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
+
+/**
+ * Helper function
+ *
+ * delete files owned by userId
+ * @param userId
+ *
+ * @returns number of file deleted
+ */
+export const deleteFilesByOwner = async (userId: number, res: Response) => {
+  try {
+    const deletedFile = await prisma.file.deleteMany({
+      where: {
+        ownerId: userId,
+      },
+    });
+    return deletedFile.count;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
 };
 
 /**
@@ -252,7 +277,7 @@ export const fileControllers = {
       const fileId = parseInt(req.body.fileId as string);
       const fileExist = await existFileId(fileId);
       if (fileExist) {
-        const deletedFile = await deleteFile(fileId);
+        const deletedFile = await deleteFile(fileId, res);
         res.status(200).send({
           message: `file ${fileId} has been deleted`,
           file: deletedFile,

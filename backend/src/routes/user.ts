@@ -9,7 +9,8 @@ import {
   userExist,
   userIsAdmin,
   userExistByEmail,
-  userExistParam,
+  userExistInQuery,
+  canDeleteUser,
 } from '../middlewares/user';
 
 import { userControllers } from '../controllers/user';
@@ -120,10 +121,10 @@ router.post(
  *  @required
  *  @param {string} Authorization
  *  @description Bearer <token> of the user who requests
- *
- * @param {number} userId
+ * @query
+ *  @param {number} userId
  *  @required
- *  @description User id of User who request to delete users
+ *  @description id of User to be deleted
  *
  */
 
@@ -131,11 +132,9 @@ router.delete(
   '/',
   authAccessToken,
   userExist, //check whom request
-  userIsAdmin,
-  userExistParam, //check who's being deleted
+  canDeleteUser,
+  userExistInQuery,
   userControllers.deleteUserById,
 );
-
-// router.delete('/:id', userExist, userControllers.deleteUserById);
 
 export default router;

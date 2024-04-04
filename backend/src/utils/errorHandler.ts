@@ -16,6 +16,7 @@ const ERROR = {
   RecordNotFoundError: 'RecordNotFoundError',
   InvalidOperationError: 'InvalidOperationError',
   DuplicationError: 'DuplicationError',
+  // TokenExpiredError: 'TokenExpiredError',
 };
 
 export interface Error {
@@ -103,6 +104,17 @@ export const errorHandler = {
   UnauthorizedError: (message: string) => {
     return { name: ERROR.UnauthorizedError, status: 401, message };
   },
+
+  /**
+   *
+   * Thrown when a TokenExpiredError fail
+   * by using the param on an API route
+   * @param message Message with error details
+   * @return TokenExpiredError
+   */
+  // TokenExpiredError: (message: string) => {
+  //   return { name: ERROR.TokenExpiredError, status: 401, message };
+  // },
 
   handleError: (error: Error, res: Response) => {
     if (Object.values(ERROR).includes(error.name)) {

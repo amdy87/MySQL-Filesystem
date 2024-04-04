@@ -25,9 +25,18 @@ jest.mock('../connectPrisma', () => ({
       create: jest.fn(),
       update: jest.fn(),
       findUnique: jest.fn(),
+      delete: jest.fn(),
     },
     directory: {
       create: jest.fn(),
+      deleteMany: jest.fn(),
+    },
+
+    file: {
+      deleteMany: jest.fn(),
+    },
+    permission: {
+      findMany: jest.fn(),
     },
   },
 }));
@@ -96,6 +105,11 @@ describe('User signup and login', () => {
         ownerId: index + 1,
       });
 
+      (prisma.permission.findMany as jest.Mock).mockResolvedValueOnce([
+        { id: 1 },
+        { id: 2 },
+      ]);
+
       await userControllers.signUp(req as Request, res as Response);
 
       // Assert user creation
@@ -110,5 +124,66 @@ describe('User signup and login', () => {
         }),
       );
     });
+  });
+});
+
+describe('delete user account', () => {
+  it('missing userId in query, should return status 400', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: {} }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    // Mock Prisma method
+    (prisma.file.deleteMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'file 1' },
+      { id: 2, name: 'file 2' },
+    ]);
+
+    (prisma.directory.deleteMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'dir 1' },
+      { id: 2, name: 'dir 2' },
+    ]);
+
+    await userControllers.deleteUserById(req as Request, res as Response);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('should return status ok', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: { userId: '1' } }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    // Mock Prisma method
+    (prisma.user.delete as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'user 1' },
+    ]);
+    (prisma.file.deleteMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'file 1' },
+      { id: 2, name: 'file 2' },
+    ]);
+
+    (prisma.directory.deleteMany as jest.Mock).mockResolvedValueOnce([
+      { id: 1, name: 'dir 1' },
+      { id: 2, name: 'dir 2' },
+    ]);
+
+    await userControllers.deleteUserById(req as Request, res as Response);
+    // Assert response
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
