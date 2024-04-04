@@ -85,6 +85,7 @@ export default function FileViewPage() {
   }, [tree]);
 
   const handleFileChange = async (event) => {
+    // Collect file
     const file = event.target.files[0];
 
     let formData = {};
@@ -96,7 +97,7 @@ export default function FileViewPage() {
     }
 
     // Adding file info to formData
-    formData['ownerId'] = 1;
+    formData['ownerId'] = user.id;
     formData['name'] = file.name;
     formData['path'] = path;
     formData['parentId'] = 1;
@@ -211,6 +212,8 @@ export default function FileViewPage() {
                     <FileTableRow
                       // TODO: give this a better key?
                       key={idx}
+                      userId={user.id}
+                      fileId={1} // TODO: Change this when the file tree is real
                       {...file}
                       clickDirectory={clickDirectory}
                     ></FileTableRow>
