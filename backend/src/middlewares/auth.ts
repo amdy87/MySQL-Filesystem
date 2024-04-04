@@ -1,7 +1,12 @@
+/**
+ * Middleware used in authentication
+ * @fileoverview
+ */
+
 import { Response, Request, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../utils/config';
+import { JWT_SECRET } from '../utils/constants';
 import { errorHandler } from '../utils/errorHandler';
 
 // Interface extending JwtPayload with a 'user' property
@@ -22,7 +27,7 @@ export const authAccessToken = (
     // Read auth header
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      const message = 'Access token is not set.';
+      const message = 'Access token is not set';
       throw errorHandler.UnauthorizedError(message);
     }
 
@@ -30,15 +35,17 @@ export const authAccessToken = (
     // Assume authHeader is a string with format "Bearer <token>"
     const [_, token] = authHeader.split(' ');
     if (!(token && JWT_SECRET)) {
-      const message = 'Access token is not set.';
+      const message =
+        'Access token is set but not in correct "Bearer <token>" format';
       throw errorHandler.UnauthorizedError(message);
     }
 
     const decoded = jwt.verify(token, JWT_SECRET as jwt.Secret);
-    req.user = decoded as JwtPayloadWithUser;
+    req.authenticatedUser = decoded as JwtPayloadWithUser;
     next();
   } catch (error: any) {
-    const message = 'Token Invalid or expired';
-    errorHandler.handleError(errorHandler.UnauthorizedError(message), res);
+    console.log(error);
+    error.message = error.message || 'Token Invalid or expired';
+    errorHandler.handleError(error, res);
   }
 };

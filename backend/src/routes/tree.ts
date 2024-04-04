@@ -1,10 +1,32 @@
+/**
+ * Routes for Tree API
+ * @fileoverview
+ */
+
 import express, { Request, Response } from 'express';
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';
+import { treeControllers } from '../controllers/tree';
+import { authAccessToken } from '../middlewares/auth';
 
-export const apiRouter = express.Router();
+export const treeRouter = express.Router();
 
-apiRouter.get('/tree', (_req: Request, res: Response) => {
+/**
+ * Get a list of all directories owned by a user
+ * @route GET /tree/treeByParent
+ * @access authenticated User
+ *
+ * @body
+ *  @requires
+ *  @param {number} userId
+ */
+treeRouter.get(
+  '/treeByParent',
+  authAccessToken,
+  treeControllers.getTreeByParentDirId,
+);
+
+treeRouter.get('/sampleData', (_req: Request, res: Response) => {
   const tmpFile: DbFile = {
     id: 4,
     name: 'myfile',

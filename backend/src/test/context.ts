@@ -1,3 +1,7 @@
+/**
+ * Mocked PrismaClient Setup
+ * @packageDocumentation
+ */
 import { PrismaClient } from '@prisma/client';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 

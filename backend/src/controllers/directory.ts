@@ -1,9 +1,20 @@
+/**
+ * Controllers used in Directory API
+ * @@fileoverview
+ */
+
 import { Request, Response } from 'express';
 import { Prisma, PermissionType } from '@prisma/client';
 
 import { prisma } from '../connectPrisma';
 import { errorHandler } from '../utils/errorHandler';
+import { Metadata, Perms } from '../utils/metadata';
+import { DbDirectory } from '../utils/directory';
 
+/**
+ * A Helper function
+ * @returns all Permission records
+ */
 export const getAllPermissions = async () => {
   const existingPermissions = await prisma.permission.findMany({
     where: {
@@ -15,13 +26,73 @@ export const getAllPermissions = async () => {
   return existingPermissions;
 };
 
-export const directoryController = {
+/**
+ * A Helper function
+ * Update a Directory record in database
+ * @param {DbDirectory} dir
+ * @param {Response} res
+ * @returns updated Directory in json
+ */
+const updateDirectory = async (dir: DbDirectory, res: Response) => {
+  try {
+    const updatedDirectory = await prisma.directory.update({
+      where: { id: dir.id },
+      data: {
+        ownerId: dir.ownerId,
+        name: dir.name,
+        parentId: dir.parentId,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        path: true,
+        parentId: true,
+        ownerId: true,
+        permissions: true,
+      },
+    });
+    return updatedDirectory;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
+
+export const directoryControllers = {
+  getDirectory: async (req: Request, res: Response) => {
+    try {
+      if (!req.query?.directoryId) {
+        throw errorHandler.InvalidQueryParamError('directoryId');
+      }
+      const directoryId = parseInt(req.query.directoryId as string);
+
+      const directory = await prisma.directory.findMany({
+        where: {
+          id: directoryId,
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          name: true,
+          path: true,
+          parentId: true,
+          ownerId: true,
+          permissions: true,
+        },
+      });
+      res.status(200).send({ dir: directory });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
   getDirectories: async (req: Request, res: Response) => {
     try {
-      const { userId } = req.body;
-      if (!userId) {
-        throw errorHandler.InvalidParamError('userId');
+      if (!req.query?.userId) {
+        throw errorHandler.InvalidQueryParamError('userId');
       }
+      const userId = parseInt(req.query.userId as string);
 
       const directories = await prisma.directory.findMany({
         where: {
@@ -44,11 +115,26 @@ export const directoryController = {
     }
   },
 
+  getDirsByParentDir: async (req: Request, res: Response) => {
+    try {
+      if (!(req.query?.userId && req.query?.parentId)) {
+        throw errorHandler.InvalidQueryParamError('userId or/and parentId');
+      }
+      const userId = parseInt(req.query.userId as string);
+      const parentId = parseInt(req.query.parentId as string);
+
+      const directories = await getDirsByParent(userId, parentId);
+      res.status(200).send({ ownerId: userId, dirs: directories });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
+
   addRootDirectory: async (req: Request, res: Response) => {
     try {
       var { ownerId, name, path } = req.body;
       if (!ownerId) {
-        throw errorHandler.InvalidParamError('ownerId');
+        throw errorHandler.InvalidBodyParamError('ownerId');
       }
 
       // Check if user exists, TODO: move to middleware later
@@ -90,8 +176,10 @@ export const directoryController = {
   addDirectory: async (req: Request, res: Response) => {
     try {
       var { ownerId, parentId, name, path } = req.body;
-      if (!ownerId) {
-        throw errorHandler.InvalidParamError('ownerId');
+      if (!(ownerId && parentId && name && path)) {
+        throw errorHandler.InvalidBodyParamError(
+          'One of (ownerId , parentId , name , path )',
+        );
       }
 
       // Check if user exists
@@ -105,7 +193,7 @@ export const directoryController = {
       }
 
       if (!parentId) {
-        throw errorHandler.InvalidParamError('parentId');
+        throw errorHandler.InvalidBodyParamError('parentId');
       }
 
       // Retrieve existing permission records from the database
@@ -138,7 +226,83 @@ export const directoryController = {
     }
   },
 
-  // TODO: update
+  updateDirById: async (req: Request, res: Response) => {
+    try {
+      //  Doesn't support change permission yet
+      const { directoryId, name, path, permissions, parentId } = req.body;
+
+      let dir: Prisma.DirectoryFindUniqueArgs;
+      if (!directoryId) {
+        throw errorHandler.InvalidBodyParamError('directoryId');
+      }
+      dir = { where: { id: directoryId } };
+
+      const existDirectory = await prisma.directory.findUnique(dir);
+      if (!existDirectory) {
+        throw errorHandler.RecordNotFoundError('Directory does not exist');
+      }
+      let perms: Perms = { read: true, write: true, execute: true };
+      let metadata: Metadata = {
+        // TODO: perms: existDirectory.permissions,
+        perms: perms,
+        createdAt: existDirectory.createdAt.getTime(),
+        updatedAt: Date.now(),
+      };
+      // Update file record in the database
+      const updatedDirectory = await updateDirectory(
+        {
+          id: directoryId,
+          name: name || existDirectory.name, // Update name if provided, otherwise keep existing value
+          parentId: parentId || existDirectory.parentId,
+          metadata: metadata,
+        },
+        res,
+      );
+      res.status(200).send({ directory: updatedDirectory });
+    } catch (error: any) {
+      console.log(error);
+      errorHandler.handleError(error, res);
+    }
+  },
 
   // TODO: deleteByOwnerId
+};
+
+export const getDirsByParent = async (userId: number, parentId: number) => {
+  const directories = await prisma.directory.findMany({
+    where: {
+      ownerId: userId,
+      parentId: parentId,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return directories;
+};
+
+export const getDirById = async (dirId: number) => {
+  const dir = await prisma.directory.findUnique({
+    where: {
+      id: dirId,
+    },
+    select: {
+      id: true,
+      createdAt: true,
+      updatedAt: true,
+      name: true,
+      path: true,
+      parentId: true,
+      ownerId: true,
+      permissions: true,
+    },
+  });
+  return dir;
 };

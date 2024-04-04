@@ -1,6 +1,17 @@
+/**
+ * Routes for File API
+ * @fileoverview
+ */
+
 import express, { Request, Response } from 'express';
 
-import { fileController } from '../controllers/file';
+import { fileControllers } from '../controllers/file';
+import { authAccessToken } from '../middlewares/auth';
+import {
+  checkFileReadPerm,
+  checkFileWritePerm,
+  checkFileExecutePerm,
+} from '../middlewares/file';
 
 export const fileRouter = express.Router();
 
@@ -10,12 +21,12 @@ export const fileRouter = express.Router();
  * @route GET
  * @access Any User
  *
- * @params
+ * @param {number} userId
  *  @requires
- *  @description userId (int)
+ *  @description {number} userId
  */
 
-fileRouter.get('/', fileController.getFiles);
+fileRouter.get('/', fileControllers.getFiles);
 
 // ADD AUTH MIDDLEWARE after token is setup
 /**
@@ -23,14 +34,42 @@ fileRouter.get('/', fileController.getFiles);
  * @route GET
  * @access Any User
  *
- * @param userId
- * @description userId (int)
+ * @header req.headers.authorization
+ *  @requires
+ *  @description authentication token
  *
- * @param parentDirId
- * @description parentDirId: the parent directory of the file of this user
+ * @param {number} userId
+ *  @requires
+ *  @description id of the owner user
+ *
+ * @param {number} parentId
+ *  @requires
+ *  @description parentId: the parent directory of the file of this user
  */
 
-fileRouter.get('/', fileController.getFilesByParentDir);
+fileRouter.get('/', authAccessToken, fileControllers.getFilesByParentDir);
+// fileRouter.get('/', fileControllers.getFilesByParentDir);
+
+/**
+ * Get a file record by fileId
+ * @route GET
+ * @access User who has READ permission
+ *
+ * @header req.headers.authorization
+ *  @requires
+ *  @description authentication token
+ *
+ * @param {number} fileId
+ *  @requires
+ *  @description id of the file
+ */
+
+fileRouter.get(
+  '/fileById',
+  authAccessToken,
+  checkFileReadPerm,
+  fileControllers.getFileById,
+);
 
 /**
  * Create a file owned by a user
@@ -39,33 +78,32 @@ fileRouter.get('/', fileController.getFilesByParentDir);
  *
  * @body
  *  @requires
- *  @field ownerId (number)
+ *  @field ownerId {number}
  *  @description userId of the User who creates this file
  *
  *  @requires
- *  @field name (string)
+ *  @field name {string}
  *  @description name of the file
  *
  *  @requires
- *  @field path (string)
+ *  @field path {string}
  *  @description absolute path of the file
  *
  *  @requires
- *  @field parentId (number)
+ *  @field parentId {number}
  *  @description directoryId of the parent directory
  *
  *  @optional
- *  @field content (string)
+ *  @field content {string}
  *  @description content written in this file
  *
  */
-//  TODO: add authToken after frontend setup token storage
-fileRouter.post('/add', fileController.addFile);
+fileRouter.post('/add', fileControllers.addFile);
 
 /**
  * Update a file
  * @route POST /file/update
- * @access Owner of the user
+ * @access Owner of the file
  *
  * @body
  *  @requires
@@ -90,5 +128,18 @@ fileRouter.post('/add', fileController.addFile);
  *
  */
 
-//  TODO: add authToken after frontend setup token storage
-fileRouter.post('/update', fileController.updateFileById);
+fileRouter.post(
+  '/update',
+  authAccessToken,
+  checkFileWritePerm,
+  fileControllers.updateFileById,
+);
+
+/**
+ * delete a file by its fildId
+ * @route DEL /file/
+ * @access Owner of the file
+ *
+ * @param fileId: number
+ */
+fileRouter.delete('/', fileControllers.deleteFileById);

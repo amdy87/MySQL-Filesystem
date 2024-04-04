@@ -1,5 +1,9 @@
+/**
+ * Middleware used in User API
+ * @fileoverview
+ */
+
 import { Response, Request, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { Prisma, Role } from '@prisma/client';
 
 import { prisma } from '../connectPrisma';
@@ -9,7 +13,7 @@ import { errorHandler } from '../utils/errorHandler';
 declare global {
   namespace Express {
     interface Request {
-      user?: any; // Change 'any' to the type of your user object if possible
+      authenticatedUser?: any; // Change 'any' to the type of your user object if possible
     }
   }
 }
@@ -28,18 +32,25 @@ export const userExist = async (
 ) => {
   try {
     let user: Prisma.UserFindUniqueArgs;
-    const { userId } = req.body;
+    const userId = parseInt(req.authenticatedUser?.id);
     if (!userId) {
-      throw errorHandler.InvalidParamError('userId');
+      throw errorHandler.UnauthorizedError('Middleware auth failed');
     }
-    user = { where: { id: userId } };
+    user = {
+      where: { id: userId },
+      select: {
+        id: true,
+        password: true,
+        role: true,
+      },
+    };
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
       throw errorHandler.UserNotFoundError(
         'User does not exist, please signup',
       );
     }
-    req.user = existUser;
+    req.authenticatedUser = existUser;
     next();
   } catch (error: any) {
     errorHandler.handleError(error, res);
@@ -63,7 +74,7 @@ export const userExistParam = async (
     const userId = parseInt(req.params.id);
     user = { where: { id: userId } };
     if (!userId) {
-      throw errorHandler.InvalidParamError('userId');
+      throw errorHandler.UnauthorizedError('Middleware auth failed');
     }
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
@@ -71,7 +82,7 @@ export const userExistParam = async (
         `User with id ${userId} does not exist`,
       );
     }
-    req.user = existUser;
+    req.authenticatedUser = existUser;
     next();
   } catch (error: any) {
     errorHandler.handleError(error, res);
@@ -104,7 +115,7 @@ export const userExistByEmail = async (
       },
     };
     if (!email) {
-      throw errorHandler.InvalidParamError('email');
+      throw errorHandler.InvalidBodyParamError('email');
     }
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
@@ -112,7 +123,7 @@ export const userExistByEmail = async (
         'User does not exist, please signup',
       );
     }
-    req.user = existUser;
+    req.authenticatedUser = existUser;
     next();
   } catch (error: any) {
     errorHandler.handleError(error, res);
@@ -129,8 +140,8 @@ export const userIsAdmin = (
   next: NextFunction,
 ) => {
   try {
-    const { user } = req;
-    if (!user || user.role !== Role.ADMIN) {
+    const { authenticatedUser } = req;
+    if (!authenticatedUser || authenticatedUser.role !== Role.ADMIN) {
       const message =
         'Current user does not have access to specified resource.';
       throw errorHandler.ForbiddenError(message);

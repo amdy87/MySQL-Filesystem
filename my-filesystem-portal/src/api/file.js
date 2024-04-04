@@ -1,3 +1,4 @@
+import { INVALID_TOKEN_ERROR } from '@utils/error';
 import { request } from '@utils/request';
 
 // Requests all the directories and files for the user
@@ -32,9 +33,17 @@ async function sendFile(data) {
 // Posts the new file name to the backend
 async function fileRename(data) {
   try {
+    console.log('Renaming file');
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      throw {
+        name: INVALID_TOKEN_ERROR,
+      };
+    }
     const response = await fetch('/backend/api/file/update', {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data), // Backend requires JSON format

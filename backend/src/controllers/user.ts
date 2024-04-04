@@ -1,3 +1,8 @@
+/**
+ * Controllers used in User API
+ * @fileoverview
+ */
+
 import { CookieOptions, Request, Response } from 'express';
 import { $Enums, Prisma, PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
@@ -5,12 +10,12 @@ import bcrypt from 'bcrypt';
 import ms from 'ms';
 
 import { prisma } from '../connectPrisma';
-import { directoryController } from './directory';
+import { directoryControllers } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
-import { TOKEN } from '../utils/config';
-import { Role } from '../utils/config';
-import { JWT_SECRET } from '../utils/config';
+import { TOKEN } from '../utils/constants';
+import { Role } from '../utils/constants';
+import { JWT_SECRET } from '../utils/constants';
 
 /**
  * Set refresh token to cookie
@@ -149,7 +154,7 @@ const createRootDir = async (user: User, req: Request, res: Response) => {
     },
   }) as Request;
   try {
-    const newRootDir = await directoryController.addRootDirectory(
+    const newRootDir = await directoryControllers.addRootDirectory(
       addRootDirRequest,
       res,
     );
@@ -230,7 +235,7 @@ export const userControllers = {
   // Authenticate a user using email/password
   loginWithPassword: async (req: Request, res: Response) => {
     try {
-      const existUser = req.user;
+      const existUser = req.authenticatedUser;
       const { password, ...user } = existUser;
 
       const inputPassword: string = req.body.password;
@@ -262,7 +267,7 @@ export const userControllers = {
       // Extract updated user data from request body
       const { name, email, userId, rootDirId } = req.body;
 
-      const existingUser = req.user;
+      const existingUser = req.authenticatedUser;
 
       // Update user record in the database
       const updatedUser = await updateUser(
@@ -283,7 +288,10 @@ export const userControllers = {
   // Delete a user with the specified id and all related data
   // Only ADMIN user has authority to do so
   deleteUserById: async (req: Request, res: Response) => {
-    const userId = parseInt(req.params.id);
+    if (!req.query?.userId) {
+      throw errorHandler.InvalidQueryParamError('userId');
+    }
+    const userId = parseInt(req.query?.userId as string);
     try {
       const user = await prisma.user.delete({
         where: {

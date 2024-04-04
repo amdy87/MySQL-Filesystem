@@ -1,3 +1,8 @@
+/**
+ * Load and setup constants used in backend
+ * @fileoverview
+ */
+
 import dotenv from 'dotenv';
 import { Response } from 'express';
 
