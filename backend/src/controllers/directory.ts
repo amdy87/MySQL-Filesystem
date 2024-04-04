@@ -50,7 +50,6 @@ export const deleteDirsByOwner = async (userId: number, res: Response) => {
         ownerId: userId,
       },
     });
-    console.log(deletedDirs.count);
     return deletedDirs.count;
   } catch (error: any) {
     errorHandler.handleError(error, res);
