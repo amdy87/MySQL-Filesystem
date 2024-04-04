@@ -110,8 +110,8 @@ router.post(
  *  @field directoryId (number)
  *  @description directoryId of the directory to be deleted
  */
-router.post(
-  '/delete',
+router.delete(
+  '/',
   authAccessToken,
   checkDirWritePerm,
   directoryControllers.deleteDirectoryById,
