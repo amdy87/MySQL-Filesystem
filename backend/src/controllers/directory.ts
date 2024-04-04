@@ -60,6 +60,33 @@ const updateDirectory = async (dir: DbDirectory, res: Response) => {
 };
 
 export const directoryControllers = {
+  getDirectory: async (req: Request, res: Response) => {
+    try {
+      if (!req.query?.directoryId) {
+        throw errorHandler.InvalidQueryParamError('directoryId');
+      }
+      const directoryId = parseInt(req.query.directoryId as string);
+
+      const directory = await prisma.directory.findMany({
+        where: {
+          id: directoryId,
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          name: true,
+          path: true,
+          parentId: true,
+          ownerId: true,
+          permissions: true,
+        },
+      });
+      res.status(200).send({ dir: directory });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
   getDirectories: async (req: Request, res: Response) => {
     try {
       if (!req.query?.userId) {

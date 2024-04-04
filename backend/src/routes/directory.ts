@@ -6,7 +6,8 @@
 import express from 'express';
 import { authAccessToken } from '../middlewares/auth';
 import { directoryControllers } from '../controllers/directory';
-import { checkDirWritePerm } from '../middlewares/directory';
+import { checkDirReadPerm, checkDirWritePerm } from '../middlewares/directory';
+import { treeControllers } from '../controllers/tree';
 
 const router = express.Router();
 
@@ -50,6 +51,23 @@ router.post('/add', directoryControllers.addDirectory);
 router.get('/', directoryControllers.getDirectories);
 
 /**
+ * Get a directories record
+ * @route GET /dir/dirById
+ * @access Any User
+ *
+ * @query
+ *  @requires
+ *  @param {number} directoryId
+ */
+
+router.get(
+  '/dirById',
+  authAccessToken,
+  checkDirReadPerm,
+  directoryControllers.getDirectory,
+);
+
+/**
  * Update a dir
  * @route POST /dir/update
  * @access Owner of the dir
@@ -57,7 +75,7 @@ router.get('/', directoryControllers.getDirectories);
  * @body
  *  @requires
  *  @field directoryId (number)
- *  @description dirId of the User who creates this file
+ *  @description directoryId of the User who creates this file
  *
  *  @optional
  *  @field name (string)

@@ -11,6 +11,15 @@ import { authAccessToken } from '../middlewares/auth';
 
 export const treeRouter = express.Router();
 
+/**
+ * Get a list of all directories owned by a user
+ * @route GET /tree/treeByParent
+ * @access authenticated User
+ *
+ * @body
+ *  @requires
+ *  @param {number} userId
+ */
 treeRouter.get(
   '/treeByParent',
   authAccessToken,
