@@ -54,7 +54,9 @@ export const deleteDirsByOwner = async (userId: number, res: Response) => {
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
- * Check whether directoryId exist
+};
+
+/* Check whether directoryId exist
  * @param req
  * @param res
  *
