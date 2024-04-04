@@ -30,8 +30,14 @@ export const checkDirReadPerm = async (
 ) => {
   // Get permissions of this directory for this user
   try {
+    let directoryId: number = -1;
+    if (req.body?.directoryId) {
+      directoryId = parseInt(req.body?.directoryId as string);
+    } else if (req.query?.directoryId) {
+      directoryId = parseInt(req.query?.directoryId as string);
+    }
     const directory = await prisma.directory.findUnique({
-      where: { id: parseInt(req.query?.directoryId as string) },
+      where: { id: directoryId },
       select: {
         permissions: true,
       },
@@ -78,8 +84,14 @@ export const checkDirWritePerm = async (
   next: NextFunction,
 ) => {
   try {
+    let directoryId: number = -1;
+    if (req.body?.directoryId) {
+      directoryId = parseInt(req.body?.directoryId as string);
+    } else if (req.query?.directoryId) {
+      directoryId = parseInt(req.query?.directoryId as string);
+    }
     const directory = await prisma.directory.findUnique({
-      where: { id: req.body?.directoryId },
+      where: { id: directoryId },
       select: {
         permissions: true,
       },
@@ -126,8 +138,14 @@ export const checkDirExecutePerm = async (
   next: NextFunction,
 ) => {
   try {
+    let directoryId: number = -1;
+    if (req.body?.directoryId) {
+      directoryId = parseInt(req.body?.directoryId as string);
+    } else if (req.query?.directoryId) {
+      directoryId = parseInt(req.query?.directoryId as string);
+    }
     const directory = await prisma.directory.findUnique({
-      where: { id: req.body?.directoryId },
+      where: { id: directoryId },
       select: {
         permissions: true,
       },
