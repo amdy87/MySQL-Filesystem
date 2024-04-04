@@ -2,12 +2,12 @@ import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import './FileRenamePopup.css';
 
-const FileRenamePopup = ({ isOpen, onClose, onRename, fileName }) => {
+const FileRenamePopup = ({ isOpen, onClose, onRename, fileName, fileType }) => {
   const [newName, setNewName] = useState(fileName);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRename(newName);
+    onRename(newName, fileType);
     onClose();
   };
 

@@ -136,10 +136,15 @@ fileRouter.post(
 );
 
 /**
- * delete a file by its fildId
+ * delete a file by its fileId
  * @route DEL /file/
  * @access Owner of the file
  *
  * @param fileId: number
  */
-fileRouter.delete('/', fileControllers.deleteFileById);
+fileRouter.delete(
+  '/',
+  authAccessToken,
+  checkFileWritePerm,
+  fileControllers.deleteFileById,
+);
