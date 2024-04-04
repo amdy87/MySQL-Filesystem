@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import FileRenamePopup from '../FileRenamePopup/FileRenamePopup';
-import { fileRename } from '../../api/file';
+import { fileRename, directoryRename } from '../../api/file';
 import { useNavigate } from 'react-router-dom';
 
 export default function FileTableRow({
@@ -28,17 +28,24 @@ export default function FileTableRow({
     }
   };
 
-  const handleRename = (name) => {
+  const handleRename = (newName, type) => {
     let renameData = {};
 
-    // TODO: Collect the fileId from the file tree.
+    // TODO: Collect the fileId or directoryId from the file tree.
+    if (type == 'directory') {
+      renameData['directoryId'] = 1;
+      renameData['name'] = newName;
 
-    // Add rename info to renameData
-    renameData['fileId'] = 1;
-    renameData['name'] = name;
+      // Send rename info to the directory update api
+      directoryRename(renameData);
+    } else {
+      // Add rename info to renameData
+      renameData['fileId'] = 1;
+      renameData['name'] = newName;
 
-    // Send rename info to the api post call method
-    fileRename(renameData);
+      // Send rename info to the file update api
+      fileRename(renameData);
+    }
 
     // Close the rename popup window
     setIsPopupOpen(false);
@@ -86,6 +93,7 @@ export default function FileTableRow({
             onClose={() => setIsPopupOpen(false)}
             onRename={handleRename}
             fileName={fileName}
+            fileType={fileType}
           />
         </div>
       </td>

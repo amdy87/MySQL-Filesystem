@@ -3,7 +3,7 @@ import { request } from '@utils/request';
 
 // Requests all the directories and files for the user
 async function getFileTree() {
-  const data = await request('/api/tree');
+  const data = await request('/api/tree/sampleData');
   return data;
 }
 
@@ -34,7 +34,7 @@ async function sendFile(data) {
 async function fileRename(data) {
   try {
     console.log('Renaming file');
-    const token = localStorage.getItem('authToken');
+    const token = JSON.parse(localStorage.getItem('authToken'));
     if (!token) {
       throw {
         name: INVALID_TOKEN_ERROR,
@@ -48,9 +48,37 @@ async function fileRename(data) {
       },
       body: JSON.stringify(data), // Backend requires JSON format
     });
-
     if (response.ok) {
       console.log('File renamed successfully');
+    } else {
+      console.error('Rename failed');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Posts the new directory name to the backend
+async function directoryRename(data) {
+  try {
+    console.log('Renaming Directory');
+    const token = JSON.parse(localStorage.getItem('authToken'));
+    if (!token) {
+      throw {
+        name: INVALID_TOKEN_ERROR,
+      };
+    }
+    const response = await fetch('/backend/api/dir/update', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data), // Backend requires JSON format
+    });
+
+    if (response.ok) {
+      console.log('Directory renamed successfully');
     } else {
       console.error('Rename failed');
     }
@@ -85,4 +113,10 @@ async function collectUserContent(userId) {
   }
 }
 
-export { getFileTree, sendFile, fileRename, collectUserContent };
+export {
+  getFileTree,
+  sendFile,
+  fileRename,
+  directoryRename,
+  collectUserContent,
+};
