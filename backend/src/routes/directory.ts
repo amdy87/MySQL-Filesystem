@@ -99,4 +99,22 @@ router.post(
   directoryControllers.updateDirById,
 );
 
+/**
+ * Delete a directory
+ *
+ * @route POST /dir/delete
+ * @access owner of the directory
+ *
+ * @body
+ *  @requires
+ *  @field directoryId (number)
+ *  @description directoryId of the directory to be deleted
+ */
+router.delete(
+  '/',
+  authAccessToken,
+  checkDirWritePerm,
+  directoryControllers.deleteDirectoryById,
+);
+
 export default router;

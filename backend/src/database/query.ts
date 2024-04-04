@@ -1,3 +1,7 @@
+/**
+ * Querys to use with database
+ */
+
 import { PrismaClient, Role, PermissionType } from '@prisma/client';
 
 const prisma = new PrismaClient();

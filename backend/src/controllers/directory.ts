@@ -54,6 +54,34 @@ export const deleteDirsByOwner = async (userId: number, res: Response) => {
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
+ * Check whether directoryId exist
+ * @param req
+ * @param res
+ *
+ * @returns isExist : boolean
+ */
+
+const existDirectoryId = async (directoryId: number) => {
+  const existingDirectory = await prisma.directory.findUnique({
+    where: { id: directoryId },
+  });
+  return existingDirectory ? true : false;
+};
+
+/**
+ * Helper function
+ * Check if there are child files in parent directory
+ * @param req
+ * @param res
+ *
+ * @returns isExist : boolean
+ */
+
+const getFilesByParentDir = async (directoryId: number) => {
+  const existingFiles = await prisma.file.findMany({
+    where: { parentId: directoryId },
+  });
+  return existingFiles ? true : false;
 };
 
 /**
@@ -295,7 +323,48 @@ export const directoryControllers = {
     }
   },
 
-  // TODO: deleteByOwnerId
+  deleteDirectoryById: async (req: Request, res: Response) => {
+    try {
+      if (!req.body?.directoryId) {
+        console.log('no directory id in body');
+        throw errorHandler.InvalidQueryParamError('directoryId');
+      }
+      const directoryId = parseInt(req.body.directoryId as string);
+      const directoryExist = await existDirectoryId(directoryId);
+      if (directoryExist) {
+        // check if there are files with parentId that match the directoryId
+        const fileIds = await getFilesByParentDir(directoryId);
+        let deletedFiles;
+        if (fileIds) {
+          // delete all files that have the parentId of the current directoryId
+          deletedFiles = await prisma.file.deleteMany({
+            where: {
+              parentId: directoryId,
+            },
+          });
+        }
+        // delete the directory
+        const deletedDirectory = await prisma.directory.delete({
+          where: {
+            id: directoryId,
+          },
+        });
+        res.status(200).send({
+          message: `directory with id ${directoryId} and all files in that directory have been deleted`,
+          directory: deletedDirectory,
+          file: deletedFiles,
+        });
+      } else {
+        console.log('no valid directoryid');
+        throw errorHandler.RecordNotFoundError(
+          `${directoryId} is not a valid directory id`,
+        );
+      }
+    } catch (error: any) {
+      console.log(`some other error here: ${error}`);
+      errorHandler.handleError(error, res);
+    }
+  },
 };
 
 export const getDirsByParent = async (userId: number, parentId: number) => {

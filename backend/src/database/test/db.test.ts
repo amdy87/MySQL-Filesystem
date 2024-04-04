@@ -1,3 +1,7 @@
+/**
+ * Integration tests for database
+ */
+
 import { describe, it, expect } from '@jest/globals';
 import {
   addUser,
