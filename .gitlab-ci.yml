@@ -1,65 +1,69 @@
-# This file is a template, and might need editing before it works on your project.
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Nodejs.gitlab-ci.yml
-
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/node/tags/
 image: node:latest
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: https://docs.gitlab.com/ee/ci/services/index.html
-# services:
-#   - mysql:latest
-
-# This folder is cached between builds
-# https://docs.gitlab.com/ee/ci/yaml/index.html#cache
 cache:
   paths:
     - my-filesystem-portal/node_modules/
     - backend/node_modules/
 
+stages:
+  - test
+  - build
+  - deploy
+  - format
+  - lint
 
 test_frontend:
+  stage: test
   script:
     - cd my-filesystem-portal
     - npm install
     - npm run testCI
-    - cd ..
 
 format_backend:
+  stage: format
   script:
     - cd backend
     - npm install
     - npx prettier -c .
-    - cd ..
-    
+
 format_frontend:
+  stage: format
   script:
     - cd my-filesystem-portal
     - npm install
     - npx prettier -c .
-    - cd ..
 
 lint_frontend:
+  stage: lint
   script:
     - cd my-filesystem-portal
     - npm install
     - npm run lint
-    
+
 test_api:
+  stage: test
+  services:
+    - name: mysql:latest
+      alias: mysql
   script:
     - cd backend
     - npm install
     - npm run test-api
-    - cd ..
 
-# deploy:
-#   stage: deploy
-#   script: echo "Define your deployment script!"
-#   environment: production
+test_db:
+  stage: test
+  services:
+    - name: mysql:latest
+      alias: mysql
+  variables:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: db
+      DATABASE_URL: mysql://root:password@mysql:3306/db
+      CI: 'true'
+  script:
+    - cd backend
+    - npm install
+    - npx prisma generate
+    - npx prisma migrate dev
+    - npm run test-db
