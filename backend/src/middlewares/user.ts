@@ -74,7 +74,7 @@ export const userExistInQuery = async (
     const userId = parseInt(req.query.userId as string);
     user = { where: { id: userId } };
     if (!userId) {
-      throw errorHandler.UnauthorizedError(
+      throw errorHandler.InvalidQueryParamError(
         'Middleware auth failed: userId not in request.query',
       );
     }

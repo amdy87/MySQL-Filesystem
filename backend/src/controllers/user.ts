@@ -312,7 +312,10 @@ export const userControllers = {
       deleteDirsByOwner(userId, res);
       // TODO: Delete related records in Permission table
 
-      res.status(200).send({ user: user });
+      res.status(200).send({
+        message: `${user.name} and related records are deleted`,
+        user: user,
+      });
     } catch (error: any) {
       errorHandler.handleError(error, res);
     }
