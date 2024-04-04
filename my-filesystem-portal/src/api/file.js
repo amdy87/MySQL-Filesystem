@@ -42,7 +42,7 @@ async function fileRename(data) {
     const response = await fetch('/backend/api/file/update', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data), // Backend requires JSON format
