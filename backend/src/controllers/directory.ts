@@ -36,12 +36,13 @@ export const getAllPermissions = async () => {
 };
 
 /**
-<<<<<<< HEAD
  * TODO: Change to account for PERMISSIONSSSSSSS!
  */
 export const deleteFilesOwnedByUserId = async (userId: number) => {
   await prisma.file.deleteMany({ where: { ownerId: userId } });
-=======
+};
+
+/**
  * A Helper function
  * Update a Directory record in database
  * @param {DbDirectory} dir
@@ -72,7 +73,6 @@ const updateDirectory = async (dir: DbDirectory, res: Response) => {
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
->>>>>>> jane/directory-update
 };
 
 export const directoryControllers = {
@@ -98,6 +98,7 @@ export const directoryControllers = {
           permissions: true,
         },
       });
+
       res.status(200).send({ dir: directory });
     } catch (error: any) {
       errorHandler.handleError(error, res);
