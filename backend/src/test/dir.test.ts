@@ -22,6 +22,11 @@ jest.mock('../connectPrisma', () => ({
       create: jest.fn(),
       update: jest.fn(),
       findUnique: jest.fn(),
+      delete: jest.fn(),
+    },
+    file: {
+      findMany: jest.fn(),
+      deleteMany: jest.fn(),
     },
     user: {
       findMany: jest.fn(),
@@ -190,5 +195,108 @@ describe('update a Directory', () => {
 
     // Assert response
     expect(res.status).toHaveBeenCalledWith(200);
+  });
+});
+
+describe('delete a directory', () => {
+  it('should delete empty directory', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    const sampleDirectoryId = 1;
+    req = {
+      body: {
+        directoryId: `${sampleDirectoryId}`,
+      },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    const sampleFiles = [
+      { id: 1, parentId: 0 },
+      { id: 2, parentId: 3 },
+    ];
+
+    (prisma.directory.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: `${sampleDirectoryId}`,
+    });
+
+    (prisma.directory.delete as jest.Mock).mockResolvedValueOnce({
+      id: `${sampleDirectoryId}`,
+    });
+
+    (prisma.file.findMany as jest.Mock).mockResolvedValueOnce({ sampleFiles });
+
+    (prisma.file.deleteMany as jest.Mock).mockResolvedValueOnce({
+      count: sampleFiles.length,
+    });
+
+    await directoryControllers.deleteDirectoryById(
+      req as Request,
+      res as Response,
+    );
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+      directory: {
+        id: `${sampleDirectoryId}`,
+      },
+      file: {
+        count: sampleFiles.length,
+      },
+      message: `directory with id ${sampleDirectoryId} and all files in that directory have been deleted`,
+    });
+  });
+
+  it('should delete directory with one file', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    const sampleDirectoryId = 1;
+    req = {
+      body: {
+        directoryId: `${sampleDirectoryId}`,
+      },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    (prisma.directory.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: `${sampleDirectoryId}`,
+    });
+
+    (prisma.directory.delete as jest.Mock).mockResolvedValueOnce({
+      id: `${sampleDirectoryId}`,
+    });
+
+    const sampleFiles = [
+      { id: 1, parentId: sampleDirectoryId },
+      { id: 2, parentId: sampleDirectoryId },
+    ];
+
+    (prisma.file.findMany as jest.Mock).mockResolvedValueOnce({ sampleFiles });
+
+    (prisma.file.deleteMany as jest.Mock).mockResolvedValueOnce({
+      count: sampleFiles.length,
+    });
+
+    await directoryControllers.deleteDirectoryById(
+      req as Request,
+      res as Response,
+    );
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+      directory: {
+        id: `${sampleDirectoryId}`,
+      },
+      file: {
+        count: sampleFiles.length,
+      },
+      message: `directory with id ${sampleDirectoryId} and all files in that directory have been deleted`,
+    });
   });
 });
