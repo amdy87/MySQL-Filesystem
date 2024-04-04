@@ -77,9 +77,57 @@ export const prismaPermissionsToPerms = (permissions: any) => {
 
 /**
  *
- * Recursively construct the tree structure for files and dirs
+ * Get files and dirs stored in parentId
+ *
+ * @param {number} userId
+ * @param {number} parentId
+ *
+ * @return {DbDirectory} dbDir
  */
 const getDocsByParent = async (userId: number, parentId: number) => {
+  const dirs = await getDirsByParent(userId, parentId);
+  const files = await getFilesByParent(userId, parentId);
+  const dbFiles: DbFile[] = files.map((file) => ({
+    id: file.id,
+    name: file.name,
+    metadata: {
+      createdAt: new Date(file.createdAt || '').getTime(),
+      updatedAt: new Date(file.updatedAt || '').getTime(),
+      perms: prismaPermissionsToPerms(file.permissions),
+    },
+  }));
+  const dbDirs: DbDirectory[] = dirs.map((dir) => ({
+    id: dir.id,
+    name: dir.name,
+    metadata: {
+      createdAt: new Date(dir.createdAt || '').getTime(),
+      updatedAt: new Date(dir.updatedAt || '').getTime(),
+      perms: prismaPermissionsToPerms(dir.permissions),
+    },
+  }));
+  const currDir = await getDirById(parentId);
+
+  const result: DbDirectory = {
+    id: parentId,
+    ownerId: userId,
+    name: currDir?.name || 'Dir has no name',
+    files: dbFiles,
+    directories: dbDirs,
+    metadata: {
+      createdAt: new Date(currDir?.createdAt || '').getTime(),
+      updatedAt: new Date(currDir?.updatedAt || '').getTime(),
+      perms: prismaPermissionsToPerms(currDir?.permissions),
+    },
+  };
+
+  return result;
+};
+
+/**
+ *
+ * Recursively construct the tree structure for files and dirs
+ */
+const getAllDocsByParent = async (userId: number, parentId: number) => {
   const dirs = await getDirsByParent(userId, parentId);
   const files = await getFilesByParent(userId, parentId);
   const dbFiles: DbFile[] = files.map((file) => ({
@@ -113,7 +161,7 @@ const getDocsByParent = async (userId: number, parentId: number) => {
   // Recursively call getDocsByParent for each directory
   const subResult = await Promise.all(
     dirs.map(async (dir) => {
-      return await getDocsByParent(userId, dir.id);
+      return await getAllDocsByParent(userId, dir.id);
     }),
   );
   result.directories = subResult;

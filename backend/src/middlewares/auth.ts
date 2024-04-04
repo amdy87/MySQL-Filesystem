@@ -30,7 +30,6 @@ export const authAccessToken = (
       const message = 'Access token is not set';
       throw errorHandler.UnauthorizedError(message);
     }
-
     // Verify access token and extract user data
     // Assume authHeader is a string with format "Bearer <token>"
     const [_, token] = authHeader.split(' ');
