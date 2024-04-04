@@ -36,10 +36,25 @@ export const getAllPermissions = async () => {
 };
 
 /**
- * TODO: Change to account for PERMISSIONSSSSSSS!
+ * Helper function
+ *
+ * delete Dirs owned by userId
+ * @param userId
+ *
+ * @returns number of file deleted
  */
-export const deleteFilesOwnedByUserId = async (userId: number) => {
-  await prisma.file.deleteMany({ where: { ownerId: userId } });
+export const deleteDirsByOwner = async (userId: number, res: Response) => {
+  try {
+    const deletedDirs = await prisma.directory.deleteMany({
+      where: {
+        ownerId: userId,
+      },
+    });
+    console.log(deletedDirs.count);
+    return deletedDirs.count;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
 };
 
 /**
@@ -166,7 +181,6 @@ export const directoryControllers = {
       }
       // Retrieve existing permission records from the database
       const existingPermissions = await getAllPermissions();
-
       let directory: Prisma.DirectoryCreateInput;
       directory = {
         name: name,

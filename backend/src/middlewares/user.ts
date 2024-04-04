@@ -47,7 +47,7 @@ export const userExist = async (
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
       throw errorHandler.UserNotFoundError(
-        'User does not exist, please signup',
+        'User does not exist, fail to process request',
       );
     }
     req.authenticatedUser = existUser;
@@ -60,21 +60,23 @@ export const userExist = async (
 /**
  *
  * Validate Whether UserId exist in database
- * userId is stored in req.body.params.id
+ * userId is stored in req.query.id
  * @throw UserNotFoundError
  */
 
-export const userExistParam = async (
+export const userExistInQuery = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     let user: Prisma.UserFindUniqueArgs;
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.query.userId as string);
     user = { where: { id: userId } };
     if (!userId) {
-      throw errorHandler.UnauthorizedError('Middleware auth failed');
+      throw errorHandler.UnauthorizedError(
+        'Middleware auth failed: userId not in request.query',
+      );
     }
     const existUser = await prisma.user.findUnique(user);
     if (!existUser) {
@@ -147,6 +149,52 @@ export const userIsAdmin = (
       throw errorHandler.ForbiddenError(message);
     }
     next();
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
+
+/**
+ * Check authorization for account deletion
+ * @throw ForbiddenError
+ * @throw UnauthorizedError
+ */
+export const canDeleteUser = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { authenticatedUser } = req;
+    if (!authenticatedUser) {
+      const message =
+        'Current user does not have access to specified resource.';
+      throw errorHandler.ForbiddenError(message);
+    }
+    if (authenticatedUser.role === Role.ADMIN) {
+      next();
+    } else if (authenticatedUser.role == Role.USER) {
+      if (!req.query?.userId) {
+        throw errorHandler.InvalidQueryParamError('userId');
+      }
+      if (authenticatedUser.id === parseInt(req.query.userId as string)) {
+        next();
+      } else {
+        console.log(authenticatedUser.id);
+        console.log(typeof authenticatedUser.id);
+
+        console.log(parseInt(req.query.userId as string));
+        console.log(typeof parseInt(req.query.userId as string));
+
+        throw errorHandler.UnauthorizedError(
+          'Request User has no permission to delete this account',
+        );
+      }
+    } else {
+      throw errorHandler.ForbiddenError(
+        'authenticated User has an invalid Role',
+      );
+    }
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
