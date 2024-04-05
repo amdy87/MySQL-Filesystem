@@ -4,6 +4,7 @@
  *  directoryControllers.getDirsByParentDir
  *  directoryControllers.addRootDirectory
  *  directoryControllers.addDirectory
+ *  directoryControllers.deleteDirectory
  *
  * Functions:
  *  getAllPermissions

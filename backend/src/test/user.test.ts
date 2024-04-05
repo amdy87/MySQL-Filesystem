@@ -187,3 +187,21 @@ describe('delete user account', () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 });
+
+describe('user logout', () => {
+  it('should return logout message', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {}; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await userControllers.userLogout(req as Request, res as Response);
+    expect(res.json).toHaveBeenCalledWith({
+      message: 'LOG OUT successfully',
+    });
+  });
+});

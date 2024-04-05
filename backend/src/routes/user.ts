@@ -137,4 +137,17 @@ router.delete(
   userControllers.deleteUserById,
 );
 
+/**
+ * User logout
+ * @route POST /user/logout
+ * @access Everyone
+ *
+ * @header
+ * @required
+ * @param {string} Authorization
+ * @description Bearer <token> of the user who requests
+ *
+ */
+router.post('/logout', authAccessToken, userExist, userControllers.userLogout);
+
 export default router;
