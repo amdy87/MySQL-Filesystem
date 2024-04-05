@@ -299,4 +299,23 @@ describe('delete a directory', () => {
       message: `directory with id ${sampleDirectoryId} and all files in that directory have been deleted`,
     });
   });
+
+  it('missing directory id', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {
+      body: {},
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await directoryControllers.deleteDirectoryById(
+      req as Request,
+      res as Response,
+    );
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
 });

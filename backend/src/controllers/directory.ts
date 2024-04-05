@@ -67,6 +67,7 @@ const existDirectoryId = async (directoryId: number) => {
   const existingDirectory = await prisma.directory.findUnique({
     where: { id: directoryId },
   });
+  console.log(existingDirectory, 'THIS');
   return existingDirectory ? true : false;
 };
 
@@ -329,10 +330,13 @@ export const directoryControllers = {
     try {
       if (!req.body?.directoryId) {
         console.log('no directory id in body');
-        throw errorHandler.InvalidQueryParamError('directoryId');
+        throw errorHandler.InvalidBodyParamError('directoryId');
       }
       const directoryId = parseInt(req.body.directoryId as string);
       const directoryExist = await existDirectoryId(directoryId);
+      console.log(directoryExist);
+      console.log(directoryId);
+
       if (directoryExist) {
         // check if there are files with parentId that match the directoryId
         const fileIds = await getFilesByParentDir(directoryId);
