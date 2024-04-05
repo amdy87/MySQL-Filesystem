@@ -320,4 +320,15 @@ export const userControllers = {
       errorHandler.handleError(error, res);
     }
   },
+
+  // logout user
+  userLogout: async (req: Request, res: Response) => {
+    try {
+      res.json({
+        message: `LOG OUT successfully`,
+      });
+    } catch (error: any) {
+      errorHandler.handleError(error, res);
+    }
+  },
 };
