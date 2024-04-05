@@ -67,7 +67,7 @@ const existDirectoryId = async (directoryId: number) => {
   const existingDirectory = await prisma.directory.findUnique({
     where: { id: directoryId },
   });
-  console.log(existingDirectory, "THIS");
+  console.log(existingDirectory, 'THIS');
   return existingDirectory ? true : false;
 };
 
