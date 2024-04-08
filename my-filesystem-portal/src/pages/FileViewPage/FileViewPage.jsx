@@ -7,6 +7,7 @@ import {
   Col,
 } from 'react-bootstrap';
 import { Header, FileTableRow } from '@components';
+import DirectoryCreationButton from '../../components/DirectoryCreation/DirectoryCreationButton';
 import { useEffect, useState } from 'react';
 import { getFileTree, sendFile } from '@api/file';
 
@@ -157,6 +158,11 @@ export default function FileViewPage() {
         <Col className="m-3">
           <h1>{'Boyan Sun' + "'s FileSystem"}</h1>
         </Col>
+        <DirectoryCreationButton
+          tree={tree}
+          user={user}
+          updateFileTree={updateFileTree}
+        />
         <Col md="auto" className="m-3">
           <input
             type="file"

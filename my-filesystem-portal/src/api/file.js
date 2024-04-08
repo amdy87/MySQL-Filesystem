@@ -30,6 +30,28 @@ async function sendFile(data) {
   }
 }
 
+async function sendDirectory(data) {
+  try {
+    const response = await fetch('/backend/api/dir/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data), // Puts file data in JSON format
+    });
+
+    if (response.ok) {
+      console.log('Directory created successfully');
+      return response.ok;
+    } else {
+      console.error('Creation failed');
+    }
+  } catch (error) {
+    // Print out error message in console
+    console.error('Error:', error);
+  }
+}
+
 // Posts the new file name to the backend
 async function fileRename(data) {
   try {
@@ -116,6 +138,7 @@ async function collectUserContent(userId) {
 export {
   getFileTree,
   sendFile,
+  sendDirectory,
   fileRename,
   directoryRename,
   collectUserContent,
