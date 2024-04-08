@@ -10,6 +10,30 @@ async function getFileTree({ userId, parentId }) {
   return data;
 }
 
+async function deleteFile({ fileId }) {
+  const data = await request(
+    `/api/file`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ fileId }),
+    },
+    true,
+  );
+  return data;
+}
+
+async function deleteDirectory({ directoryId }) {
+  const data = await request(
+    `/api/dir`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ directoryId }),
+    },
+    true,
+  );
+  return data;
+}
+
 // Posts all the file data to the backend
 async function sendFile(data) {
   try {
@@ -145,4 +169,6 @@ export {
   fileRename,
   directoryRename,
   collectUserContent,
+  deleteFile,
+  deleteDirectory,
 };

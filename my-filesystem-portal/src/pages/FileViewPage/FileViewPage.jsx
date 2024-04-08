@@ -232,6 +232,7 @@ export default function FileViewPage() {
                       userId={user.id}
                       {...file}
                       clickDirectory={clickDirectory}
+                      refresh={updateFileTree}
                     ></FileTableRow>
                   );
                 })

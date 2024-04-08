@@ -1,7 +1,12 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import FileRenamePopup from '../FileRenamePopup/FileRenamePopup';
-import { fileRename, directoryRename } from '../../api/file';
+import {
+  fileRename,
+  directoryRename,
+  deleteFile,
+  deleteDirectory,
+} from '../../api/file';
 import { useNavigate } from 'react-router-dom';
 
 export default function FileTableRow({
@@ -12,6 +17,7 @@ export default function FileTableRow({
   permissions,
   updatedAt,
   clickDirectory,
+  refresh,
 }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
@@ -50,6 +56,24 @@ export default function FileTableRow({
     setIsPopupOpen(false);
   };
 
+  // delete file or directory and refresh the page
+  const onClickDelete = () => {
+    console.log(fileType);
+    if (fileType != 'directory') {
+      if (confirm('Are you sure you want to delete this file?')) {
+        deleteFile({ fileId: id }).then(() => {
+          refresh();
+        });
+      }
+    } else {
+      if (confirm('Are you sure you want to delete this directory?')) {
+        deleteDirectory({ directoryId: id }).then(() => {
+          refresh();
+        });
+      }
+    }
+  };
+
   return (
     <tr>
       <td>
@@ -77,9 +101,14 @@ export default function FileTableRow({
       <td>{new Date(updatedAt).toLocaleString()}</td>
       <td>
         <div>
-          <Button variant="dark" className="mx-3">
-            Delete
-          </Button>
+          {
+            // if the directory is root, do not show the delete button
+            fileName != '.' && (
+              <Button variant="danger" onClick={onClickDelete}>
+                Delete
+              </Button>
+            )
+          }
           <Button
             variant="dark"
             className="mx-3"
