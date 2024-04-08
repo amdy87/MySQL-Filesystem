@@ -5,6 +5,7 @@ import { sendDirectory } from '../../api/file';
 
 export default function DirectoryCreationButton({
   tree,
+  currentDirId,
   user,
   updateFileTree,
 }) {
@@ -22,7 +23,7 @@ export default function DirectoryCreationButton({
     formData['ownerId'] = user.id;
     formData['name'] = dirName;
     formData['path'] = path;
-    formData['parentId'] = 1;
+    formData['parentId'] = currentDirId;
 
     let response = sendDirectory(formData);
 

@@ -113,7 +113,7 @@ export default function FileViewPage() {
     formData['ownerId'] = user.id;
     formData['name'] = file.name;
     formData['path'] = path;
-    formData['parentId'] = 1;
+    formData['parentId'] = displayedFiles[0].id;
 
     // Collecting txt file contents as a string to send to api
     const reader = new FileReader();
@@ -170,11 +170,16 @@ export default function FileViewPage() {
         <Col className="m-3">
           <h1>{user ? user.name + "'s FileSystem" : ''}</h1>
         </Col>
-        <DirectoryCreationButton
-          tree={tree}
-          user={user}
-          updateFileTree={updateFileTree}
-        />
+        {displayedFiles ? (
+          <DirectoryCreationButton
+            tree={tree}
+            user={user}
+            currentDirId={displayedFiles[0].id}
+            updateFileTree={updateFileTree}
+          />
+        ) : (
+          <></>
+        )}
         <Col md="auto" className="m-3">
           <input
             type="file"
