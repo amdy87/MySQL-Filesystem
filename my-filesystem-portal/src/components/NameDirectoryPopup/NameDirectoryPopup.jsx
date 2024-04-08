@@ -2,12 +2,12 @@ import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import '../Popup.css';
 
-const FileRenamePopup = ({ isOpen, onClose, onRename, fileName, fileType }) => {
-  const [newName, setNewName] = useState(fileName);
+const NameDirectoryPopup = ({ isOpen, onClose, onDirCreation }) => {
+  const [dirName, setDirName] = useState('New-Directory');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRename(newName, fileType);
+    onDirCreation(dirName);
     onClose();
   };
 
@@ -18,18 +18,18 @@ const FileRenamePopup = ({ isOpen, onClose, onRename, fileName, fileType }) => {
       <div className="popup-container">
         <form onSubmit={handleSubmit}>
           <label>
-            New Name:
+            Directory Name:
             <input
               type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
+              value={dirName}
+              onChange={(e) => setDirName(e.target.value)}
             />
           </label>
           <Button
             type="submit"
             style={{ marginRight: '10px', marginLeft: '10px' }}
           >
-            Rename
+            Submit
           </Button>
           <Button onClick={onClose}>Cancel</Button>
         </form>
@@ -38,4 +38,4 @@ const FileRenamePopup = ({ isOpen, onClose, onRename, fileName, fileType }) => {
   );
 };
 
-export default FileRenamePopup;
+export default NameDirectoryPopup;
