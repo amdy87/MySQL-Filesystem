@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 import { Header, FileTableRow } from '@components';
 import DirectoryCreationButton from '../../components/DirectoryCreation/DirectoryCreationButton';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getFileTree, sendFile } from '@api/file';
 
 export default function FileViewPage() {
@@ -16,21 +16,29 @@ export default function FileViewPage() {
   const [displayedFiles, setDisplayedFiles] = useState();
   const [user, setUser] = useState();
 
-  useEffect(() => {
-    updateFileTree(); // Initial fetch of the file tree
-    setUser(JSON.parse(localStorage.getItem('user')));
-  }, []);
-
   // Refreshes the tree files
-  const updateFileTree = () => {
-    getFileTree().then((data) => {
+  const updateFileTree = useCallback(() => {
+    getFileTree({ userId: user.id, parentId: user.rootDirId }).then((data) => {
       setTree({
         path: [data.name],
         files: data,
       });
     });
-  };
+  }, [user]);
 
+  // set the user state from the local storage
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('user')));
+  }, []);
+
+  // Update the file tree when the user state changes
+  useEffect(() => {
+    if (user) {
+      updateFileTree(user.id, user.rootDirId);
+    }
+  }, [user, updateFileTree]);
+
+  // Update the displayed files when the tree.path changes
   useEffect(() => {
     if (tree) {
       let files = [];
@@ -47,6 +55,7 @@ export default function FileViewPage() {
       }
 
       files.push({
+        id: currentDir.id,
         fileName: '.',
         fileType: 'directory',
         permissions: currentDir.metadata.perms,
@@ -55,6 +64,7 @@ export default function FileViewPage() {
       // add the parent directory if not in the root
       if (tree.path.length > 1) {
         files.push({
+          id: parentDir.id,
           fileName: '..',
           fileType: 'directory',
           permissions: parentDir.metadata.perms,
@@ -64,6 +74,7 @@ export default function FileViewPage() {
       files = files.concat(
         currentDir.directories.map((dir) => {
           return {
+            id: dir.id,
             fileName: dir.name,
             fileType: 'directory',
             permissions: dir.metadata.perms,
@@ -74,6 +85,7 @@ export default function FileViewPage() {
       files = files.concat(
         currentDir.files.map((file) => {
           return {
+            id: file.id,
             fileName: file.name,
             fileType: 'file',
             permissions: file.metadata.perms,
@@ -156,7 +168,7 @@ export default function FileViewPage() {
       <Header style={{ width: 50 }} username={user ? user.name : ''}></Header>
       <Row>
         <Col className="m-3">
-          <h1>{'Boyan Sun' + "'s FileSystem"}</h1>
+          <h1>{user ? user.name + "'s FileSystem" : ''}</h1>
         </Col>
         <DirectoryCreationButton
           tree={tree}
@@ -213,13 +225,11 @@ export default function FileViewPage() {
           </thead>
           <tbody>
             {displayedFiles
-              ? displayedFiles.map((file, idx) => {
+              ? displayedFiles.map((file) => {
                   return (
                     <FileTableRow
-                      // TODO: give this a better key?
-                      key={idx}
+                      key={file.id}
                       userId={user.id}
-                      fileId={1} // TODO: Change this when the file tree is real
                       {...file}
                       clickDirectory={clickDirectory}
                     ></FileTableRow>

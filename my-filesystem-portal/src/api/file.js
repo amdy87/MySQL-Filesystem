@@ -1,9 +1,12 @@
 import { INVALID_TOKEN_ERROR } from '@utils/error';
 import { request } from '@utils/request';
 
-// Requests all the directories and files for the user
-async function getFileTree() {
-  const data = await request('/api/tree/sampleData');
+async function getFileTree({ userId, parentId }) {
+  const data = await request(
+    `/api/tree/treeByParent?userId=${userId}&parentId=${parentId}`,
+    {},
+    true,
+  );
   return data;
 }
 

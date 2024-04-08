@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function FileTableRow({
   userId,
-  fileId,
+  id,
   fileName,
   fileType,
   permissions,
@@ -24,23 +24,22 @@ export default function FileTableRow({
     } else {
       console.log(userId);
       // Navigates to the file view page for that file
-      navigate(`/content/${userId}/${fileId}`);
+      navigate(`/content/${userId}/${id}`);
     }
   };
 
   const handleRename = (newName, type) => {
     let renameData = {};
 
-    // TODO: Collect the fileId or directoryId from the file tree.
     if (type == 'directory') {
-      renameData['directoryId'] = 1;
+      renameData['directoryId'] = id;
       renameData['name'] = newName;
 
       // Send rename info to the directory update api
       directoryRename(renameData);
     } else {
       // Add rename info to renameData
-      renameData['fileId'] = 1;
+      renameData['fileId'] = id;
       renameData['name'] = newName;
 
       // Send rename info to the file update api
