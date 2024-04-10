@@ -25,12 +25,7 @@ export default function DirectoryCreationButton({
     formData['path'] = path;
     formData['parentId'] = currentDirId;
 
-    let response = sendDirectory(formData);
-
-    // If the response of the sendFile is true then refresh the file tree
-    if (response) {
-      updateFileTree();
-    }
+    sendDirectory(formData).then(updateFileTree);
 
     setIsPopupOpen(false);
   };

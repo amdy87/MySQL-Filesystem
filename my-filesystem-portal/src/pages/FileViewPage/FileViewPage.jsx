@@ -123,12 +123,9 @@ export default function FileViewPage() {
       formData['content'] = content;
 
       // sending formData to file.js for the api POST call
-      let response = sendFile(formData);
+      sendFile(formData).then(updateFileTree);
 
       // If the response of the sendFile is true then refresh the file tree
-      if (response) {
-        updateFileTree();
-      }
     };
     reader.onerror = (error) => {
       // Log the file reading error
