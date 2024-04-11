@@ -54,6 +54,7 @@ async function addDirectory(
     const permissionData = permissions.map((pType) => ({
       type: pType,
       userId: ownerId,
+      enabled: true,
     }));
 
     const newDir = await prisma.directory.create({
@@ -100,6 +101,7 @@ async function addFile(
     const permissionData = permissions.map((pType) => ({
       type: pType,
       userId: ownerId,
+      enabled: true,
     }));
 
     const newFile = await prisma.file.create({
@@ -154,7 +156,7 @@ async function listPermsForFile(fileId: number) {
         permissions: true,
       },
     });
-    console.log(`Permissions for file ${fileId}`);
+    console.log(`Permissions for file ${fileId}`, perms);
     return perms;
   } catch (e) {
     console.error('Error reading contents:', e);
@@ -172,7 +174,7 @@ async function listPermsForDirectory(directoryId: number) {
         permissions: true,
       },
     });
-    console.log(`Permissions for directory ${directoryId}`);
+    console.log(`Permissions for directory ${directoryId}`, perms);
     return perms;
   } catch (e) {
     console.error('Error reading contents:', e);
@@ -187,7 +189,7 @@ async function listPermsForUser(userId: number) {
         userId: userId,
       },
     });
-    console.log(`Permissions for user ${userId}`);
+    console.log(`Permissions for user ${userId}`, perms);
     return perms;
   } catch (e) {
     console.error('Error reading contents:', e);

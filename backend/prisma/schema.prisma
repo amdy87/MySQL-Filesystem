@@ -22,10 +22,11 @@ model Permission {
   id          Int             @id @default(autoincrement())
   type        PermissionType  
   userId      Int  
+  enabled     Boolean 
   directoryId Int?
   fileId      Int?
-  directory   Directory?    @relation(fields: [directoryId], references: [id])
-  file        File?         @relation(fields: [fileId], references: [id])
+  directory   Directory?    @relation(fields: [directoryId], references: [id], onDelete: Cascade)
+  file        File?         @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }
 
 model User {
