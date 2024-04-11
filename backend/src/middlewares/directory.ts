@@ -47,7 +47,7 @@ export const checkDirReadPerm = async (
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
     directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.READ) {
+      if (p.type == PermissionType.READ && p.enabled == true) {
         canRead = true;
       }
     });
@@ -87,6 +87,8 @@ export const checkDirWritePerm = async (
     let directoryId: number = -1;
     if (req.body?.directoryId) {
       directoryId = parseInt(req.body?.directoryId as string);
+    } else if (req.body?.parentId) {
+      directoryId = parseInt(req.body?.parentId as string);
     } else if (req.query?.directoryId) {
       directoryId = parseInt(req.query?.directoryId as string);
     }
@@ -101,7 +103,7 @@ export const checkDirWritePerm = async (
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
     directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.WRITE) {
+      if (p.type == PermissionType.WRITE && p.enabled == true) {
         canWrite = true;
       }
     });
@@ -155,7 +157,7 @@ export const checkDirExecutePerm = async (
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
     directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.EXECUTE) {
+      if (p.type == PermissionType.EXECUTE && p.enabled == true) {
         canExecute = true;
       }
     });

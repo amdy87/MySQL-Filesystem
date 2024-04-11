@@ -47,7 +47,7 @@ export const checkFileReadPerm = async (
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
     file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.READ) {
+      if (p.type == PermissionType.READ && p.enabled == true) {
         canRead = true;
       }
     });
@@ -101,7 +101,7 @@ export const checkFileWritePerm = async (
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
     file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.WRITE) {
+      if (p.type == PermissionType.WRITE && p.enabled == true) {
         canWrite = true;
       }
     });
@@ -155,7 +155,7 @@ export const checkFileExecutePerm = async (
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
     file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.EXECUTE) {
+      if (p.type == PermissionType.EXECUTE && p.enabled == true) {
         canExecute = true;
       }
     });
