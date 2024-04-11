@@ -25,7 +25,7 @@ async function addUser(
     const newUser = await prisma.user.create({
       data: { email, name, password, role },
     });
-    console.log('User added');
+    console.log('User added', `ID: ${newUser.id}`);
     return newUser;
   } catch (error) {
     console.error('Error adding user:', error);
@@ -51,23 +51,26 @@ async function addDirectory(
   permissions: PermissionType[],
 ) {
   try {
+    const permissionData = permissions.map(pType => ({
+      type: pType,
+      userId: ownerId,
+    }))
+
     const newDir = await prisma.directory.create({
-      data: { name, path, parentId, ownerId },
+      data: { 
+        name, 
+        path, 
+        parentId, 
+        ownerId,
+        permissions: {
+          createMany: {
+            data: permissionData,
+          }
+        } 
+      },
     });
-    const permission = await Promise.all(
-      permissions.map(async (permissionType) => {
-        return prisma.permission.create({
-          data: {
-            type: permissionType,
-            directory: {
-              connect: { id: newDir.id },
-            },
-          },
-        });
-      }),
-    );
-    console.log('New Directory created with permissions');
-    console.log('directory permissions: ', permission);
+
+    console.log('New Directory created with permissions', `id: ${newDir.id}`);
     return newDir;
   } catch (error) {
     console.error('Error creating directory:', error);
@@ -94,23 +97,26 @@ async function addFile(
   permissions: PermissionType[],
 ) {
   try {
+    const permissionData = permissions.map(pType => ({
+      type: pType,
+      userId: ownerId,
+    }))
+
     const newFile = await prisma.file.create({
-      data: { name, path, parentId, ownerId, content },
+      data: { 
+        name, 
+        path, 
+        parentId, 
+        ownerId, 
+        content,
+        permissions: {
+          createMany: {
+            data: permissionData,
+          }
+        }
+      }, 
     });
-    const permission = await Promise.all(
-      permissions.map(async (permissionType) => {
-        return prisma.permission.create({
-          data: {
-            type: permissionType,
-            file: {
-              connect: { id: newFile.id },
-            },
-          },
-        });
-      }),
-    );
-    console.log('New file created');
-    console.log('file permissions: ', permission);
+    console.log('New file created', `FILE: ${newFile}`);
     return newFile;
   } catch (error) {
     console.error('Error creating file:', error);
@@ -129,9 +135,59 @@ async function readFile(userId: number) {
       where: {
         ownerId: userId,
       },
+      
     });
-    console.log('read successfully');
+    console.log('read successfully', files);
     return files;
+  } catch (e) {
+    console.error('Error reading contents:', e);
+    throw e;
+  }
+}
+
+async function listPermsForFile(fileId: number) {
+  try {
+    const perms = await prisma.file.findUnique({
+      where: {
+        id: fileId,
+      }, select: {
+        permissions:true,
+      }
+    });
+    console.log(`Permissions for file ${fileId}`);
+    return perms;
+  } catch (e) {
+    console.error('Error reading contents:', e);
+    throw e;
+  }
+}
+
+async function listPermsForDirectory(directoryId: number) {
+  try {
+    const perms = await prisma.directory.findUnique({
+      where: {
+        id: directoryId,
+      }, select: {
+        permissions: true,
+      }
+    });
+    console.log(`Permissions for directory ${directoryId}`);
+    return perms;
+  } catch (e) {
+    console.error('Error reading contents:', e);
+    throw e;
+  }
+}
+
+async function listPermsForUser(userId: number) {
+  try {
+    const perms = await prisma.permission.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    console.log(`Permissions for user ${userId}`);
+    return perms;
   } catch (e) {
     console.error('Error reading contents:', e);
     throw e;
@@ -217,4 +273,7 @@ export {
   removeFile,
   removeDirectory,
   deleteAllData,
+  listPermsForFile,
+  listPermsForDirectory,
+  listPermsForUser,
 };

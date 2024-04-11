@@ -20,9 +20,9 @@ async function main() {
     // Create permissions
     const permissions = await prisma.permission.createMany({
       data: [
-        { type: PermissionType.READ },
-        { type: PermissionType.WRITE },
-        { type: PermissionType.EXECUTE },
+        { type: PermissionType.READ, userId: 0 },
+        { type: PermissionType.WRITE, userId: 0 },
+        { type: PermissionType.EXECUTE, userId: 0 },
       ],
     });
 

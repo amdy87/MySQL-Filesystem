@@ -21,8 +21,11 @@ enum PermissionType {
 model Permission {
   id          Int             @id @default(autoincrement())
   type        PermissionType  
-  directory   Directory[]    @relation("DirectoryPermissions")
-  file        File[]         @relation("FilePermissions")
+  userId      Int  
+  directoryId Int?
+  fileId      Int?
+  directory   Directory?    @relation(fields: [directoryId], references: [id])
+  file        File?         @relation(fields: [fileId], references: [id])
 }
 
 model User {
@@ -36,7 +39,6 @@ model User {
   role      Role        @default(USER)
 }
 
-
 model File {
   id              Int       @id @default(autoincrement())
   content         String
@@ -46,7 +48,7 @@ model File {
   path            String
   parentId        Int
   ownerId         Int
-  permissions     Permission[]  @relation("FilePermissions")
+  permissions     Permission[] 
   @@unique([name, parentId])
 }
 
@@ -58,6 +60,6 @@ model Directory {
   path            String
   parentId        Int?
   ownerId         Int
-  permissions     Permission[]  @relation("DirectoryPermissions")
+  permissions     Permission[]
   @@unique([name, parentId])
 }
