@@ -73,7 +73,6 @@ describe('addDirectory', () => {
   });
 });
 
-
 describe('addFile', () => {
   it('should add a new file for the user', async () => {
     const newFile = await addFile(
@@ -108,19 +107,25 @@ describe('addFile', () => {
 });
 
 describe('listPerms', () => {
-  it("should check perms for fileId", async () => {
+  it('should check perms for fileId', async () => {
     const permFile = await listPermsForFile(fileData[0].id);
-    expect(permFile?.permissions.map(perm => perm.type).sort).toEqual(fileData[0].permissions.sort);
-  })
-  it("should check perms for directoryId", async () => {
+    expect(permFile?.permissions.map((perm) => perm.type).sort).toEqual(
+      fileData[0].permissions.sort,
+    );
+  });
+  it('should check perms for directoryId', async () => {
     const permDir = await listPermsForDirectory(directoryData[0].id);
-    expect(permDir?.permissions.map(perm => perm.type).sort).toEqual(directoryData[0].permissions.sort);
-  })
-  it("should check perms for user", async () => {
+    expect(permDir?.permissions.map((perm) => perm.type).sort).toEqual(
+      directoryData[0].permissions.sort,
+    );
+  });
+  it('should check perms for user', async () => {
     const permUser = await listPermsForUser(userData[0].id);
-    expect(permUser.map(perm => perm.type).sort).toEqual([fileData[0].permissions, directoryData[0].permissions].sort);
-  })
-})
+    expect(permUser.map((perm) => perm.type).sort).toEqual(
+      [fileData[0].permissions, directoryData[0].permissions].sort,
+    );
+  });
+});
 
 describe('readFile', () => {
   it('should read file for the user', async () => {

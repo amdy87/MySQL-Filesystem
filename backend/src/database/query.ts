@@ -51,22 +51,22 @@ async function addDirectory(
   permissions: PermissionType[],
 ) {
   try {
-    const permissionData = permissions.map(pType => ({
+    const permissionData = permissions.map((pType) => ({
       type: pType,
       userId: ownerId,
-    }))
+    }));
 
     const newDir = await prisma.directory.create({
-      data: { 
-        name, 
-        path, 
-        parentId, 
+      data: {
+        name,
+        path,
+        parentId,
         ownerId,
         permissions: {
           createMany: {
             data: permissionData,
-          }
-        } 
+          },
+        },
       },
     });
 
@@ -97,24 +97,24 @@ async function addFile(
   permissions: PermissionType[],
 ) {
   try {
-    const permissionData = permissions.map(pType => ({
+    const permissionData = permissions.map((pType) => ({
       type: pType,
       userId: ownerId,
-    }))
+    }));
 
     const newFile = await prisma.file.create({
-      data: { 
-        name, 
-        path, 
-        parentId, 
-        ownerId, 
+      data: {
+        name,
+        path,
+        parentId,
+        ownerId,
         content,
         permissions: {
           createMany: {
             data: permissionData,
-          }
-        }
-      }, 
+          },
+        },
+      },
     });
     console.log('New file created', `FILE: ${newFile}`);
     return newFile;
@@ -135,7 +135,6 @@ async function readFile(userId: number) {
       where: {
         ownerId: userId,
       },
-      
     });
     console.log('read successfully', files);
     return files;
@@ -150,9 +149,10 @@ async function listPermsForFile(fileId: number) {
     const perms = await prisma.file.findUnique({
       where: {
         id: fileId,
-      }, select: {
-        permissions:true,
-      }
+      },
+      select: {
+        permissions: true,
+      },
     });
     console.log(`Permissions for file ${fileId}`);
     return perms;
@@ -167,9 +167,10 @@ async function listPermsForDirectory(directoryId: number) {
     const perms = await prisma.directory.findUnique({
       where: {
         id: directoryId,
-      }, select: {
+      },
+      select: {
         permissions: true,
-      }
+      },
     });
     console.log(`Permissions for directory ${directoryId}`);
     return perms;
