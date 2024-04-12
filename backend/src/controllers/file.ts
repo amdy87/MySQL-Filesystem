@@ -4,7 +4,7 @@
  */
 
 import { Request, Response } from 'express';
-import { $Enums, Prisma } from '@prisma/client';
+import { $Enums, Prisma, PermissionType } from '@prisma/client';
 
 import { prisma } from '../connectPrisma';
 import { getAllPermissions } from './directory';
@@ -200,18 +200,32 @@ export const fileControllers = {
       }
 
       // Default file has all 3 permissions
-      const existingPermissions = await getAllPermissions();
-      // Prisma File record to be created in the database
-      const fileData: Prisma.FileCreateInput = {
-        parentId,
-        ownerId,
-        name,
-        path,
-        content,
+      const fileData = {
+        name: name,
+        parentId: parentId,
+        path: path,
+        ownerId: ownerId,
+        content: content,
         permissions: {
-          connect: existingPermissions.map((permission) => ({
-            id: permission.id,
-          })),
+          createMany: {
+            data: [
+              {
+                type: PermissionType.READ,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.WRITE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.EXECUTE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+            ],
+          },
         },
       };
 

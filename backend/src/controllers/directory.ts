@@ -200,28 +200,40 @@ export const directoryControllers = {
         throw errorHandler.InvalidBodyParamError('ownerId');
       }
 
-      // Check if user exists, TODO: move to middleware later
+      // Check if user exists
       const existingUser = await prisma.user.findUnique({
         where: { id: ownerId },
       });
-
-      // TODO: Check uniqueness of root dir
 
       if (!existingUser) {
         throw errorHandler.UserNotFoundError('User does not exist');
       }
       // Retrieve existing permission records from the database
-      const existingPermissions = await getAllPermissions();
-      let directory: Prisma.DirectoryCreateInput;
-      directory = {
+      const directory = {
         name: name,
         parentId: null,
         path: path,
         ownerId: ownerId,
         permissions: {
-          connect: existingPermissions.map((permission) => ({
-            id: permission.id,
-          })),
+          createMany: {
+            data: [
+              {
+                type: PermissionType.READ,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.WRITE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.EXECUTE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+            ],
+          },
         },
       };
       const result = await prisma.directory.create({ data: directory });
@@ -261,16 +273,31 @@ export const directoryControllers = {
       // Retrieve existing permission records from the database
       const existingPermissions = await getAllPermissions();
 
-      let directory: Prisma.DirectoryCreateInput;
-      directory = {
+      const directory = {
         name: name,
         parentId: parentId,
         path: path,
         ownerId: ownerId,
         permissions: {
-          connect: existingPermissions.map((permission) => ({
-            id: permission.id,
-          })),
+          createMany: {
+            data: [
+              {
+                type: PermissionType.READ,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.WRITE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+              {
+                type: PermissionType.EXECUTE,
+                userId: ownerId,
+                enabled: true,
+              }, // Replace with the ID of the user
+            ],
+          },
         },
       };
       const newDirectory = await prisma.directory.create({ data: directory });

@@ -64,11 +64,11 @@ export const prismaPermissionsToPerms = (permissions: any) => {
     execute: false,
   };
   permissions.map((p: any) => {
-    if (p.type == PermissionType.READ && p.enabled == true) {
+    if (p.type == PermissionType.READ && Boolean(p.enabled) == true) {
       perms.read = true;
-    } else if (p.type == PermissionType.WRITE && p.enabled == true) {
+    } else if (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) {
       perms.write = true;
-    } else if (p.type == PermissionType.EXECUTE && p.enabled == true) {
+    } else if (p.type == PermissionType.EXECUTE && Boolean(p.enabled) == true) {
       perms.execute = true;
     }
   });
