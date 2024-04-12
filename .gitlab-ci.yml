@@ -19,6 +19,14 @@ test_frontend:
     - npm install
     - npm run testCI
 
+coverage_frontend:
+  stage: test
+  script:
+    - cd my-filesystem-portal
+    - npm install
+    - npm run coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+
 format_backend:
   stage: format
   script:
@@ -42,9 +50,6 @@ lint_frontend:
 
 test_api:
   stage: test
-  services:
-    - name: mysql:latest
-      alias: mysql
   script:
     - cd backend
     - npm install
@@ -67,3 +72,22 @@ test_db:
     - npx prisma generate
     - npx prisma migrate dev
     - npm run test-db
+
+coverage_backend:
+  stage: test
+  services:
+    - name: mysql:latest
+      alias: mysql
+  variables:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: db
+      DATABASE_URL: mysql://root:password@mysql:3306/db
+      CI: 'true'
+  script:
+    - cd backend
+    - npm install
+    - npx prisma generate
+    - npx prisma migrate dev
+    - npm run coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'

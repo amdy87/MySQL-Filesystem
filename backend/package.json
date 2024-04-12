@@ -9,6 +9,7 @@
     "prisma-migrate-dev": "npx prisma migrate dev",
     "prisma-connect": "npm run prisma-generate && npm run prisma-migrate-init && npm run prisma-migrate-dev",
     "test": "jest",
+    "coverage": "jest --ci --coverage",
     "test-api": "jest --testPathPattern=src/test",
     "test-db": "jest --testPathPattern=src/database/test",
     "dev-run": "npm run build && node dist/entrypoint.js"
