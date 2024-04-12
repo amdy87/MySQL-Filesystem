@@ -5,15 +5,17 @@ import { Button, Row, Col, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '@api/user';
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordCheck, setPasswordCheck] = useState('');
   const navigate = useNavigate();
 
   const onPasswordInput = (e) => setPassword(e.target.value);
   const onNameInput = (e) => setName(e.target.value.trim());
   const onEmailInput = (e) => setEmail(e.target.value.trim());
+  const onPasswordCheckInput = (e) => setPasswordCheck(e.target.value);
 
   const toLogin = () => {
     navigate('login');
@@ -28,8 +30,17 @@ export default function LoginPage() {
       alert('please input the email');
       return;
     }
-    if (password.length === 0) {
-      alert('please input the password');
+    if (
+      password.length < 8 ||
+      !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/.test(password)
+    ) {
+      alert(
+        'please input a password with the following credentials: 8 or more characters, at least one uppercase letter, lowercase letter, and digit',
+      );
+      return;
+    }
+    if (password != passwordCheck) {
+      alert('the passwords inputed do not match');
       return;
     }
     signup({ name, email, password }).then((data) => {
@@ -66,18 +77,26 @@ export default function LoginPage() {
                   type="password"
                 />
               </Form.Group>
+              <Form.Group className="mb-3" controlId="loginForm.passwordCheck">
+                <Form.Label>Retype Password</Form.Label>
+                <Form.Control
+                  onInput={onPasswordCheckInput}
+                  value={passwordCheck}
+                  type="password"
+                />
+              </Form.Group>
             </Form>
           </Col>
         </Row>
         <Row className="justify-content-md-center md-6">
           <Col md={'auto'}>
-            <Button variant="secondary" onClick={toLogin}>
-              Login
+            <Button variant="secondary" onClick={onSignUp}>
+              Sign Up
             </Button>
           </Col>
           <Col md={'auto'}>
-            <Button variant="secondary" onClick={onSignUp}>
-              Sign Up
+            <Button variant="secondary" onClick={toLogin}>
+              Login
             </Button>
           </Col>
         </Row>
