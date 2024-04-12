@@ -19,6 +19,8 @@ services:
         - MYFILESYSTEM_BACKEND_HOST=localhost
     ports:
       - 80:80
+    volumes:
+      - frontend-dist:/usr/share/nginx/my_filesystem/
 
   server:
     hostname: server
@@ -30,9 +32,14 @@ services:
         - DATABASE_URL=mysql://root:password@db:3306/db
     ports:
       - 3000:3000
+    volumes:
+      - frontend-dist:/app/frontend-dist
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
+volumes:
+  frontend-dist:
