@@ -1,4 +1,3 @@
-import { HOSTNAME } from '@utils/const';
 import { INVALID_TOKEN_ERROR, HTTP_ERROR } from '@utils/error';
 
 async function useRequest(url, options = {}, needAuth = false) {
@@ -25,10 +24,7 @@ async function useRequest(url, options = {}, needAuth = false) {
       },
     };
 
-    const response = await fetch(
-      'http://' + HOSTNAME + '/backend' + url,
-      requestOptions,
-    );
+    const response = await fetch(url, requestOptions);
 
     if (!response.ok) {
       throw {

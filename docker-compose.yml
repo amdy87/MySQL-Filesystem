@@ -16,11 +16,9 @@ services:
     build:
       context: ./my-filesystem-portal
       args:
-        - MYFILESYSTEM_BACKEND_HOST=localhost
-    ports:
-      - 80:80
+        - MYFILESYSTEM_BACKEND_HOST=0.0.0.0
     volumes:
-      - frontend-dist:/usr/share/nginx/my_filesystem/
+      - frontend-dist:/app/dist
 
   server:
     hostname: server
@@ -28,10 +26,10 @@ services:
       context: ./backend
       args:
         - JWT_SECRET=03cef2fd6d0b1ca7
-        - BACKEND_DOMAIN=http://localhost:3000
+        - BACKEND_DOMAIN=http://0.0.0.0:8080
         - DATABASE_URL=mysql://root:password@db:3306/db
     ports:
-      - 3000:3000
+      - 8080:8080
     volumes:
       - frontend-dist:/app/frontend-dist
 
@@ -39,7 +37,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 8000:8080
 
 volumes:
   frontend-dist:

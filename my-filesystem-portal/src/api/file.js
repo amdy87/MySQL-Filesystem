@@ -37,7 +37,7 @@ async function deleteDirectory({ directoryId }) {
 // Posts all the file data to the backend
 async function sendFile(data) {
   try {
-    const response = await fetch('/backend/api/file/add', {
+    const response = await fetch('/api/file/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ async function sendFile(data) {
 
 async function sendDirectory(data) {
   try {
-    const response = await fetch('/backend/api/dir/add', {
+    const response = await fetch('/api/dir/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ async function fileRename(data) {
         name: INVALID_TOKEN_ERROR,
       };
     }
-    const response = await fetch('/backend/api/file/update', {
+    const response = await fetch('/api/file/update', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -117,7 +117,7 @@ async function directoryRename(data) {
         name: INVALID_TOKEN_ERROR,
       };
     }
-    const response = await fetch('/backend/api/dir/update', {
+    const response = await fetch('/api/dir/update', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -139,11 +139,8 @@ async function directoryRename(data) {
 // Gets the user content
 async function collectUserContent(userId) {
   try {
-    // Puts GET info into a query to send to backend
-    const url = new URL('/backend/api/file/', 'http://localhost');
-    url.searchParams.set('userId', userId);
-
-    const response = await fetch(url.toString(), {
+    // TODO!!!!
+    const response = await fetch(`/api/file?userId=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
