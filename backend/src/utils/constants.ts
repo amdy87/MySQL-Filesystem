@@ -31,7 +31,7 @@ export const TOKEN = {
 };
 
 export const JWT_SECRET = env.JWT_SECRET;
-export const PORT = env.port || 3000;
+export const PORT = 8080;
 export const DATABASE_URL = env.DATABASE_URL || 'default_value';
 export const BACKEND_DOMAIN = env.BACKEND_DOMAIN;
 export const PASSWORD_LENGTH = env.PASSWORD_LENGTH || '8';
