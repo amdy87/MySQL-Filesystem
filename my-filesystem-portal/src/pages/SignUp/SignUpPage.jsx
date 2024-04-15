@@ -45,7 +45,7 @@ export default function SignUpPage() {
     }
     signup({ name, email, password }).then((data) => {
       localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('authToken', JSON.stringify(data.authToken));
+      localStorage.setItem('authToken', data.authToken);
       navigate('/file');
     });
   };
