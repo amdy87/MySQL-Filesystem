@@ -1,4 +1,3 @@
-import { INVALID_TOKEN_ERROR } from '@utils/error';
 import { request } from '@utils/request';
 
 async function getFileTree({ userId, parentId }) {
@@ -35,128 +34,72 @@ async function deleteDirectory({ directoryId }) {
 }
 
 // Posts all the file data to the backend
-async function sendFile(data) {
-  try {
-    const response = await fetch('/api/file/add', {
+async function sendFile(fileData) {
+  const data = await request(
+    '/api/file/add',
+    {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data), // Puts file data in JSON format
-    });
-
-    if (response.ok) {
-      console.log('File uploaded successfully');
-      return response.ok;
-    } else {
-      console.error('Upload failed');
-    }
-  } catch (error) {
-    // Print out error message in console
-    console.error('Error:', error);
-  }
+      body: JSON.stringify(fileData),
+    },
+    true,
+  );
+  return data;
 }
 
 async function sendDirectory(data) {
-  try {
-    const response = await fetch('/api/dir/add', {
+  const response = await request(
+    '/api/dir/add',
+    {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data), // Puts file data in JSON format
-    });
-
-    if (response.ok) {
-      console.log('Directory created successfully');
-      return response.ok;
-    } else {
-      console.error('Creation failed');
-    }
-  } catch (error) {
-    // Print out error message in console
-    console.error('Error:', error);
-  }
+      body: JSON.stringify(data),
+    },
+    true,
+  );
+  return response;
 }
 
 // Posts the new file name to the backend
 async function fileRename(data) {
-  try {
-    console.log('Renaming file');
-    const token = JSON.parse(localStorage.getItem('authToken'));
-    if (!token) {
-      throw {
-        name: INVALID_TOKEN_ERROR,
-      };
-    }
-    const response = await fetch('/api/file/update', {
+  const response = await request(
+    '/api/file/update',
+    {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data), // Backend requires JSON format
-    });
-    if (response.ok) {
-      console.log('File renamed successfully');
-    } else {
-      console.error('Rename failed');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+      body: JSON.stringify(data),
+    },
+    true,
+  );
+  return response;
 }
 
 // Posts the new directory name to the backend
 async function directoryRename(data) {
-  try {
-    console.log('Renaming Directory');
-    const token = JSON.parse(localStorage.getItem('authToken'));
-    if (!token) {
-      throw {
-        name: INVALID_TOKEN_ERROR,
-      };
-    }
-    const response = await fetch('/api/dir/update', {
+  const response = await request(
+    '/api/dir/update',
+    {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data), // Backend requires JSON format
-    });
-
-    if (response.ok) {
-      console.log('Directory renamed successfully');
-    } else {
-      console.error('Rename failed');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+      body: JSON.stringify(data),
+    },
+    true,
+  );
+  return response;
 }
 
 // Gets the user content
 async function collectUserContent(userId) {
-  try {
-    // TODO!!!!
-    const response = await fetch(`/api/file?userId=${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  const data = await request(`/api/file?userId=${userId}`, {}, true);
+  return data;
+}
 
-    if (response.ok) {
-      console.log('User data collected successfully');
-      const data = await response.json();
-      return data; // returns response data in json format
-    } else {
-      console.error('Collection failed');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
+async function updateFile({ fileId, content }) {
+  const data = await request(
+    `/api/file/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ fileId, content }),
+    },
+    true,
+  );
+  return data;
 }
 
 export {
@@ -168,4 +111,5 @@ export {
   collectUserContent,
   deleteFile,
   deleteDirectory,
+  updateFile,
 };

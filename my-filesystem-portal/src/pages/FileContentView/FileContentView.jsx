@@ -1,13 +1,15 @@
 import { Header } from '@components';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Form } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { collectUserContent } from '../../api/file';
+import { collectUserContent, updateFile } from '../../api/file';
 import React, { useState, useEffect } from 'react';
 
 export default function FileContentView() {
   const { userId, fileId } = useParams();
   const [fileContent, setFileContent] = useState('');
+  const [fileEditContent, setFileEditContent] = useState('');
   const [fileName, setFileName] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +22,7 @@ export default function FileContentView() {
 
         if (file) {
           setFileContent(file.content);
+          setFileEditContent(file.content);
           setFileName(file.name);
         }
       } catch (error) {
@@ -30,6 +33,24 @@ export default function FileContentView() {
     fetchData();
   }, [userId, fileId]);
 
+  const onInputChange = (event) => {
+    setFileEditContent(event.target.value);
+  };
+
+  const onClickEdit = () => {
+    setFileEditContent(fileContent);
+    setIsEditing(true);
+  };
+
+  const onConfirmEdit = () => {
+    updateFile({ fileId: parseInt(fileId), content: fileEditContent }).then(
+      () => {
+        setFileContent(fileEditContent);
+        setIsEditing(false);
+      },
+    );
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Header style={{ width: 50 }}></Header>
@@ -38,10 +59,36 @@ export default function FileContentView() {
           <h1>{fileName}</h1>
         </Col>
         <Col md="auto" className="m-3">
-          <Button>Edit File</Button>
+          <Button onClick={onClickEdit}>Edit File</Button>
         </Col>
       </Row>
-      <div style={{ marginTop: '10px', marginLeft: '15px' }}>{fileContent}</div>
+      {isEditing ? (
+        <Form>
+          <Form.Group className="mb-3" controlId="form.fileContent">
+            <Form.Label></Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={fileEditContent}
+              onChange={onInputChange}
+            />
+          </Form.Group>
+          <Row>
+            <Col md="auto" className="m-3">
+              <Button onClick={onConfirmEdit}>Confirm</Button>
+            </Col>
+            <Col md="auto" className="m-3">
+              <Button variant="secondary" onClick={() => setIsEditing(false)}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      ) : (
+        <div style={{ marginTop: '10px', marginLeft: '15px' }}>
+          {fileContent}
+        </div>
+      )}
     </div>
   );
 }

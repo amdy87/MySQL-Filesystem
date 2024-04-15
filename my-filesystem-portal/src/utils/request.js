@@ -7,7 +7,7 @@ async function useRequest(url, options = {}, needAuth = false) {
     };
 
     if (needAuth) {
-      const token = JSON.parse(localStorage.getItem('authToken'));
+      const token = localStorage.getItem('authToken');
       if (!token) {
         throw {
           name: INVALID_TOKEN_ERROR,
