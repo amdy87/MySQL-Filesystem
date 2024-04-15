@@ -2,7 +2,7 @@
  * Sample data for database tests
  */
 
-import { PrismaClient, Role, PermissionType } from '@prisma/client';
+import { Role, PermissionType } from '@prisma/client';
 
 /**
  * userData contains input data to create a new user.

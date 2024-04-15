@@ -12,6 +12,11 @@ import {
   checkFileWritePerm,
   checkFileExecutePerm,
 } from '../middlewares/file';
+import {
+  checkDirReadPerm,
+  checkDirWritePerm,
+  checkDirExecutePerm,
+} from '../middlewares/directory';
 
 export const fileRouter = express.Router();
 
@@ -98,7 +103,7 @@ fileRouter.get(
  *  @description content written in this file
  *
  */
-fileRouter.post('/add', fileControllers.addFile);
+fileRouter.post('/add', checkDirWritePerm, fileControllers.addFile);
 
 /**
  * Update a file

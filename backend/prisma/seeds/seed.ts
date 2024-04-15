@@ -17,17 +17,6 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
-    // Create permissions
-    const permissions = await prisma.permission.createMany({
-      data: [
-        { type: PermissionType.READ },
-        { type: PermissionType.WRITE },
-        { type: PermissionType.EXECUTE },
-      ],
-    });
-
-    console.log('Seed data created successfully');
-
     const password = '654321';
     const hashedPassword = bcrypt.hashSync(password, 12);
     const adminUser = {
@@ -42,16 +31,31 @@ async function main() {
     );
 
     // Create a root dir for Admin user above,
-    const existingPermissions = await getAllPermissions();
     const rootDirData = {
       name: 'root',
       path: '.',
       parentId: null,
       ownerId: newAdminUser.id,
       permissions: {
-        connect: existingPermissions.map((permission) => ({
-          id: permission.id,
-        })),
+        createMany: {
+          data: [
+            {
+              type: PermissionType.READ,
+              userId: newAdminUser.id,
+              enabled: true,
+            }, // Replace with the ID of the user
+            {
+              type: PermissionType.WRITE,
+              userId: newAdminUser.id,
+              enabled: true,
+            }, // Replace with the ID of the user
+            {
+              type: PermissionType.EXECUTE,
+              userId: newAdminUser.id,
+              enabled: true,
+            }, // Replace with the ID of the user
+          ],
+        },
       },
     };
 
