@@ -10,6 +10,8 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_ROOT_HOST: '%'
       MYSQL_DATABASE: db
+    volumes:
+    - db-volume:/var/lib/mysql
 
   frontend:
     image: my-filesystem-portal:latest
@@ -41,3 +43,4 @@ services:
 
 volumes:
   frontend-dist:
+  db-volume:
