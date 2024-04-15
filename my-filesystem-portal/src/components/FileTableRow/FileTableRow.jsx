@@ -42,14 +42,18 @@ export default function FileTableRow({
       renameData['name'] = newName;
 
       // Send rename info to the directory update api
-      directoryRename(renameData);
+      directoryRename(renameData).then(() => {
+        refresh();
+      });
     } else {
       // Add rename info to renameData
       renameData['fileId'] = id;
       renameData['name'] = newName;
 
       // Send rename info to the file update api
-      fileRename(renameData);
+      fileRename(renameData).then(() => {
+        refresh();
+      });
     }
 
     // Close the rename popup window
