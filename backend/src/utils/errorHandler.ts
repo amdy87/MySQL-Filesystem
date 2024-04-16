@@ -2,7 +2,6 @@
  * Error Types Definitions and Error Handler
  * @fileoverview
  */
-
 import { Response } from 'express';
 
 // Error enum
@@ -16,6 +15,7 @@ const ERROR = {
   RecordNotFoundError: 'RecordNotFoundError',
   InvalidOperationError: 'InvalidOperationError',
   DuplicationError: 'DuplicationError',
+  TokenExpiredError: 'TokenExpiredError',
   // TokenExpiredError: 'TokenExpiredError',
 };
 
@@ -112,9 +112,9 @@ export const errorHandler = {
    * @param message Message with error details
    * @return TokenExpiredError
    */
-  // TokenExpiredError: (message: string) => {
-  //   return { name: ERROR.TokenExpiredError, status: 401, message };
-  // },
+  TokenExpiredError: (message: string) => {
+    return { name: ERROR.TokenExpiredError, status: 401, message };
+  },
 
   handleError: (error: Error, res: Response) => {
     if (Object.values(ERROR).includes(error.name)) {
