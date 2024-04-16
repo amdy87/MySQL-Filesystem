@@ -12,12 +12,31 @@ process.env.JWT_SECRET = 'iiiiedsfsdf';
 import { userControllers } from '../controllers/user';
 import { prisma } from '../connectPrisma';
 import userData from './sample_data/users';
+import bcrypt from 'bcrypt';
 
 // Mock the Prisma methods globally
 // When you use jest.mock at the top level of your test file,
 // Jest replaces all exports of the mocked module with mock functions,
 // and Jest resets those mock functions before each test automatically.
 // This means that each test will start with a fresh set of mock functions, preventing interference between tests.
+
+class CustomError extends Error {
+  code: string;
+
+  constructor(message: string, code: string) {
+    super(message);
+    this.code = code;
+    // Ensure the correct prototype chain
+    Object.setPrototypeOf(this, CustomError.prototype);
+  }
+}
+
+jest.mock('bcrypt', () => ({
+  compare: jest.fn(),
+  hashSync: jest.fn(),
+  hash: jest.fn(),
+}));
+
 jest.mock('../connectPrisma', () => ({
   prisma: {
     user: {
@@ -68,6 +87,88 @@ describe('getUsers', () => {
   });
 });
 
+describe('User Login', () => {
+  it(`should throw a 401 error`, async () => {
+    const mockPassword = 'incorrectPassword';
+    const hashedPassword = await bcrypt.hash('correctPassword', 10);
+    const req: Partial<Request> = {
+      body: {
+        name: 'asb',
+        email: 'asb@gmail.com',
+        inputPassword: mockPassword,
+      },
+      authenticatedUser: {
+        email: '@.com',
+        rootDirId: 'here',
+        password: hashedPassword,
+      },
+    }; // Mock request
+    const res: Partial<Response> = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    (bcrypt.compare as jest.Mock).mockResolvedValueOnce(false);
+    (bcrypt.hash as jest.Mock).mockResolvedValueOnce(hashedPassword);
+
+    await userControllers.loginWithPassword(req as Request, res as Response);
+    expect(res.status).toHaveBeenCalledWith(401);
+  });
+});
+
+describe('User Login', () => {
+  it(`should successfully login`, async () => {
+    const mockPassword = 'correctPassword22';
+    const hashedPassword = await bcrypt.hash('correctPassword', 10);
+    const req: Partial<Request> = {
+      body: {
+        password: mockPassword,
+      },
+      authenticatedUser: {
+        id: 1,
+        name: 'user1',
+        role: 'USER',
+        email: 'asb@gmail.com',
+        password: hashedPassword,
+      },
+    }; // Mock request
+    const res: Partial<Response> = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    (bcrypt.compare as jest.Mock).mockResolvedValueOnce(true);
+
+    await userControllers.loginWithPassword(req as Request, res as Response);
+    console.log(`hello: ${res.status}`);
+    expect(res.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: `user1 LOG IN successfully`,
+      }),
+    );
+  });
+});
+
+describe('User signup Fail', () => {
+  it(`should throw a 409 error`, async () => {
+    const req: Partial<Request> = {
+      body: { name: 'asb', email: 'asb@gmail.com', password: 'akduhfw' },
+    }; // Mock request
+    const res: Partial<Response> = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+    let mockError = new CustomError('Mocked error', 'P2002');
+    (prisma.user.create as jest.Mock).mockRejectedValueOnce(mockError);
+
+    await userControllers.signUp(req as Request, res as Response);
+    expect(res.status).toHaveBeenCalledWith(409);
+  });
+});
+
 describe('User signup and login', () => {
   userData.forEach((user, index) => {
     it(`should create user ${user.name}`, async () => {
@@ -110,6 +211,8 @@ describe('User signup and login', () => {
         { id: 2 },
       ]);
 
+      (bcrypt.hashSync as jest.Mock).mockResolvedValueOnce('hashedpw');
+
       await userControllers.signUp(req as Request, res as Response);
 
       // Assert user creation
@@ -124,6 +227,50 @@ describe('User signup and login', () => {
         }),
       );
     });
+  });
+});
+
+describe('update user by id', () => {
+  it('Update user name but missing userId, should return status 400', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { body: {} }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await userControllers.updateUserById(req as Request, res as Response);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+
+  it('Update user name with userId, should return status 200', async () => {
+    // Create a mock instance of PrismaClient
+    // console.log(prisma); // Debugging: Log prisma object
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {
+      body: { userId: '1', name: 'newName' },
+      authenticatedUser: { email: '@.com', rootDirId: 'here' },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    };
+
+    // Mock response
+    (prisma.user.update as jest.Mock).mockResolvedValueOnce({
+      id: 1,
+      name: 'newName',
+    });
+
+    await userControllers.updateUserById(req as Request, res as Response);
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
 

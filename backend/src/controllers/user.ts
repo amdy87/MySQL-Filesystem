@@ -7,7 +7,6 @@ import { CookieOptions, Request, Response } from 'express';
 import { $Enums, Prisma, PrismaClient } from '@prisma/client';
 import * as jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import ms from 'ms';
 
 import { prisma } from '../connectPrisma';
 import { deleteFilesByOwner } from './file';
@@ -18,39 +17,6 @@ import { errorHandler } from '../utils/errorHandler';
 import { TOKEN } from '../utils/constants';
 import { Role } from '../utils/constants';
 import { JWT_SECRET } from '../utils/constants';
-
-/**
- * Set refresh token to cookie
- * [Not in used yet]
- * @param req: Request
- * @param res: Response
- * @param refreshToken: string
- *
- * @return void
- */
-const setRefreshTokenCookie = (
-  req: Request,
-  res: Response,
-  refreshToken: string,
-) => {
-  const options: CookieOptions = {
-    maxAge: ms(TOKEN.Refresh.limit),
-    httpOnly: true,
-    signed: true,
-    sameSite: 'strict',
-  };
-  res.cookie(TOKEN.Refresh.name, refreshToken, options as CookieOptions);
-};
-
-/**
- * Clear refresh token cookie
- * @param res: Response
- *
- * @return void
- */
-const clearRefreshTokenCookie = (res: Response) => {
-  res.clearCookie(TOKEN.Refresh.name);
-};
 
 /**
  * Generate access token
@@ -203,6 +169,7 @@ export const userControllers = {
         newUser.name,
         convertPrismaRole(newUser.role),
       );
+
       // Create a root directory for new user
       const newRootDir = await createRootDir(
         {
@@ -236,8 +203,10 @@ export const userControllers = {
 
   // Authenticate a user using email/password
   loginWithPassword: async (req: Request, res: Response) => {
+    const existUser = req.authenticatedUser;
+
     try {
-      const existUser = req.authenticatedUser;
+      // const existUser = req.authenticatedUser;
       const { password, ...user } = existUser;
 
       const inputPassword: string = req.body.password;
@@ -255,6 +224,7 @@ export const userControllers = {
           authToken: accessToken,
           user: user,
         });
+        return;
       } else {
         throw errorHandler.UnauthorizedError('Incorrect password');
       }
@@ -266,6 +236,9 @@ export const userControllers = {
   // Update User information
   updateUserById: async (req: Request, res: Response) => {
     try {
+      if (!req.body?.userId) {
+        throw errorHandler.InvalidBodyParamError('userId');
+      }
       // Extract updated user data from request body
       const { name, email, userId, rootDirId } = req.body;
 
