@@ -1,5 +1,5 @@
 /**
- * Unit Test written for Directory API
+ * Unit Tests written for Directory API
  * @packageDocumentation
  */
 
@@ -39,6 +39,119 @@ jest.mock('../connectPrisma', () => ({
     },
   },
 }));
+
+describe('getDirectory by dirId', () => {
+  it('should return error', async () => {
+    // Create a mock instance of PrismaClient
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: {} }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await directoryControllers.getDirectory(req as Request, res as Response);
+
+    // Assert response
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+  it('should return directory', async () => {
+    // Create a mock instance of PrismaClient
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: { directoryId: '1' } }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    // Mock Prisma method
+    (prisma.directory.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: 1,
+      name: 'dir 1',
+      ownerId: 1,
+    });
+
+    await directoryControllers.getDirectory(req as Request, res as Response);
+
+    // Assert response
+    expect(res.send).toHaveBeenCalledWith({
+      dir: { id: 1, name: 'dir 1', ownerId: 1 },
+    });
+  });
+});
+
+describe('getDirectories by parentDirId', () => {
+  it('should return error', async () => {
+    // Create a mock instance of PrismaClient
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: {} }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await directoryControllers.getDirsByParentDir(
+      req as Request,
+      res as Response,
+    );
+
+    // Assert response
+    expect(res.status).toHaveBeenCalledWith(400);
+  });
+  it('should return directories', async () => {
+    // Create a mock instance of PrismaClient
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = { query: { userId: '1', parentId: '1' } }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    // Mock Prisma method
+    (prisma.directory.findMany as jest.Mock).mockResolvedValueOnce([
+      {
+        id: 1,
+        name: 'dir 1',
+        ownerId: 1,
+      },
+      {
+        id: 2,
+        name: 'dir 2',
+        ownerId: 1,
+      },
+    ]);
+
+    await directoryControllers.getDirsByParentDir(
+      req as Request,
+      res as Response,
+    );
+
+    // Assert response
+    expect(res.send).toHaveBeenCalledWith({
+      ownerId: 1,
+      dirs: [
+        {
+          id: 1,
+          name: 'dir 1',
+          ownerId: 1,
+        },
+        {
+          id: 2,
+          name: 'dir 2',
+          ownerId: 1,
+        },
+      ],
+    });
+  });
+});
 
 describe('getDirectories', () => {
   it('should return directories', async () => {
