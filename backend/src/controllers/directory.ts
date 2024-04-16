@@ -307,7 +307,6 @@ export const directoryControllers = {
       });
     } catch (error: any) {
       if (error.code === 'P2002') {
-        // TODO: Check with DB, does DB handle this correctly
         const message = 'Directory with the same name already exists.';
         error = errorHandler.DuplicationError(message);
       }
