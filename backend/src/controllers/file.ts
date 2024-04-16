@@ -235,10 +235,15 @@ export const fileControllers = {
       });
       res.status(201).send(newFile);
     } catch (error: any) {
+      console.log(error.code);
       // Error code of Prisma when record not found
       if (error.code === 'P2025') {
         const message: string = `User with id ${ownerId} does not exist`;
         error = errorHandler.UserNotFoundError(message);
+      }
+      if (error.code === 'P2002') {
+        const message: string = `Can't create file, a file with the same name has existed in this directory`;
+        error = errorHandler.DuplicationError(message);
       }
       errorHandler.handleError(error, res);
     }

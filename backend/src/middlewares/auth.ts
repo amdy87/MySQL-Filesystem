@@ -43,6 +43,8 @@ export const authAccessToken = (
     req.authenticatedUser = decoded as JwtPayloadWithUser;
     next();
   } catch (error: any) {
+    const message: string = 'Token has expired';
+    error = errorHandler.TokenExpiredError(message);
     errorHandler.handleError(error, res);
   }
 };
