@@ -144,7 +144,6 @@ export const directoryControllers = {
           permissions: true,
         },
       });
-
       res.status(200).send({ dir: directory });
     } catch (error: any) {
       errorHandler.handleError(error, res);
