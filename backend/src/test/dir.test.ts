@@ -1,5 +1,5 @@
 /**
- * Unit Test written for Directory API
+ * Unit Tests written for Directory API
  * @packageDocumentation
  */
 
