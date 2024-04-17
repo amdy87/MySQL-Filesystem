@@ -102,6 +102,18 @@ async function updateFile({ fileId, content }) {
   return data;
 }
 
+async function changeFilePermission({ fileId, permission }) {
+  return new Promise((resolve) => {
+    resolve({ fileId, permission });
+  });
+}
+
+async function changeDirectoryPermission({ directoryId, permission }) {
+  return new Promise((resolve) => {
+    resolve({ directoryId, permission });
+  });
+}
+
 export {
   getFileTree,
   sendFile,
@@ -112,4 +124,6 @@ export {
   deleteFile,
   deleteDirectory,
   updateFile,
+  changeFilePermission,
+  changeDirectoryPermission,
 };
