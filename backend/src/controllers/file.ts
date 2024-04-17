@@ -28,7 +28,7 @@ const updateFile = async (file: DbFile, res: Response) => {
         name: file.name,
         parentId: file.parentId,
         content: file.content,
-        path: file.path
+        path: file.path,
       },
       select: {
         id: true,
@@ -151,6 +151,7 @@ export const fileControllers = {
       // const { userId } = req.body;
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
+
       const files = await getFilesByParent(userId, parentId);
 
       res.status(200).send({ ownerId: userId, files: files });
@@ -200,16 +201,17 @@ export const fileControllers = {
       }
 
       const parentDirectory = await prisma.directory.findUnique({
-        where: {id: parentId},
-        select:
-          {path: true}
+        where: { id: parentId },
+        select: {
+          path: true,
+        },
       });
 
       // Default file has all 3 permissions
       const fileData = {
         name: name,
         parentId: parentId,
-        path: parentDirectory?.path + "/" + name,
+        path: parentDirectory?.path + '/' + name,
         ownerId: ownerId,
         content: content,
         permissions: {
@@ -236,7 +238,6 @@ export const fileControllers = {
       };
 
       // prisma returns file object in json form if succeed
-
       const newFile = await prisma.file.create({
         data: fileData,
       });

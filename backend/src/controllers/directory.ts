@@ -194,7 +194,7 @@ export const directoryControllers = {
 
   addRootDirectory: async (req: Request, res: Response) => {
     try {
-      var { ownerId, name} = req.body;
+      var { ownerId, name } = req.body;
       if (!ownerId) {
         throw errorHandler.InvalidBodyParamError('ownerId');
       }
@@ -212,7 +212,7 @@ export const directoryControllers = {
         name: name,
         parentId: null,
         ownerId: ownerId,
-        path: ".",
+        path: '.',
         permissions: {
           createMany: {
             data: [
@@ -248,7 +248,7 @@ export const directoryControllers = {
   },
   addDirectory: async (req: Request, res: Response) => {
     try {
-      var { ownerId, parentId, name} = req.body;
+      var { ownerId, parentId, name } = req.body;
       if (!(ownerId && parentId && name)) {
         throw errorHandler.InvalidBodyParamError(
           'One of (ownerId , parentId , name)',
@@ -262,10 +262,10 @@ export const directoryControllers = {
       });
 
       const parentDirectory = await prisma.directory.findUnique({
-        where: {id: parentId},
-        select:{
-          path: true
-        }
+        where: { id: parentId },
+        select: {
+          path: true,
+        },
       });
 
       if (!existingUser) {
@@ -282,8 +282,8 @@ export const directoryControllers = {
       const directory = {
         name: name,
         parentId: parentId,
+        path: parentDirectory?.path + '/' + name,
         ownerId: ownerId,
-        path: parentDirectory?.path + "/" + name,
         permissions: {
           createMany: {
             data: [
@@ -382,11 +382,12 @@ export const directoryControllers = {
             },
           });
         }
+
         // delete all the subdirectories within in the current directory
-        const deletedsubDirectories = await prisma.directory.deleteMany({
+        const deletedSubdirectories = await prisma.directory.deleteMany({
           where: {
-            parentId: directoryId
-          }
+            parentId: directoryId,
+          },
         });
 
         // delete the directory
@@ -399,6 +400,7 @@ export const directoryControllers = {
           message: `directory with id ${directoryId} and all files in that directory have been deleted`,
           directory: deletedDirectory,
           file: deletedFiles,
+          subdirectories: deletedSubdirectories,
         });
       } else {
         console.log('no valid directoryid');
