@@ -23,7 +23,15 @@ export default defineConfig((mode) => {
       },
     },
     server: {
-      // Serve static files from the 'dist' directory
+      host: true,
+      port: 3000,
+      proxy: {
+        '/api': {
+          target: 'http://host.docker.internal:8080',
+          changeOrigin: true,
+          secure: false,
+        },
+      },
       fs: {
         strict: false,
       },

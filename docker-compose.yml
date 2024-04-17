@@ -22,6 +22,19 @@ services:
     volumes:
       - frontend-dist:/app/dist
 
+  frontend-dev:
+    image: my-filesystem-portal-dev:latest
+    profiles: [dev]
+    build:
+      dockerfile: dev.Dockerfile
+      context: ./my-filesystem-portal
+      args:
+        - MYFILESYSTEM_BACKEND_HOST=0.0.0.0
+    volumes:
+      - ./my-filesystem-portal/src:/app/src
+    ports:
+      - 3000:3000
+
   server:
     hostname: server
     build:
