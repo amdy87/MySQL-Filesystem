@@ -1,6 +1,7 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import FileRenamePopup from '../FileRenamePopup/FileRenamePopup';
+import PermissionChangePopup from '../PermissionChangePopup/PermissionChangePopup';
 import {
   fileRename,
   directoryRename,
@@ -20,6 +21,7 @@ export default function FileTableRow({
   refresh,
 }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showPermissionPopup, setShowPermissionPopup] = useState(false);
   const navigate = useNavigate();
 
   // On file or directory click
@@ -80,6 +82,16 @@ export default function FileTableRow({
 
   return (
     <tr>
+      <PermissionChangePopup
+        id={id}
+        show={showPermissionPopup}
+        onClose={() => {
+          setShowPermissionPopup(false);
+        }}
+        initialPermission={permissions}
+        refresh={refresh}
+        fileType={fileType}
+      ></PermissionChangePopup>
       <td>
         <a
           onClick={click}
@@ -127,6 +139,17 @@ export default function FileTableRow({
             fileName={fileName}
             fileType={fileType}
           />
+          {
+            // if the directory is root, do not show the permission button
+            fileName != '.' && (
+              <Button
+                variant="dark"
+                onClick={() => setShowPermissionPopup(true)}
+              >
+                Change Permission
+              </Button>
+            )
+          }
         </div>
       </td>
     </tr>
