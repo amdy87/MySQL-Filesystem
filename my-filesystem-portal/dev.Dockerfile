@@ -6,6 +6,7 @@ ENV MYFILESYSTEM_BACKEND_HOST ${MYFILESYSTEM_BACKEND_HOST}
 
 WORKDIR /app
 
-COPY . .
+COPY package.json package-lock.json vite.config.js index.html .
 RUN npm install
-RUN npm run build
+
+CMD npm run dev
