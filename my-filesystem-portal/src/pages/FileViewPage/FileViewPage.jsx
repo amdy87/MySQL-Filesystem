@@ -232,16 +232,16 @@ export default function FileViewPage() {
           <tbody>
             {displayedFiles
               ? displayedFiles.map((file) => {
-                return (
-                  <FileTableRow
-                    key={file.id}
-                    userId={user.id}
-                    {...file}
-                    clickDirectory={clickDirectory}
-                    refresh={updateFileTree}
-                  ></FileTableRow>
-                );
-              })
+                  return (
+                    <FileTableRow
+                      key={file.id}
+                      userId={user.id}
+                      {...file}
+                      clickDirectory={clickDirectory}
+                      refresh={updateFileTree}
+                    ></FileTableRow>
+                  );
+                })
               : null}
           </tbody>
         </Table>
