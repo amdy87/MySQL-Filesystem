@@ -71,28 +71,32 @@ export default function FileViewPage() {
           updatedAt: parentDir.metadata.updatedAt,
         });
       }
-      files = files.concat(
-        currentDir.directories.map((dir) => {
-          return {
-            id: dir.id,
-            fileName: dir.name,
-            fileType: 'directory',
-            permissions: dir.metadata.perms,
-            updatedAt: dir.metadata.updatedAt,
-          };
-        }),
-      );
-      files = files.concat(
-        currentDir.files.map((file) => {
-          return {
-            id: file.id,
-            fileName: file.name,
-            fileType: 'file',
-            permissions: file.metadata.perms,
-            updatedAt: file.metadata.updatedAt,
-          };
-        }),
-      );
+      if (currentDir.directories) {
+        files = files.concat(
+          currentDir.directories.map((dir) => {
+            return {
+              id: dir.id,
+              fileName: dir.name,
+              fileType: 'directory',
+              permissions: dir.metadata.perms,
+              updatedAt: dir.metadata.updatedAt,
+            };
+          }),
+        );
+      }
+      if (currentDir.files) {
+        files = files.concat(
+          currentDir.files.map((file) => {
+            return {
+              id: file.id,
+              fileName: file.name,
+              fileType: 'file',
+              permissions: file.metadata.perms,
+              updatedAt: file.metadata.updatedAt,
+            };
+          }),
+        );
+      }
       setDisplayedFiles(files);
     }
   }, [tree]);
@@ -228,16 +232,16 @@ export default function FileViewPage() {
           <tbody>
             {displayedFiles
               ? displayedFiles.map((file) => {
-                  return (
-                    <FileTableRow
-                      key={file.id}
-                      userId={user.id}
-                      {...file}
-                      clickDirectory={clickDirectory}
-                      refresh={updateFileTree}
-                    ></FileTableRow>
-                  );
-                })
+                return (
+                  <FileTableRow
+                    key={file.id}
+                    userId={user.id}
+                    {...file}
+                    clickDirectory={clickDirectory}
+                    refresh={updateFileTree}
+                  ></FileTableRow>
+                );
+              })
               : null}
           </tbody>
         </Table>
