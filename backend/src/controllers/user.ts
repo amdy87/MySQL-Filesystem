@@ -17,6 +17,7 @@ import { errorHandler } from '../utils/errorHandler';
 import { TOKEN } from '../utils/constants';
 import { Role } from '../utils/constants';
 import { JWT_SECRET } from '../utils/constants';
+import { validatePassword } from '../utils/constants';
 
 /**
  * Generate access token
@@ -155,7 +156,15 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
-
+      const checkPassword = validatePassword(password);
+      if (!checkPassword) {
+        const message =
+          'Please input a password ' +
+          'with the following credentials: ' +
+          '8 or more characters, ' +
+          'at least one uppercase letter, lowercase letter, and digit.';
+        throw errorHandler.ValidationError(message);
+      }
       const hashedPassword = hashPassword(password);
       user = {
         name: name,

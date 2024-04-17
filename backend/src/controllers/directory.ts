@@ -194,7 +194,7 @@ export const directoryControllers = {
 
   addRootDirectory: async (req: Request, res: Response) => {
     try {
-      var { ownerId, name, path } = req.body;
+      var { ownerId, name } = req.body;
       if (!ownerId) {
         throw errorHandler.InvalidBodyParamError('ownerId');
       }
@@ -211,8 +211,8 @@ export const directoryControllers = {
       const directory = {
         name: name,
         parentId: null,
-        path: path,
         ownerId: ownerId,
+        path: '.',
         permissions: {
           createMany: {
             data: [
@@ -248,10 +248,10 @@ export const directoryControllers = {
   },
   addDirectory: async (req: Request, res: Response) => {
     try {
-      var { ownerId, parentId, name, path } = req.body;
-      if (!(ownerId && parentId && name && path)) {
+      var { ownerId, parentId, name } = req.body;
+      if (!(ownerId && parentId && name)) {
         throw errorHandler.InvalidBodyParamError(
-          'One of (ownerId , parentId , name , path )',
+          'One of (ownerId , parentId , name)',
         );
       }
 
@@ -259,6 +259,13 @@ export const directoryControllers = {
       // TODO: replace with auth middleware later
       const existingUser = await prisma.user.findUnique({
         where: { id: ownerId },
+      });
+
+      const parentDirectory = await prisma.directory.findUnique({
+        where: { id: parentId },
+        select: {
+          path: true,
+        },
       });
 
       if (!existingUser) {
@@ -275,7 +282,7 @@ export const directoryControllers = {
       const directory = {
         name: name,
         parentId: parentId,
-        path: path,
+        path: parentDirectory?.path + '/' + name,
         ownerId: ownerId,
         permissions: {
           createMany: {
@@ -316,7 +323,7 @@ export const directoryControllers = {
   updateDirById: async (req: Request, res: Response) => {
     try {
       //  Doesn't support change permission yet
-      const { directoryId, name, path, permissions, parentId } = req.body;
+      const { directoryId, name, permissions, parentId } = req.body;
 
       let dir: Prisma.DirectoryFindUniqueArgs;
       if (!directoryId) {
@@ -375,6 +382,14 @@ export const directoryControllers = {
             },
           });
         }
+
+        // delete all the subdirectories within in the current directory
+        const deletedSubdirectories = await prisma.directory.deleteMany({
+          where: {
+            parentId: directoryId,
+          },
+        });
+
         // delete the directory
         const deletedDirectory = await prisma.directory.delete({
           where: {
@@ -385,6 +400,7 @@ export const directoryControllers = {
           message: `directory with id ${directoryId} and all files in that directory have been deleted`,
           directory: deletedDirectory,
           file: deletedFiles,
+          subdirectories: deletedSubdirectories,
         });
       } else {
         console.log('no valid directoryid');
