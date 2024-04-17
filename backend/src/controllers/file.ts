@@ -28,6 +28,7 @@ const updateFile = async (file: DbFile, res: Response) => {
         name: file.name,
         parentId: file.parentId,
         content: file.content,
+        path: file.path
       },
       select: {
         id: true,
@@ -150,7 +151,6 @@ export const fileControllers = {
       // const { userId } = req.body;
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
-
       const files = await getFilesByParent(userId, parentId);
 
       res.status(200).send({ ownerId: userId, files: files });
@@ -183,12 +183,12 @@ export const fileControllers = {
   },
 
   addFile: async (req: Request, res: Response) => {
-    let { ownerId, name, path, parentId, content } = req.body;
+    let { ownerId, name, parentId, content } = req.body;
     content = content || '';
     try {
-      if (!(ownerId && name && path && parentId)) {
+      if (!(ownerId && name && parentId)) {
         throw errorHandler.InvalidBodyParamError(
-          'One of (ownerId, name, path, or parentId) ',
+          'One of (ownerId, name, or parentId) ',
         );
       }
 
@@ -199,11 +199,17 @@ export const fileControllers = {
         throw errorHandler.UserNotFoundError('User does not exist');
       }
 
+      const parentDirectory = await prisma.directory.findUnique({
+        where: {id: parentId},
+        select:
+          {path: true}
+      });
+
       // Default file has all 3 permissions
       const fileData = {
         name: name,
         parentId: parentId,
-        path: path,
+        path: parentDirectory?.path + "/" + name,
         ownerId: ownerId,
         content: content,
         permissions: {
@@ -230,6 +236,7 @@ export const fileControllers = {
       };
 
       // prisma returns file object in json form if succeed
+
       const newFile = await prisma.file.create({
         data: fileData,
       });
@@ -252,7 +259,7 @@ export const fileControllers = {
   updateFileById: async (req: Request, res: Response) => {
     try {
       //  Doesn't support change permission yet
-      const { fileId, name, content, path, permissions, parentId } = req.body;
+      const { fileId, name, content, permissions, parentId } = req.body;
       let file: Prisma.FileFindUniqueArgs;
       if (!fileId) {
         throw errorHandler.InvalidBodyParamError('fileId');

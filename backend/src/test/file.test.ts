@@ -351,28 +351,6 @@ describe('Create File without required fields in req.body', () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
 
-  it('Missing path, should return 400 status', async () => {
-    let req: Partial<Request>;
-    let res: Partial<Response>;
-    req = {
-      body: {
-        ownerId: `${sampleOwnerId}`,
-        name: `${sampleFileName}`,
-        parentId: `${sampleParentDirId}`,
-        content: 'hi',
-      },
-    }; // Mock request
-    res = {
-      send: jest.fn(),
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
-    }; // Mock response
-
-    await fileControllers.addFile(req as Request, res as Response);
-    // Assert response
-    expect(res.status).toHaveBeenCalledWith(400);
-  });
-
   it('Missing parentId, should return 400 status', async () => {
     let req: Partial<Request>;
     let res: Partial<Response>;

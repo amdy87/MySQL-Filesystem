@@ -11,4 +11,5 @@ export interface DbDirectory extends DbFile {
   metadata: Metadata;
   files?: DbFile[];
   directories?: DbDirectory[];
+  path?: string;
 }

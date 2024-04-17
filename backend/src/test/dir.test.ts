@@ -23,6 +23,7 @@ jest.mock('../connectPrisma', () => ({
       update: jest.fn(),
       findUnique: jest.fn(),
       delete: jest.fn(),
+      deleteMany: jest.fn()
     },
     file: {
       findMany: jest.fn(),
