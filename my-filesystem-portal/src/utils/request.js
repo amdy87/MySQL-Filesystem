@@ -8,14 +8,16 @@ async function useRequest(url, options = {}, needAuth = false) {
 
     if (needAuth) {
       const token = localStorage.getItem('authToken');
+
+      // If token not found throw error
       if (!token) {
-        throw {
-          name: INVALID_TOKEN_ERROR,
-        };
+        alert('Authentication failed: No token found.');
+        throw new Error(INVALID_TOKEN_ERROR);
       }
       defaultHeaders['Authorization'] = `Bearer ${token}`;
     }
 
+    // Consolodating all the api call info
     const requestOptions = {
       ...options,
       headers: {
@@ -24,18 +26,24 @@ async function useRequest(url, options = {}, needAuth = false) {
       },
     };
 
+    // api call
     const response = await fetch(url, requestOptions);
 
+    // Throws an unkown error if response comes back negative
     if (!response.ok) {
-      throw {
-        name: HTTP_ERROR,
-        response: response,
-      };
+      const responseBody = await response.json();
+
+      const errorMessage =
+        responseBody.message ||
+        'An unknown error occurred during the API request.';
+
+      alert(`HTTP Error: ${response.status} ${errorMessage}`);
+      throw new Error(HTTP_ERROR);
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Fetch error:', error.message);
+    alert(`Fetch Error: ${error.response.statusText}`);
     throw error;
   }
 }
