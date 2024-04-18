@@ -21,6 +21,8 @@ import { Metadata, Perms } from '../utils/metadata';
  */
 const updateFile = async (file: DbFile, res: Response) => {
   try {
+    await updateFilePermissions(file, res);
+
     const updatedFile = await prisma.file.update({
       where: { id: file.id },
       data: {
@@ -43,6 +45,65 @@ const updateFile = async (file: DbFile, res: Response) => {
       },
     });
     return updatedFile;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
+
+/**
+ * Helper function to update the file permissions
+ * @param file
+ * @param res
+ */
+const updateFilePermissions = async (file: DbFile, res: Response) => {
+  try {
+    if (file.metadata.perms.read == null) {
+      return;
+    }
+
+    const filePermissions = await prisma.file.findUnique({
+      where: { id: file.id },
+      select: {
+        permissions: true,
+      },
+    });
+
+    if (!filePermissions) {
+      throw errorHandler.RecordNotFoundError('Permissions not found');
+    }
+
+    await prisma.permission.update({
+      where: {
+        id: filePermissions.permissions[0].id,
+        fileId: file.id,
+        type: PermissionType.READ,
+      },
+      data: {
+        enabled: file.metadata.perms.read,
+      },
+    });
+
+    await prisma.permission.update({
+      where: {
+        id: filePermissions.permissions[1].id,
+        fileId: file.id,
+        type: PermissionType.WRITE,
+      },
+      data: {
+        enabled: file.metadata.perms.write,
+      },
+    });
+
+    await prisma.permission.update({
+      where: {
+        id: filePermissions.permissions[2].id,
+        fileId: file.id,
+        type: PermissionType.EXECUTE,
+      },
+      data: {
+        enabled: file.metadata.perms.execute,
+      },
+    });
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
@@ -259,36 +320,61 @@ export const fileControllers = {
 
   updateFileById: async (req: Request, res: Response) => {
     try {
-      //  Doesn't support change permission yet
       const { fileId, name, content, permissions, parentId } = req.body;
-      let file: Prisma.FileFindUniqueArgs;
       if (!fileId) {
         throw errorHandler.InvalidBodyParamError('fileId');
       }
-      file = { where: { id: fileId } };
 
-      const existFile = await prisma.file.findUnique(file);
+      const existFile = await prisma.file.findUnique({
+        where: { id: fileId },
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          name: true,
+          path: true,
+          parentId: true,
+          ownerId: true,
+          content: true,
+          permissions: true,
+        },
+      });
+
       if (!existFile) {
         throw errorHandler.RecordNotFoundError('File does not exist');
       }
-      let perms: Perms = { read: true, write: true, execute: true };
+
+      let perms;
+
+      if (!permissions) {
+        perms = {
+          read: null,
+          write: null,
+          execute: null,
+        };
+      } else {
+        perms = {
+          read: permissions[0],
+          write: permissions[1],
+          execute: permissions[2],
+        };
+      }
+
       let metadata: Metadata = {
-        // TODO: perms: existFile.permissions,
         perms: perms,
         createdAt: existFile.createdAt.getTime(),
         updatedAt: Date.now(),
       };
+      let fileasDB = {
+        id: fileId,
+        name: name || existFile.name, // Update name if provided, otherwise keep existing value
+        parentId: parentId || existFile.parentId,
+        content: content || existFile.content,
+        metadata: metadata,
+      };
+
       // Update file record in the database
-      const updatedFile = await updateFile(
-        {
-          id: fileId,
-          name: name || existFile.name, // Update name if provided, otherwise keep existing value
-          parentId: parentId || existFile.parentId,
-          content: content || existFile.content,
-          metadata: metadata,
-        },
-        res,
-      );
+      const updatedFile = await updateFile(fileasDB, res);
       res.status(200).send({ file: updatedFile });
     } catch (error: any) {
       console.log(error);

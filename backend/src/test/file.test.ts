@@ -213,7 +213,7 @@ describe('create a File, update it, and then delete', () => {
     let res: Partial<Response>;
     req = {
       body: {
-        ownerId: `${sampleFileId}`,
+        ownerId: `${sampleOwnerId}`,
         name: `${sampleFileName}`,
         path: '.',
         parentId: `${sampleParentDirId}`,
