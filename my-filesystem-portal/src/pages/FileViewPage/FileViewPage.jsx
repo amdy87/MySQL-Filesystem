@@ -128,8 +128,6 @@ export default function FileViewPage() {
 
       // sending formData to file.js for the api POST call
       sendFile(formData).then(updateFileTree);
-
-      // If the response of the sendFile is true then refresh the file tree
     };
     reader.onerror = (error) => {
       // Log the file reading error
