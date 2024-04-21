@@ -102,16 +102,28 @@ async function updateFile({ fileId, content }) {
   return data;
 }
 
-async function changeFilePermission({ fileId, permission }) {
-  return new Promise((resolve) => {
-    resolve({ fileId, permission });
-  });
+async function changeFilePermission({ fileId, permissions }) {
+  const data = await request(
+    `/api/file/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ fileId, permissions }),
+    },
+    true,
+  );
+  return data;
 }
 
-async function changeDirectoryPermission({ directoryId, permission }) {
-  return new Promise((resolve) => {
-    resolve({ directoryId, permission });
-  });
+async function changeDirectoryPermission({ directoryId, permissions }) {
+  const data = await request(
+    `/api/dir/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ directoryId, permissions }),
+    },
+    true,
+  );
+  return data;
 }
 
 export {
