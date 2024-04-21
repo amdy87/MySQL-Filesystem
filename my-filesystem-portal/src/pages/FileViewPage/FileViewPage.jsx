@@ -186,11 +186,7 @@ export default function FileViewPage() {
             onChange={handleFileChange}
             style={{ display: 'none' }}
           />
-          <Button
-            variant="secondary"
-            style={{ marginLeft: 20 }}
-            onClick={handleClick}
-          >
+          <Button variant="secondary" onClick={handleClick}>
             Add File
           </Button>
         </Col>

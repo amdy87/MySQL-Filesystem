@@ -17,7 +17,11 @@ export default function PermissionChangePopup({
   });
 
   const onCheckboxesChange = (e) => {
-    setPermission({ ...permission, [e.target.name]: e.target.checked });
+    if (e.target.checked == '') {
+      setPermission({ ...permission, [e.target.name]: false });
+    } else {
+      setPermission({ ...permission, [e.target.name]: true });
+    }
   };
 
   useEffect(() => {
@@ -25,15 +29,23 @@ export default function PermissionChangePopup({
   }, [initialPermission]);
 
   const onClickChange = () => {
+    const permissionsReformat = [
+      permission.read,
+      permission.write,
+      permission.execute,
+    ];
     if (fileType === 'file') {
-      changeFilePermission({ fileId: id, permission }).then(() => {
+      changeFilePermission({
+        fileId: id,
+        permissions: permissionsReformat,
+      }).then(() => {
         onClose();
         refresh();
       });
     } else {
       changeDirectoryPermission({
         directoryId: id,
-        permission,
+        permissions: permissionsReformat,
       }).then(() => {
         onClose();
         refresh();

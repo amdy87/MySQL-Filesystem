@@ -44,7 +44,7 @@ describe('PermissionChangePopup', () => {
     await waitFor(() => {
       expect(Api.changeFilePermission).toHaveBeenCalledWith({
         fileId: '123',
-        permission: { read: true, write: false, execute: false },
+        permissions: [true, false, false],
       });
       expect(defaultProps.onClose).toHaveBeenCalled();
       expect(defaultProps.refresh).toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('PermissionChangePopup', () => {
     await waitFor(() => {
       expect(Api.changeDirectoryPermission).toHaveBeenCalledWith({
         directoryId: '123',
-        permission: { read: true, write: false, execute: false },
+        permissions: [true, false, false],
       });
       expect(defaultProps.onClose).toHaveBeenCalled();
       expect(defaultProps.refresh).toHaveBeenCalled();
