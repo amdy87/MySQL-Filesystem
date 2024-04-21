@@ -165,7 +165,7 @@ describe('Get File without userId or parentId', () => {
   });
 });
 
-describe('create a File, update it, and then delete', () => {
+describe('create a File, update the name, and then delete', () => {
   // Mock Prisma method
   const sampleFileId = 1;
   const sampleOwnerId = 1;
@@ -262,6 +262,146 @@ describe('create a File, update it, and then delete', () => {
       file: {
         id: `${sampleFileId}`,
         name: `${sampleNewFileName}`,
+      },
+    });
+  });
+
+  it('should delete the file by fileId', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    const sampleFileId = 1;
+    req = {
+      body: {
+        fileId: `${sampleFileId}`,
+      },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    (prisma.file.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: `${sampleFileId}`,
+      createdAt: new Date(),
+    });
+
+    await fileControllers.deleteFileById(req as Request, res as Response);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+      message: `file ${sampleFileId} has been deleted`,
+      file: {
+        id: `${sampleFileId}`,
+        name: `${sampleFileName}`,
+      },
+    });
+  });
+});
+
+describe('create a File, update permissions, and then delete', () => {
+  // Mock Prisma method
+  const sampleFileId = 1;
+  const sampleOwnerId = 1;
+  const sampleFileName = 'Jimmy';
+  const sampleParentDirId = 1;
+  (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce([
+    {
+      id: `${sampleOwnerId}`,
+    },
+  ]);
+  (prisma.permission.findMany as jest.Mock).mockResolvedValueOnce([
+    'READ',
+    'WRITE',
+    'EXECUTE',
+  ]);
+
+  (prisma.file.findUnique as jest.Mock).mockResolvedValueOnce({
+    id: `${sampleFileId}`,
+    createdAt: new Date(),
+  });
+
+  (prisma.file.create as jest.Mock).mockResolvedValueOnce({
+    id: `${sampleFileId}`,
+    ownerId: `${sampleOwnerId}`,
+    name: `${sampleFileName}`,
+    path: '.',
+    parentId: `${sampleParentDirId}`,
+    content: 'hi',
+    permissions: ['READ', 'WRITE', 'EXECUTE'],
+  });
+
+  (prisma.file.delete as jest.Mock).mockResolvedValueOnce({
+    id: `${sampleFileId}`,
+    name: `${sampleFileName}`,
+  });
+
+  (prisma.file.update as jest.Mock).mockResolvedValueOnce({
+    id: `${sampleFileId}`,
+    metadata: {
+      perms: {
+        read: false,
+        write: true,
+        execute: false,
+      },
+    },
+  });
+
+  it('should create a file', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    req = {
+      body: {
+        ownerId: `${sampleOwnerId}`,
+        name: `${sampleFileName}`,
+        path: '.',
+        parentId: `${sampleParentDirId}`,
+        content: 'hi',
+      },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await fileControllers.addFile(req as Request, res as Response);
+    // Assert response
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.send).toHaveBeenCalledWith({
+      id: `${sampleFileId}`,
+      ownerId: `${sampleOwnerId}`,
+      name: `${sampleFileName}`,
+      path: '.',
+      parentId: `${sampleParentDirId}`,
+      content: 'hi',
+      permissions: ['READ', 'WRITE', 'EXECUTE'],
+    });
+  });
+
+  it('should update the file permissions', async () => {
+    let req: Partial<Request>;
+    let res: Partial<Response>;
+    const sampleFileId = 1;
+    req = {
+      body: {
+        fileId: `${sampleFileId}`,
+        permissions: [false, true, false],
+      },
+    }; // Mock request
+    res = {
+      send: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnThis(),
+    }; // Mock response
+
+    await fileControllers.updateFileById(req as Request, res as Response);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith({
+      file: {
+        id: `${sampleFileId}`,
+        metadata: {
+          perms: { read: false, write: true, execute: false },
+        },
       },
     });
   });
