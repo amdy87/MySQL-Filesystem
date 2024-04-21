@@ -103,9 +103,17 @@ export const checkDirWritePerm = async (
     if (!directory) {
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
-    console.log(directory.permissions);
+    const isAdmin = await prisma.user.findUnique({
+      where: { id: parseInt(req.authenticatedUser.id) },
+      select: {
+        role: true,
+      },
+    });
     directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) {
+      if (
+        (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
+        isAdmin
+      ) {
         canWrite = true;
       }
     });
