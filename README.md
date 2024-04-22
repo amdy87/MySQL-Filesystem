@@ -22,10 +22,12 @@ The customers for this software are the CS506 instructional staff and people nee
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | **R01**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
-| **R02**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
+| **R02**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
+| **R02**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user fisrt signup |  high   | Done   |
+
+| **R03**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
 | **R03**  | The system will provide an interface that enables moving a file or directory that is within a directory a users has write access to another directory that they have write access to within their filesystem. |   high   | Open   |
 | **R04**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Open   |
-| **R05**  | In order for the system to allow a user access a filesystem, a user must login to an account that has access to the filesystem and include the Bearer Token they receive from login in subsequent requests. |  high    | Open   |
 | **R06**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
 | **R07**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
 | **R08**  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Open   |
@@ -35,7 +37,6 @@ The customers for this software are the CS506 instructional staff and people nee
 | **R12**  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Open   |
 | **R13**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Open   |
 | **R14**  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Open   |
-| **R15**  | The system must be able to display the files and directories within a given directory alphabetically by filename (ascending and descending). |   low   | Open   |
 | **R16**  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Open   |
 | **R17**  | The system will provide an inteface for renaming a top-level file system. |   low   | Open   |
 | **R18**  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Open   |
