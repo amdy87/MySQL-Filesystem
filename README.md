@@ -7,7 +7,7 @@ MyFilesystem
 ## Project Abstract
 
 
-This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, size, last updated). Users will be required to log in and will only be ablet o view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
+This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, file type, last updated). Users will be required to log in and will only be able to view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
 
 ## Customer
 
@@ -51,10 +51,10 @@ The customers for this software are the CS506 instructional staff and people nee
 > To add a file, I press the “add” button and the file creation dialog appears
 
 (U02)
-> I select file type from file creation dialog, and I am prompted to name the file
+> I select a file from file creation dialog, and I am prompted to select the file
 
 (U03)
-> To finish the creation, I press “confirm” button
+> To finish the creation, I press the "open" button on the file creation dialog
 
 (U04)
 > To cancel the creation, I press the “cancel” button
@@ -62,140 +62,101 @@ The customers for this software are the CS506 instructional staff and people nee
 ##### File Deletion
 
 (U05)
-> To delete a file or directory, I select the file or directory and press delete, file is moved to “recently deleted” directory
-
-##### File Updating
-
-(U06)
-> To update a file, I select the file and right click, and am prompted with the update file options dialog
+> To delete a file or directory, I select the delete button within the file or directory row
 
 ##### File Reading
+(U06)
+> To open a file, I click on the file name and the contents of that file are displayed on the screen.
+
 (U07)
-> To open a file, I double click on it or press the open button while it is selected and the contents of that file are displayed on the screen.
+> Once file is open, to edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
 
 (U08)
-> Once file is open, To edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
-
-(U09)
 > If the file can not be displayed/opened, the system will display an error message.
 
-##### File Metadata
+(U09)
+> To go back to the tree display of the current directory I click the "Back" button. 
+
+##### File and Directory Metadata
 (U10)
-> To view the metadata of a file, I select it and right click to display the "options" dialog.
-
-(U11)
-> When the "options" dialog is open, I click the properties button and the "properties" dialog appears displaying the metadata of the file.
-
-(U38)
-> To edit the metadata I press the edit button on the options dialog
-
-(U39)
-> After making the edits I press the confirm button to save my edits to the metadata
-
-(U40)
-> I press the cancel button to discard any changes I made
+> File or directory metadata is displayed in the same row as the file or directory. Metadata includes, File name, File type, Permissions, Updated At, and Actions. 
 
 ##### Navigation
 
+(U11)
+> To change directories, I click on the name of the directory I want to go to. 
+
 (U12)
-> To change directories, I double-click the directory that I want to move to in the directory tree, and the new directory is opened up and displayed
-
-(U13)
-> When a directory is selected or the arrow attached to it is clicked, the directory tree should display the files and directories it contains beneath it in the tree.
-
-(U14)
-> When a directory is selected and its contents are already displayed in the tree, the contents should no longer be displayed in the tree.
+> The directory tree will display the files and directories it contains beneath it in the tree.
 
 ##### Login
 
-(U15)
+(U13)
 > When the webpage is loaded, login page appears and I am prompted to enter a username and password
 
-(U16)
+(U14)
 > Once my username and password are entered, I then press the “login” button to login
 
-(U17)
+(U15)
 > If my login credentials are incorrect the system will display an error message and I will be prompted to enter the info again.
 
 ##### User Creation
 
-(U18)
+(U16)
 > To create a new user, I press “create new user” button on login page and the “Create New User” page is shown
 
-(U19)
-> On the “Create New User” page, I am prompted to enter a username, password, and to re-enter the password;
+(U17)
+> On the “Create New User” page, I am prompted to enter a name, username, password, and to re-enter the password.
 
-(U20)
-> To complete user creation, I press the confirm button and I am logged into the service
+(U18)
+> To complete user creation, I press the "sign up" button and I am logged into the service
 
-(U21) 
+(U19) 
 > If the credentials I entered are not allowed, the system displays an error message.
 
-##### File Import
-(U23) 
-> To import a file, I select the import button and the import file dialog is displayed.
-
-(U24) 
->I drag the desired file into the window or search for it using the access file dialog and it is imported into the current directory.
-
-##### File Renaming
-(U25)
+##### File and Directory Renaming
+(U20)
 > To rename a file, I press the "rename file" button when the file is selected and am prompted with the "rename file" dialog
 
-(U26)
+(U21)
 > I enter the new file name into the entry box and press confirm to rename a file
 
-(U27)
+(U22)
 > To cancel file renaming, I press the cancel button in the "rename file" dialog
 
 ##### logout
-(U28)
-> To logout, I press the logout button on the homepage and am prompted with the "confirm logout" dialog
+(U23)
+> To logout, I press the logout button on the homepage and am logged out.
 
-(U29)
-> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage
-
-
-##### File sorting
-(U30)
-> To sort the files alphabetically descending, I press the sort button
-
-(U31)
-> To sort the files alphabetically ascending, I press the sort button after the files are sorted alphabetically descending
+(U24)
+> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage.
 
 ##### Project Documentation
-(U32)
+(U25)
 > To understand how the system works, I access the project README.md file 
 
-##### File System Renaming
-(U33)
-> To rename the file system, I press the edit file system name button next to the file system name and I am prompted with the rename file system dialog
-
-(U34)
-> In the rename file system dialog, I enter the new name into the prompt and press confirm to rename the file system or cancel to return
-
 ##### Account Deletion
-(U35)
-> To delete my account, I press the delete account button
+(U26)
+> To delete my account, I press the menu in the top right corner and click on "delete account"
 
-(U36)
+(U27)
 > I am prompted with the confirm account deletion dialog
 
-(U37)
+(U28)
 > I press the confirm button on the account deletion dialog to delete my account or the cancel button to return
 
 ### Use Cases
 
 - User wants to add a file (U01 - U04)
 - User wants to delete a file (U05)
-- User wants to update a file (U06)
-- User wants to view the contents of a file (U07 - U09)
-- User wants to view the metadata of a file (U10, U11)
-- User wants to change the directory they are in or view what a directory holds (U12 - U14)
-- User wants to login to a file system (U15, U16)
-- User wants to create a new account (U18-U21)
-- User wants to export a file (U22)
-- User wants to import a new file to the system (U23-U24)
+- User wants to view the contents of a file (U06 - U09)
+- User wants to view the metadata of a file or directory (U10)
+- User wants to change the directory they are in or view what a directory holds (U11 - U12)
+- User wants to login to a file system (U13 - U15)
+- User wants to create a new account (U16 - U19)
+- User wants to rename a file or directory (U20 - U22)
+- User wants to logout (U23 - U24)
+- User wants to delete their account (U26 - U28)
 
 ### User-Requirements Traceability
 | Requirements  | User stories |
