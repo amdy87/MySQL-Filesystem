@@ -22,19 +22,20 @@ The customers for this software are the CS506 instructional staff and people nee
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | **R01**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
-| **R07**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
-| **R02**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
-| **R02**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user fisrt signup |  high   | Done   |
-| **R03**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
-| **R04**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Open   |
-| **R06**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
-| **R08**  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Open   |
-| **R09**  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
-| **R10**  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Open   |
-| **R11**  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Open   |
-| **R12**  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Open   |
-| **R13**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Open   |
-| **R14**  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Open   |
+| **R02**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
+| **R03**  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Open   |
+| **R04**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
+| **R05**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user fisrt signup |  high   | Done   |
+| **R06**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
+| **R07**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Open   |
+| **R08**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
+| **R09**  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Open   |
+| **R10**  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
+| **R11**  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Open   |
+| **R12**  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Open   |
+| **R13**  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Open   |
+| **R14**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Open   |
+| **R15**  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Open   |
 | **R16**  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Open   |
 | **R17**  | The system will provide an inteface for renaming a top-level file system. |   low   | Open   |
 | **R18**  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Open   |
