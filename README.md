@@ -287,8 +287,8 @@ erDiagram
     }
 
     Role {
-        ADMIN
-        USER
+        enum ADMIN
+        enum USER
     }
 
     Permission {
@@ -303,13 +303,13 @@ erDiagram
     }
 
     PermissionType {
-        READ
-        WRITE
-        EXECUTE
+        enum READ
+        enum WRITE
+        enum EXECUTE
     }
 
     File {
-        Int id "PK"
+        Int id PK
         String content
         DateTime createdAt
         DateTime updatedAt
@@ -321,7 +321,7 @@ erDiagram
     }
 
     Directory {
-        Int id "PK"
+        Int id PK
         DateTime createdAt
         DateTime updatedAt
         String name UK "Unique based on parentId"
