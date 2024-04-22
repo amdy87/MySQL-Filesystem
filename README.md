@@ -22,7 +22,7 @@ The customers for this software are the CS506 instructional staff and people nee
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | [**R01**](#111)  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
-| [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | DONE   |
+| [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
 | [**R03**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
 | [**R04**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
 | [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
@@ -269,65 +269,53 @@ title: Database ERD for an SQL-Based File System
 erDiagram
     User ||--o{ File : "Creates"
     User ||--o{ Directory: "Creates"
-    User ||--o{ Permission: "Creates"
-    Directory ||--o{ File : "contains"
-    File ||--o{ File_Content : "contains"
-    Permission ||--|{ File_Permission: ""
-    Permission ||--|{ Directory_Permission: ""
-    File_Permission }|--|{ File: ""
-    Directory_Permission }|--|{ Directory: ""
+    Directory ||--o{ File : "Contains"
+    Directory ||--o{ Permission: "Has"
+    File ||--o{ Permission: "Has"
 
     User {
-        int id PK
-        string name
-        string email
-        string password "Hashed/Encrypted"
-        string role "ADMIN/USER"
+        Int id "PK"
+        DateTime createdAt
+        DateTime updatedAt 
+        String email
+        String name
+        String password "Hashed/Encrypted"
+        Int rootDirId
+        String role "ADMIN/USER"
     }
 
     Permission {
-        int permission_id PK
-        int name
-        int description
+        Int id "PK"
+        PermissionType type "READ/WRITE/EXECUTE"
+        Int userId
+        Boolean enabled
+        Int directoryId
+        Int fileId
+        Directory directory
+        File file
     }
 
     File {
-        int file_id PK
-        int user_id FK
-        int parent_dir_id FK
-        int file_permission_id FK
-        string created_at
-        string updated_at
-        string file_path
-    }
-    File_Permission {
-        int file_permission_id PK
-        int file_id FK
-        int user_id FK
-        int permission_id FK
-    }
-    
-    Directory_Permission {
-        int dir_permission_id PK
-        int dir_id FK
-        int user_id FK
-        int permission_id FK
+        Int id "PK"
+        String content
+        DateTime createdAt
+        DateTime updatedAt
+        String name "unique requirement"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
     Directory {
-        int dir_id PK
-        int parent_dir_id FK
-        int user_id FK
-        int dir_permission_id FK
-        string created_at
-        string updated_at
-        string name
-    }
-
-    File_Content {
-        int file_content_id PK
-        int file_id FK
-        string content
+        Int id "PK"
+        DateTime createdAt
+        DateTime updatedAt
+        String name "unique requirement"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
 
