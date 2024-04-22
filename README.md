@@ -267,14 +267,16 @@ title: Database ERD for an SQL-Based File System
 ---
 
 erDiagram
-    User ||--o{ File : "Creates"
+    User ||--|| Role : "is"
+    User ||--o{ File : "Uploads"
     User ||--o{ Directory: "Creates"
+    Permission ||--|| PermissionType : "Has"
     Directory ||--o{ File : "Contains"
-    Directory ||--o{ Permission: "Has"
-    File ||--o{ Permission: "Has"
+    Directory ||--|{ Permission : "Has"
+    File ||--|{ Permission: "Has"
 
     User {
-        Int id "PK"
+        Int id PK
         DateTime createdAt
         DateTime updatedAt 
         String email
@@ -284,9 +286,14 @@ erDiagram
         String role "ADMIN/USER"
     }
 
+    Role {
+        ADMIN
+        USER
+    }
+
     Permission {
-        Int id "PK"
-        PermissionType type "READ/WRITE/EXECUTE"
+        Int id PK
+        PermissionType type
         Int userId
         Boolean enabled
         Int directoryId
@@ -295,12 +302,18 @@ erDiagram
         File file
     }
 
+    PermissionType {
+        READ
+        WRITE
+        EXECUTE
+    }
+
     File {
         Int id "PK"
         String content
         DateTime createdAt
         DateTime updatedAt
-        String name "unique requirement"
+        String name UK "Unique based on parentId"
         String path
         Int parentId
         Int ownerId
@@ -311,7 +324,7 @@ erDiagram
         Int id "PK"
         DateTime createdAt
         DateTime updatedAt
-        String name "unique requirement"
+        String name UK "Unique based on parentId"
         String path
         Int parentId
         Int ownerId
