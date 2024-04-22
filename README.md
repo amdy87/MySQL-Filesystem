@@ -24,7 +24,7 @@ The customers for this software are the CS506 instructional staff and people nee
 | **R01**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
 | **R02**  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | DONE   |
 | **R03**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
-| **R04**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user fisrt signup |  high   | Done   |
+| **R04**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
 | **R05**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
 | **R06**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
 | **R07**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
