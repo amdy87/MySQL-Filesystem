@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { request } from '@utils/request';
-import { login, signup } from './user';
+import { login, signup, deleteAccount } from './user';
 
 // Mock the request module
 vi.mock('@utils/request', () => ({
@@ -39,6 +39,23 @@ describe('test signup', () => {
         password: 'password',
       }),
     });
+    expect(result).toEqual(mockData);
+  });
+});
+
+// Tests for deleteAccount
+describe('test deleteAccount', () => {
+  it('deletes an account using userId', async () => {
+    const mockData = { success: true };
+    request.mockResolvedValueOnce(mockData);
+    const result = await deleteAccount({ userId: '123' });
+    expect(request).toHaveBeenCalledWith(
+      '/api/user?userId=123',
+      {
+        method: 'DELETE',
+      },
+      true,
+    );
     expect(result).toEqual(mockData);
   });
 });

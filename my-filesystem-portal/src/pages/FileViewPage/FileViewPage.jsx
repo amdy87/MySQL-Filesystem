@@ -164,7 +164,11 @@ export default function FileViewPage() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <Header style={{ width: 50 }} username={user ? user.name : ''}></Header>
+      <Header
+        style={{ width: 50 }}
+        username={user ? user.name : ''}
+        userId={user ? user.id : -1}
+      ></Header>
       <Row>
         <Col className="m-3">
           <h1>{user ? user.name + "'s FileSystem" : ''}</h1>
