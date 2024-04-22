@@ -21,24 +21,24 @@ The customers for this software are the CS506 instructional staff and people nee
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| **R01**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
-| **R02**  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | DONE   |
-| **R03**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
-| **R04**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
-| **R05**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
-| **R06**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
-| **R07**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
-| **R08**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
-| **R09**  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
-| **R10**  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
-| **R11**  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
-| **R12**  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
-| **R13**  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Done   |
-| **R14**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
-| **R15**  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
-| **R16**  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
-| **R17**  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
-| **R18**  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
+| [**R01**](#111)  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
+| [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
+| [**R03**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
+| [**R04**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
+| [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
+| [**R06**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
+| [**R07**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
+| [**R08**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
+| [**R09**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
+| [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
+| [**R11**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
+| [**R12**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
+| [**R13**](#123)  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Done   |
+| [**R14**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
+| [**R15**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
+| [**R16**](#126)  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
+| [**R17**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
+| [**R18**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
 
 ### User Stories
 
@@ -267,67 +267,68 @@ title: Database ERD for an SQL-Based File System
 ---
 
 erDiagram
-    User ||--o{ File : "Creates"
+    User ||--|| Role : "Is"
+    User ||--o{ File : "Uploads"
     User ||--o{ Directory: "Creates"
-    User ||--o{ Permission: "Creates"
-    Directory ||--o{ File : "contains"
-    File ||--o{ File_Content : "contains"
-    Permission ||--|{ File_Permission: ""
-    Permission ||--|{ Directory_Permission: ""
-    File_Permission }|--|{ File: ""
-    Directory_Permission }|--|{ Directory: ""
+    Permission ||--|| PermissionType : "Is"
+    Directory ||--o{ File : "Contains"
+    Directory ||--|{ Permission : "Has"
+    File ||--|{ Permission: "Has"
 
     User {
-        int id PK
-        string name
-        string email
-        string password "Hashed/Encrypted"
-        string role "ADMIN/USER"
+        Int id PK
+        DateTime createdAt
+        DateTime updatedAt 
+        String email
+        String name
+        String password "Hashed/Encrypted"
+        Int rootDirId "optional"
+        Role role
+    }
+
+    Role {
+        enum ADMIN
+        enum USER
     }
 
     Permission {
-        int permission_id PK
-        int name
-        int description
+        Int id PK
+        PermissionType type
+        Int userId
+        Boolean enabled
+        Int directoryId "optional"
+        Int fileId "optional"
+        Directory directory "optional"
+        File file "optional"
+    }
+
+    PermissionType {
+        enum READ
+        enum WRITE
+        enum EXECUTE
     }
 
     File {
-        int file_id PK
-        int user_id FK
-        int parent_dir_id FK
-        int file_permission_id FK
-        string created_at
-        string updated_at
-        string file_path
-    }
-    File_Permission {
-        int file_permission_id PK
-        int file_id FK
-        int user_id FK
-        int permission_id FK
-    }
-    
-    Directory_Permission {
-        int dir_permission_id PK
-        int dir_id FK
-        int user_id FK
-        int permission_id FK
+        Int id PK
+        String content
+        DateTime createdAt
+        DateTime updatedAt "optional"
+        String name UK "Unique based on parentId"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
     Directory {
-        int dir_id PK
-        int parent_dir_id FK
-        int user_id FK
-        int dir_permission_id FK
-        string created_at
-        string updated_at
-        string name
-    }
-
-    File_Content {
-        int file_content_id PK
-        int file_id FK
-        string content
+        Int id PK
+        DateTime createdAt
+        DateTime updatedAt "optional"
+        String name UK "Unique based on parentId"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
 
