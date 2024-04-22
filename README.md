@@ -24,7 +24,6 @@ The customers for this software are the CS506 instructional staff and people nee
 | **R01**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
 | **R02**  |  The system will create a root directory for a new User when they first signup   | high | Done   |
 | **R02**  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user fisrt signup |  high   | Done   |
-
 | **R03**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
 | **R03**  | The system will provide an interface that enables moving a file or directory that is within a directory a users has write access to another directory that they have write access to within their filesystem. |   high   | Open   |
 | **R04**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Open   |
