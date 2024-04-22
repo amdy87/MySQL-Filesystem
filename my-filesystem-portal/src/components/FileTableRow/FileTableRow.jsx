@@ -28,7 +28,7 @@ export default function FileTableRow({
   const click = () => {
     // If file type is directory, go inside directory
     if (fileType == 'directory') {
-      clickDirectory(fileName);
+      clickDirectory(fileName, id, permissions, updatedAt);
     } else {
       console.log(userId);
       // Navigates to the file view page for that file
@@ -119,19 +119,25 @@ export default function FileTableRow({
         <div>
           {
             // if the directory is root, do not show the delete button
-            fileName != '.' && (
+            fileName != '.' && fileName != '..' && (
               <Button variant="danger" onClick={onClickDelete}>
                 Delete
               </Button>
             )
           }
-          <Button
-            variant="dark"
-            className="mx-3"
-            onClick={() => setIsPopupOpen(true)}
-          >
-            Rename
-          </Button>
+
+          {
+            // if the directory is root, do not show the rename button
+            fileName != '.' && fileName != '..' && (
+              <Button
+                variant="dark"
+                className="mx-3"
+                onClick={() => setIsPopupOpen(true)}
+              >
+                Rename
+              </Button>
+            )
+          }
           <FileRenamePopup
             isOpen={isPopupOpen}
             onClose={() => setIsPopupOpen(false)}
@@ -141,7 +147,7 @@ export default function FileTableRow({
           />
           {
             // if the directory is root, do not show the permission button
-            fileName != '.' && (
+            fileName != '.' && fileName != '..' && (
               <Button
                 variant="dark"
                 onClick={() => setShowPermissionPopup(true)}

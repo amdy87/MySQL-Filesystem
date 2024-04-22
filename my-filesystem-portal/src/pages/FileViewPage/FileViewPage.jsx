@@ -18,11 +18,68 @@ export default function FileViewPage() {
 
   // Refreshes the tree files
   const updateFileTree = useCallback(() => {
+    getFileTree({ userId: user.id, parentId: tree[tree.length - 1].id }).then(
+      (currentDir) => {
+        let files = [];
+        files.push({
+          id: currentDir.id,
+          fileName: '.',
+          fileType: 'directory',
+          permissions: currentDir.metadata.perms,
+          updatedAt: currentDir.metadata.updatedAt,
+        });
+        // add the parent directory if not in the root
+        if (tree.length > 1) {
+          files.push({
+            id: tree[tree.length - 2].id,
+            fileName: '..',
+            fileType: 'directory',
+            permissions: tree[tree.length - 2].permissions,
+            updatedAt: tree[tree.length - 2].updatedAt,
+          });
+        }
+        if (currentDir.directories) {
+          files = files.concat(
+            currentDir.directories.map((dir) => {
+              return {
+                id: dir.id,
+                fileName: dir.name,
+                fileType: 'directory',
+                permissions: dir.metadata.perms,
+                updatedAt: dir.metadata.updatedAt,
+              };
+            }),
+          );
+        }
+        if (currentDir.files) {
+          files = files.concat(
+            currentDir.files.map((file) => {
+              return {
+                id: file.id,
+                fileName: file.name,
+                fileType: 'file',
+                permissions: file.metadata.perms,
+                updatedAt: file.metadata.updatedAt,
+              };
+            }),
+          );
+        }
+        setDisplayedFiles(files);
+      },
+    );
+  }, [tree, user]);
+
+  // Get the initial file tree
+  const getInitialFileTree = useCallback(() => {
     getFileTree({ userId: user.id, parentId: user.rootDirId }).then((data) => {
-      setTree({
-        path: [data.name],
-        files: data,
-      });
+      setTree([
+        {
+          name: data.name,
+          id: data.id,
+          permissions: data.metadata.perms,
+          updatedAt: data.metadata.updatedAt,
+        },
+      ]);
     });
   }, [user]);
 
@@ -34,72 +91,16 @@ export default function FileViewPage() {
   // Update the file tree when the user state changes
   useEffect(() => {
     if (user) {
-      updateFileTree(user.id, user.rootDirId);
+      getInitialFileTree();
     }
-  }, [user, updateFileTree]);
+  }, [user, getInitialFileTree]);
 
-  // Update the displayed files when the tree.path changes
+  // Update the displayed files when the tree changes
   useEffect(() => {
     if (tree) {
-      let files = [];
-      let currentDir = tree.files,
-        parentDir = null;
-      // look for the current directory by the path stack
-      for (let i = 1; i < tree.path.length; i++) {
-        if (currentDir.directories) {
-          parentDir = currentDir;
-          currentDir = currentDir.directories.find(
-            (dir) => dir.name === tree.path[i],
-          );
-        }
-      }
-
-      files.push({
-        id: currentDir.id,
-        fileName: '.',
-        fileType: 'directory',
-        permissions: currentDir.metadata.perms,
-        updatedAt: currentDir.metadata.updatedAt,
-      });
-      // add the parent directory if not in the root
-      if (tree.path.length > 1) {
-        files.push({
-          id: parentDir.id,
-          fileName: '..',
-          fileType: 'directory',
-          permissions: parentDir.metadata.perms,
-          updatedAt: parentDir.metadata.updatedAt,
-        });
-      }
-      if (currentDir.directories) {
-        files = files.concat(
-          currentDir.directories.map((dir) => {
-            return {
-              id: dir.id,
-              fileName: dir.name,
-              fileType: 'directory',
-              permissions: dir.metadata.perms,
-              updatedAt: dir.metadata.updatedAt,
-            };
-          }),
-        );
-      }
-      if (currentDir.files) {
-        files = files.concat(
-          currentDir.files.map((file) => {
-            return {
-              id: file.id,
-              fileName: file.name,
-              fileType: 'file',
-              permissions: file.metadata.perms,
-              updatedAt: file.metadata.updatedAt,
-            };
-          }),
-        );
-      }
-      setDisplayedFiles(files);
+      updateFileTree();
     }
-  }, [tree]);
+  }, [tree, updateFileTree]);
 
   const handleFileChange = async (event) => {
     // Collect file
@@ -109,8 +110,8 @@ export default function FileViewPage() {
 
     let path = '';
     // Collecting the tree path to the file
-    for (let i = 0; i < tree.path.length; i++) {
-      path = path + '/' + tree.path[i];
+    for (let i = 0; i < tree.length; i++) {
+      path = path + '/' + tree[i];
     }
 
     // Adding file info to formData
@@ -141,25 +142,19 @@ export default function FileViewPage() {
     document.getElementById('hiddenFileInput').click();
   };
 
-  const clickDirectory = (name) => {
-    const path = tree.path;
+  const clickDirectory = (name, id, permissions, updatedAt) => {
+    const treeCopy = [...tree];
     if (name === '..') {
-      path.pop();
+      treeCopy.pop();
     } else {
-      path.push(name);
+      treeCopy.push({ name, id, permissions, updatedAt });
     }
-    setTree({
-      path: path,
-      files: tree.files,
-    });
+    setTree(treeCopy);
   };
 
   const jumpDirectory = (index) => {
-    const path = tree.path.slice(0, index + 1);
-    setTree({
-      path: path,
-      files: tree.files,
-    });
+    const path = tree.slice(0, index + 1);
+    setTree(path);
   };
 
   return (
@@ -197,17 +192,17 @@ export default function FileViewPage() {
       </Row>
       <Breadcrumb className="m-3">
         {tree ? (
-          tree.path.map((path, i) => {
-            if (i != tree.path.length - 1) {
+          tree.map((path, i) => {
+            if (i != tree.length - 1) {
               return (
                 <Breadcrumb.Item key={i} onClick={() => jumpDirectory(i)}>
-                  {path}
+                  {path.name}
                 </Breadcrumb.Item>
               );
             } else {
               return (
                 <Breadcrumb.Item key={i} active>
-                  {path}
+                  {path.name}
                 </Breadcrumb.Item>
               );
             }
