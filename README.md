@@ -267,10 +267,10 @@ title: Database ERD for an SQL-Based File System
 ---
 
 erDiagram
-    User ||--|| Role : "is"
+    User ||--|| Role : "Is"
     User ||--o{ File : "Uploads"
     User ||--o{ Directory: "Creates"
-    Permission ||--|| PermissionType : "Has"
+    Permission ||--|| PermissionType : "Is"
     Directory ||--o{ File : "Contains"
     Directory ||--|{ Permission : "Has"
     File ||--|{ Permission: "Has"
@@ -282,8 +282,8 @@ erDiagram
         String email
         String name
         String password "Hashed/Encrypted"
-        Int rootDirId
-        String role "ADMIN/USER"
+        Int rootDirId "optional"
+        Role role
     }
 
     Role {
@@ -296,10 +296,10 @@ erDiagram
         PermissionType type
         Int userId
         Boolean enabled
-        Int directoryId
-        Int fileId
-        Directory directory
-        File file
+        Int directoryId "optional"
+        Int fileId "optional"
+        Directory directory "optional"
+        File file "optional"
     }
 
     PermissionType {
@@ -312,7 +312,7 @@ erDiagram
         Int id PK
         String content
         DateTime createdAt
-        DateTime updatedAt
+        DateTime updatedAt "optional"
         String name UK "Unique based on parentId"
         String path
         Int parentId
@@ -323,7 +323,7 @@ erDiagram
     Directory {
         Int id PK
         DateTime createdAt
-        DateTime updatedAt
+        DateTime updatedAt "optional"
         String name UK "Unique based on parentId"
         String path
         Int parentId
