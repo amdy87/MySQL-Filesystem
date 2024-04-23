@@ -86,15 +86,13 @@ router.get(
  *  @field name (string)
  *  @description name of the file
  *
- *  @optional
- *  @field path (string)
- *  @description absolute path of the file
  *
  *  @optional
  *  @field parentId (number)
  *  @description directoryId of the parent directory
  *
- *
+ *  @optional
+ *  @field permissions (object)
  */
 
 router.post(

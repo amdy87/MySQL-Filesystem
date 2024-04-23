@@ -5,7 +5,7 @@
  */
 
 import { Request, Response } from 'express';
-import { Prisma, PermissionType } from '@prisma/client';
+import { Prisma, PermissionType, Role } from '@prisma/client';
 
 import { DbFile } from '../utils/file';
 import { DbDirectory } from '../utils/directory';
@@ -13,6 +13,7 @@ import { DbDirectory } from '../utils/directory';
 import { errorHandler } from '../utils/errorHandler';
 import { getFilesByParent } from './file';
 import { getDirsByParent, getDirById } from './directory';
+import { prisma } from '../connectPrisma';
 
 export const treeControllers = {
   getTreeByParentDirId: async (req: Request, res: Response) => {
@@ -25,7 +26,8 @@ export const treeControllers = {
       const userId = parseInt(req.query.userId as string);
       const parentId = parseInt(req.query.parentId as string);
 
-      if (req.authenticatedUser?.id != userId) {
+      const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+      if (!isAdmin && req.authenticatedUser?.id != userId) {
         throw errorHandler.UnauthorizedError(
           'Token does not matched with user',
         );

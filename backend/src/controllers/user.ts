@@ -30,8 +30,9 @@ import { validatePassword } from '../utils/constants';
 export const generateAccessToken = (
   userId: number,
   name: string,
-  userRole: Role,
+  userRole: string,
 ) => {
+  console.log(`user role: ${userRole}`);
   return jwt.sign(
     { id: userId.toString(), name: name, role: userRole },
     JWT_SECRET as jwt.Secret,
@@ -172,11 +173,14 @@ export const userControllers = {
         password: hashedPassword,
       };
       const newUser = await prisma.user.create({ data: user });
+      console.log('SIGN UP DEBUG');
+      console.log(newUser);
+      console.log(convertPrismaRole(newUser.role));
       // Generate new tokens
       const accessToken = generateAccessToken(
         newUser.id,
         newUser.name,
-        convertPrismaRole(newUser.role),
+        newUser.role,
       );
 
       // Create a root directory for new user

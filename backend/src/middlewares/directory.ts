@@ -7,6 +7,7 @@ import { Response, Request, NextFunction } from 'express';
 import { Prisma, PermissionType, Role } from '@prisma/client';
 import { errorHandler } from '../utils/errorHandler';
 import { prisma } from '../connectPrisma';
+import { isA } from 'jest-mock-extended';
 
 /**
  * This middleware is called if token is valid
@@ -47,11 +48,16 @@ export const checkDirReadPerm = async (
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
     console.log(directory.permissions);
-    directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.READ && Boolean(p.enabled) == true) {
-        canRead = true;
-      }
-    });
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+    if (!isAdmin) {
+      directory?.permissions.map((p: any) => {
+        if (p.type == PermissionType.READ && Boolean(p.enabled) == true) {
+          canRead = true;
+        }
+      });
+    } else {
+      canRead = true;
+    }
     if (!canRead) {
       throw errorHandler.UnauthorizedError(
         'User has no Read Permission on directory',
@@ -103,21 +109,27 @@ export const checkDirWritePerm = async (
     if (!directory) {
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
-    const user = await prisma.user.findUnique({
-      where: { id: parseInt(req.authenticatedUser?.id) },
-      select: {
-        role: true,
-      },
-    });
-    console.log(directory?.permissions);
-    directory?.permissions.map((p: any) => {
-      if (
-        (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
-        user?.role == Role.ADMIN
-      ) {
-        canWrite = true;
-      }
-    });
+    // const user = await prisma.user.findUnique({
+    //   where: { id: parseInt(req.authenticatedUser?.id) },
+    //   select: {
+    //     role: true,
+    //   },
+    // });
+    // console.log(directory?.permissions);
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+
+    if (!isAdmin) {
+      directory?.permissions.map((p: any) => {
+        if (
+          (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
+          isAdmin
+        ) {
+          canWrite = true;
+        }
+      });
+    } else {
+      canWrite = true;
+    }
     console.log(`canWrite: ${canWrite}`);
     if (!canWrite) {
       throw errorHandler.UnauthorizedError(
@@ -164,14 +176,20 @@ export const checkDirExecutePerm = async (
       },
     });
     let canExecute = false;
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+
     if (!directory) {
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
-    directory?.permissions.map((p: any) => {
-      if (p.type == PermissionType.EXECUTE && Boolean(p.enabled) == true) {
-        canExecute = true;
-      }
-    });
+    if (!isAdmin) {
+      directory?.permissions.map((p: any) => {
+        if (p.type == PermissionType.EXECUTE && Boolean(p.enabled) == true) {
+          canExecute = true;
+        }
+      });
+    } else {
+      canExecute = true;
+    }
     if (!canExecute) {
       throw errorHandler.UnauthorizedError(
         'User has no EXECUTE Permission on directory',
