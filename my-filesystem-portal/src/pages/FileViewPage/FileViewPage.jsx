@@ -6,7 +6,7 @@ import {
   Button,
   Col,
 } from 'react-bootstrap';
-import { Header, FileTableRow } from '@components';
+import { Header, FileTableRow, SwitchUserCanvas } from '@components';
 import DirectoryCreationButton from '../../components/DirectoryCreation/DirectoryCreationButton';
 import { useCallback, useEffect, useState } from 'react';
 import { getFileTree, sendFile } from '@api/file';
@@ -15,63 +15,69 @@ export default function FileViewPage() {
   const [tree, setTree] = useState();
   const [displayedFiles, setDisplayedFiles] = useState();
   const [user, setUser] = useState();
+  const [displayedUser, setDisplayedUser] = useState();
+  const [showCanvas, setShowCanvas] = useState(false);
 
   // Refreshes the tree files
   const updateFileTree = useCallback(() => {
-    getFileTree({ userId: user.id, parentId: tree[tree.length - 1].id }).then(
-      (currentDir) => {
-        let files = [];
+    getFileTree({
+      userId: displayedUser.id,
+      parentId: tree[tree.length - 1].id,
+    }).then((currentDir) => {
+      let files = [];
+      files.push({
+        id: currentDir.id,
+        fileName: '.',
+        fileType: 'directory',
+        permissions: currentDir.metadata.perms,
+        updatedAt: currentDir.metadata.updatedAt,
+      });
+      // add the parent directory if not in the root
+      if (tree.length > 1) {
         files.push({
-          id: currentDir.id,
-          fileName: '.',
+          id: tree[tree.length - 2].id,
+          fileName: '..',
           fileType: 'directory',
-          permissions: currentDir.metadata.perms,
-          updatedAt: currentDir.metadata.updatedAt,
+          permissions: tree[tree.length - 2].permissions,
+          updatedAt: tree[tree.length - 2].updatedAt,
         });
-        // add the parent directory if not in the root
-        if (tree.length > 1) {
-          files.push({
-            id: tree[tree.length - 2].id,
-            fileName: '..',
-            fileType: 'directory',
-            permissions: tree[tree.length - 2].permissions,
-            updatedAt: tree[tree.length - 2].updatedAt,
-          });
-        }
-        if (currentDir.directories) {
-          files = files.concat(
-            currentDir.directories.map((dir) => {
-              return {
-                id: dir.id,
-                fileName: dir.name,
-                fileType: 'directory',
-                permissions: dir.metadata.perms,
-                updatedAt: dir.metadata.updatedAt,
-              };
-            }),
-          );
-        }
-        if (currentDir.files) {
-          files = files.concat(
-            currentDir.files.map((file) => {
-              return {
-                id: file.id,
-                fileName: file.name,
-                fileType: 'file',
-                permissions: file.metadata.perms,
-                updatedAt: file.metadata.updatedAt,
-              };
-            }),
-          );
-        }
-        setDisplayedFiles(files);
-      },
-    );
-  }, [tree, user]);
+      }
+      if (currentDir.directories) {
+        files = files.concat(
+          currentDir.directories.map((dir) => {
+            return {
+              id: dir.id,
+              fileName: dir.name,
+              fileType: 'directory',
+              permissions: dir.metadata.perms,
+              updatedAt: dir.metadata.updatedAt,
+            };
+          }),
+        );
+      }
+      if (currentDir.files) {
+        files = files.concat(
+          currentDir.files.map((file) => {
+            return {
+              id: file.id,
+              fileName: file.name,
+              fileType: 'file',
+              permissions: file.metadata.perms,
+              updatedAt: file.metadata.updatedAt,
+            };
+          }),
+        );
+      }
+      setDisplayedFiles(files);
+    });
+  }, [tree, displayedUser]);
 
   // Get the initial file tree
   const getInitialFileTree = useCallback(() => {
-    getFileTree({ userId: user.id, parentId: user.rootDirId }).then((data) => {
+    getFileTree({
+      userId: displayedUser.id,
+      parentId: displayedUser.rootDirId,
+    }).then((data) => {
       setTree([
         {
           name: data.name,
@@ -81,19 +87,25 @@ export default function FileViewPage() {
         },
       ]);
     });
-  }, [user]);
+  }, [displayedUser]);
+
+  const switchUser = (newUser) => {
+    setDisplayedUser(newUser);
+    setShowCanvas(false);
+  };
 
   // set the user state from the local storage
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem('user')));
+    setDisplayedUser(JSON.parse(localStorage.getItem('user')));
   }, []);
 
   // Update the file tree when the user state changes
   useEffect(() => {
-    if (user) {
+    if (displayedUser) {
       getInitialFileTree();
     }
-  }, [user, getInitialFileTree]);
+  }, [displayedUser, getInitialFileTree]);
 
   // Update the displayed files when the tree changes
   useEffect(() => {
@@ -115,7 +127,7 @@ export default function FileViewPage() {
     }
 
     // Adding file info to formData
-    formData['ownerId'] = user.id;
+    formData['ownerId'] = displayedUser.id;
     formData['name'] = file.name;
     formData['path'] = path;
     formData['parentId'] = displayedFiles[0].id;
@@ -157,8 +169,20 @@ export default function FileViewPage() {
     setTree(path);
   };
 
+  const closeCanvas = () => {
+    setShowCanvas(false);
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      {displayedUser && (
+        <SwitchUserCanvas
+          show={showCanvas}
+          currentUser={displayedUser}
+          switchUser={switchUser}
+          onClose={closeCanvas}
+        ></SwitchUserCanvas>
+      )}
       <Header
         style={{ width: 50 }}
         username={user ? user.name : ''}
@@ -166,27 +190,39 @@ export default function FileViewPage() {
       ></Header>
       <Row>
         <Col className="m-3">
-          <h1>{user ? user.name + "'s FileSystem" : ''}</h1>
+          <h1>{displayedUser ? displayedUser.name + "'s FileSystem" : ''}</h1>
         </Col>
-        {displayedFiles ? (
+        {displayedFiles &&
+        user &&
+        displayedUser &&
+        user.id === displayedUser.id ? (
           <DirectoryCreationButton
             tree={tree}
-            user={user}
+            user={displayedUser}
             currentDirId={displayedFiles[0].id}
             updateFileTree={updateFileTree}
           />
         ) : (
           <></>
         )}
+        {user && displayedUser && user.id === displayedUser.id ? (
+          <Col md="auto" className="m-3">
+            <input
+              type="file"
+              id="hiddenFileInput"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+            <Button variant="secondary" onClick={handleClick}>
+              Add File
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
         <Col md="auto" className="m-3">
-          <input
-            type="file"
-            id="hiddenFileInput"
-            onChange={handleFileChange}
-            style={{ display: 'none' }}
-          />
-          <Button variant="secondary" onClick={handleClick}>
-            Add File
+          <Button variant="primary" onClick={() => setShowCanvas(true)}>
+            Switch User
           </Button>
         </Col>
       </Row>
@@ -228,7 +264,7 @@ export default function FileViewPage() {
                   return (
                     <FileTableRow
                       key={file.id}
-                      userId={user.id}
+                      userId={displayedUser.id}
                       {...file}
                       clickDirectory={clickDirectory}
                       refresh={updateFileTree}
