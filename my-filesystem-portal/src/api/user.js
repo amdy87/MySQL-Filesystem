@@ -30,4 +30,14 @@ async function deleteAccount({ userId }) {
   );
 }
 
-export { login, signup, deleteAccount };
+async function getAllUser() {
+  return await request(
+    '/api/user',
+    {
+      method: 'GET',
+    },
+    true,
+  );
+}
+
+export { login, signup, deleteAccount, getAllUser };

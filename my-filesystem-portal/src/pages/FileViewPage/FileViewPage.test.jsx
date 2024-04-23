@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import { getFileTree } from '@api/file'; // Import mocked API
 import '@testing-library/jest-dom';
 import FileViewPage from './FileViewPage';
@@ -43,6 +43,12 @@ vi.mock('@components', () => {
       </tr>
     ),
     Header: () => <div>Header</div>,
+    SwitchUserCanvas: ({ show }) =>
+      show ? (
+        <div data-testid="switch-user-canvas">Mock Canvas</div>
+      ) : (
+        <div>Mock Canvas</div>
+      ),
   };
 });
 
@@ -105,6 +111,25 @@ describe('FileViewPage', () => {
       expect(
         screen.getByTestId('mock-file-table-row-2', { name: /2023-04-10/ }),
       ).toBeInTheDocument(); // For directories date display
+    });
+  });
+
+  it('displays the switch user canvas when showCanvas is true', async () => {
+    const user = { id: '123', name: 'Test User', rootDirId: 'root' };
+    window.localStorage.setItem('user', JSON.stringify(user));
+
+    vi.mocked(getFileTree).mockResolvedValue({
+      name: 'root',
+      directories: [],
+      files: [],
+      metadata: { perms: 'rwx', updatedAt: '2023-04-10' },
+      id: 1,
+    });
+
+    render(<FileViewPage />);
+    fireEvent.click(screen.getByText('Switch User'));
+    await waitFor(() => {
+      expect(screen.getByTestId('switch-user-canvas')).toBeInTheDocument();
     });
   });
 });
