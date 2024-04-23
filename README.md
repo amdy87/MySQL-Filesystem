@@ -33,12 +33,15 @@ The customers for this software are the CS506 instructional staff and people nee
 | [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
 | [**R11**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
 | [**R12**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
-| [**R13**](#123)  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Done   |
-| [**R14**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
-| [**R15**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
-| [**R16**](#126)  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
-| [**R17**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
-| [**R18**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
+| [**R13**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
+| [**R14**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
+| [**R15**](#126)  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
+| [**R16**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
+| [**R17**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
+| [**R18**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice..  |  high    | Done   |
+
+
+
 
 ### User Stories
 
@@ -145,6 +148,20 @@ The customers for this software are the CS506 instructional staff and people nee
 (U28)
 > I press the confirm button on the account deletion dialog to delete my account or the cancel button to return
 
+##### Permission Update
+(U29)
+> To update permission on a file or directory, I need to have WRITE permisison on that file or directory
+
+(U30)
+> I click "Permission" button, I can uncheck checkbox to disable permissions, such as READ, WRITE, or EXECTUE.
+
+(U31)
+> I click "Permission" button, I can check checkbox to disable permissions, such as READ, WRITE, or EXECTUE.
+
+##### Permission View
+(U32)
+> To view permission on a file or directory, I click the "Permission" button. It shows the list of permissions that I am granted for this file.
+
 ### Use Cases
 
 - User wants to add a file (U01 - U04)
@@ -157,29 +174,31 @@ The customers for this software are the CS506 instructional staff and people nee
 - User wants to rename a file or directory (U20 - U22)
 - User wants to logout (U23 - U24)
 - User wants to delete their account (U26 - U28)
+- User wants to change permissions of a file or directory (U29 - U31)
+- User wants to view permissions of a file or directory (U32)
 
 ### User-Requirements Traceability
 | Requirements  | User stories |
 | ------------  | ------------ |
-| [R01](#user-requirements) | [U01-U04](#file-creation)  |
-| [R02](#user-requirements) | [U05](#file-deletion)  |
-| [R04](#user-requirements) | [U25-U27](#file-renaming) |
-| [R03](#user-requirements) | [U12-U14](#navigation)  |
-| [R05](#user-requirements) | [U18-U21](#user-creation)|
+| [**R05**](#115)  | [U01-U04](#file-creation)  |
+| [**R06**](#116) | [U05](#file-deletion)  |
+| [**R08**](#118)  | [U06](#file-reading)  |
+| [**R02**](#112)  | [U07-U09](#file-editing) |
+| [**R10**](#120) , [**R12**](#122)  | [U10](#file-metadata) |
+| [**R03**](#113) , [**R08**](#118), [**R04**](#114) | [U11-U12](#navigation)  |
+| [**R01**](#111) , | [U13-U15](#login)|
+| [**R18**](#146) | [U16-U19](#user-creation)|
+| [**R07**](#117)| [U20-U22](#file-renaming) |
+| [**R09**](#119)   | [U23-U24](#logout) |
+| [**R16**](#127)  | [U26-U28](#account-deletion) |
+| [**R11**](#121)  | [U29-U31](#permission-update) |
+| [**R12**](#122)  | [U32](#permission-view) |
+| [**R15**](#126) | [Security](#security-requirements) |
 | [R06](#user-requirements) | [Style](#user-interface-requirements) |
-| [R07](#user-requirements) | [U15-U17](#login)|
-| [R08](#user-requirements) | [U27-U28](#logout) |
 | [R09](#user-requirements) | [Permissions Class](#class-diagram) |
-| [R10](#user-requirements) | [U07-U09](#file-reading) |
-| [R11](#user-requirements) | [U10-U11](#file-metadata) |
-| [R12](#user-requirements) | [U38-U40](#file-metadata) |
-| [R13](#user-requirements) | [System Requirements](#system-requirements) |
-| [R14](#user-requirements) | [U23-U24](#file-import) |
-| [R15](#user-requirements) | [U30-U31](#file-sorting) |
-| [R16](#user-requirements) | [Security](#security-requirements) |
-| [R17](#user-requirements) | [U33-U34](#file-system-renaming) |
-| [R18](#user-requirements) | [U35-U37](#account-deletion) |
-| [R19](#user-requirements) | [U32](#project-documentation) |
+| [**R13**](#124) | [System Requirements](#system-requirements) |
+| [**R14**](#125)  | [U23-U24](#file-import) |
+| [**R17**](#128) | [U32](#project-documentation) |
 
 
 
@@ -335,77 +354,59 @@ erDiagram
 
 ```
 
-#### Class Diagram
+#### Interface Diagram
 
 ```mermaid
 ---
-title: Class Diagram for Our Program
+title: Interface Diagram for Our Program
 ---
 classDiagram
 
     class User{
-        - String name
-        - int id
-        - String role
-        - String email
-        - String password
-        + String getName()
-        + String getEmail()
-        + int getId()
-        + String getRole()
-        + void setRole(String role)
-        + void setEmail(String email)
-        + void setPhone(String phone)
-        + void setPassword(String prev_pw, String new_pw)
-
-    }
-    class File {
-        - String name
-        - int id
-        - Directory parent
-        - String path
-        - int[] file_permission_ids
-        - createdAt
-        - updatedAt
-        + File(String name)
-        + void setName(String name)
-        + String getName()
-        + int getId()
-        + String getParent()
-        + String getPath()
-        + int[] getFilePermissionIds()
-        + String getCreatedDate()
-        + String getUpdatedDate()
+        - name: string;
+        - email: string;
+        - id: number;
+        - rootDirId?: number;
+        - role?: Role;
+        - createdAt?: Date;
+        - updatedAt?: Date | null;
+        - directories?: DbDirectory[];
+        - files?: DbFile[];
+        - tokenId?: string;
     }
 
-    class Directory {
-        - String name
-        - int id
-        - int user_id
-        - Directory parent
-        - String path
-        - createdAt
-        - updatedAt
-        - int[] dir_permissions_ids
-        + Directory(String name)
-        + void setName(String name)
-        + String getName()
-        + int getId()
-        + String getParent()
-        + String getPath()
-        + int[] getDirPermissionIds()
-        + String getCreatedDate()
-        + String getUpdatedDate()
+    class DbFile {
+        - id: number;
+        - name: string;
+        - path?: string;
+        - content?: string;
+        - metadata: Metadata;
+        - ownerId?: number;
+        - parentId?: number;
     }
 
-    class Permission {
-        - String name
-        - int id
-        - String path
-        + Permission(String name)
-        + void setName(String name)
-        + String getName()
-        + int getId()
+    class DbDirectory  {
+        - id: number;
+        - name: string;
+        - path?: string;
+        - content?: string;
+        - metadata: Metadata;
+        - ownerId?: number;
+        - parentId?: number;
+        - files?: DbFile[];
+        - directories?: DbDirectory[];
+    }
+
+    class Perms {
+        - read: boolean;
+        - write: boolean;
+        - execute: boolean;
+    }
+
+    class Metadata {
+        - perms: Perms;
+        - createdAt: number;
+        - updatedAt: number;
     }
    
 ```
