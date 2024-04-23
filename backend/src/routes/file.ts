@@ -20,7 +20,6 @@ import {
 
 export const fileRouter = express.Router();
 
-// ADD AUTH MIDDLEWARE after token is setup
 /**
  * Get a list of all files owned by a user
  * @route GET
@@ -31,9 +30,8 @@ export const fileRouter = express.Router();
  *  @description {number} userId
  */
 
-fileRouter.get('/', fileControllers.getFiles);
+fileRouter.get('/', authAccessToken, fileControllers.getFiles);
 
-// ADD AUTH MIDDLEWARE after token is setup
 /**
  * Get a list of all files owned by a user
  * @route GET
@@ -103,7 +101,12 @@ fileRouter.get(
  *  @description content written in this file
  *
  */
-fileRouter.post('/add', checkDirWritePerm, fileControllers.addFile);
+fileRouter.post(
+  '/add',
+  authAccessToken,
+  checkDirWritePerm,
+  fileControllers.addFile,
+);
 
 /**
  * Update a file

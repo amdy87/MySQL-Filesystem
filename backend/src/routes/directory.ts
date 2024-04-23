@@ -36,7 +36,12 @@ const router = express.Router();
  *
  */
 
-router.post('/add', directoryControllers.addDirectory);
+router.post(
+  '/add',
+  authAccessToken,
+  checkDirWritePerm,
+  directoryControllers.addDirectory,
+);
 
 /**
  * Get a list of all directories owned by a user
