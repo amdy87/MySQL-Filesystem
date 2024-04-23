@@ -25,20 +25,23 @@ The customers for this software are the CS506 instructional staff and people nee
 | [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
 | [**R03**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
 | [**R04**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
-| [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
+| [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Done   |
 | [**R06**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
 | [**R07**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
 | [**R08**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
 | [**R09**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
-| [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
+| [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Done   |
 | [**R11**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
 | [**R12**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
 | [**R13**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
 | [**R14**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
-| [**R15**](#126)  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
+| [**R15**](#126)  | The system must securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Open   |
 | [**R16**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
 | [**R17**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
-| [**R18**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice..  |  high    | Done   |
+| [**R18**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice.  |  high    | Done   |
+| [**R19**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Open   |
+| [**R20**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Open   |
+| [**R21**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Open   |
 
 
 
@@ -162,6 +165,17 @@ The customers for this software are the CS506 instructional staff and people nee
 (U32)
 > To view permission on a file or directory, I click the "Permission" button. It shows the list of permissions that I am granted for this file.
 
+##### ADMIN User Capability
+(U33)
+> An ADMIN user is created in the database level/internally, not from the application level. User sign up from application is
+default a regular "USER".
+
+(U34)
+> An ADMIN user can view a list of all existing users, and click into each of their file systems.
+
+(U35)
+> An ADMIN user can modify the file/directory permissions that's created by any user by clicking a button to change the permissions.
+
 ### Use Cases
 
 - User wants to add a file (U01 - U04)
@@ -176,6 +190,7 @@ The customers for this software are the CS506 instructional staff and people nee
 - User wants to delete their account (U26 - U28)
 - User wants to change permissions of a file or directory (U29 - U31)
 - User wants to view permissions of a file or directory (U32)
+- ADMIN User wants to manage permissions of any other user's file systems (U33 - U35)
 
 ### User-Requirements Traceability
 | Requirements  | User stories |
@@ -193,12 +208,13 @@ The customers for this software are the CS506 instructional staff and people nee
 | [**R16**](#127)  | [U26-U28](#account-deletion) |
 | [**R11**](#121)  | [U29-U31](#permission-update) |
 | [**R12**](#122)  | [U32](#permission-view) |
-| [**R15**](#126) | [Security](#security-requirements) |
-| [R06](#user-requirements) | [Style](#user-interface-requirements) |
-| [R09](#user-requirements) | [Permissions Class](#class-diagram) |
-| [**R13**](#124) | [System Requirements](#system-requirements) |
 | [**R14**](#125)  | [U23-U24](#file-import) |
 | [**R17**](#128) | [U32](#project-documentation) |
+| [**R19**](#148) ,[**R20**](#149), [**R21**](#150)  | [U33-U35](#admin-user-capabilities) |
+| [**R15**](#126) | [Security](#security-requirements) |
+| [**R06**](#user-requirements) | [Style](#user-interface-requirements) |
+| [**R09**](#user-requirements) | [Permissions Class](#class-diagram) |
+| [**R13**](#124) | [System Requirements](#system-requirements) |
 
 
 
@@ -411,30 +427,6 @@ classDiagram
    
 ```
 
-<!-- 
-classDiagram
-    class Animal {
-        - String name
-        + Animal(String name)
-        + void setName(String name)
-        + String getName()
-        + void makeSound()
-    }
-    class Dog {
-        + Dog(String name)
-        + void makeSound()
-    }
-    class Cat {
-        + Cat(String name)
-        + void makeSound()
-    }
-    class Bird {
-        + Bird(String name)
-        + void makeSound()
-    }
-    Animal <|-- Dog
-    Animal <|-- Cat
-    Animal <|-- Bird -->
 
 #### Flowchart
 
