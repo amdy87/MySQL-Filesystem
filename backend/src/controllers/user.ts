@@ -43,20 +43,6 @@ export const generateAccessToken = (
 };
 
 /**
- * Convert prisma Role enum type to ENUM Role
- * @param prismaUserRole: $Enums.Role
- *
- * @return backend ENUM `Role`
- */
-const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
-  if ($Enums.Role.ADMIN === prismaUserRole) {
-    return Role.ADMIN;
-  } else {
-    return Role.USER;
-  }
-};
-
-/**
  * Verify a signed token
  * @param token
  * @return Token content
@@ -173,9 +159,6 @@ export const userControllers = {
         password: hashedPassword,
       };
       const newUser = await prisma.user.create({ data: user });
-      console.log('SIGN UP DEBUG');
-      console.log(newUser);
-      console.log(convertPrismaRole(newUser.role));
       // Generate new tokens
       const accessToken = generateAccessToken(
         newUser.id,
