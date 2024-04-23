@@ -4,17 +4,22 @@ const userData: any[] = [
   {
     name: 'Alice',
     email: 'alice@prisma.io',
-    password: 'abcdefg5&',
+    password: 'abcDefg5&',
   },
   {
     name: 'Nilu',
     email: 'nilu@prisma.io',
-    password: 'abcdefg5&',
+    password: 'ABCDEFg5&',
   },
   {
     name: 'Mahmoud',
     email: 'mahmoud@prisma.io',
-    password: 'abcdefg5&',
+    password: 'abCDefG5&',
+  },
+  {
+    name: 'Jordan',
+    email: 'jordan@prisma.io',
+    password: 'Ab84CdEfG5',
   },
 ];
 

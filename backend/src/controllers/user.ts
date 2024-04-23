@@ -171,6 +171,7 @@ export const userControllers = {
         email: email,
         password: hashedPassword,
       };
+      console.log(`email ${user.email}`);
       const newUser = await prisma.user.create({ data: user });
       // Generate new tokens
       const accessToken = generateAccessToken(
@@ -198,12 +199,11 @@ export const userControllers = {
         },
         res,
       );
-
       res.status(201).send({ authToken: accessToken, user: updatedUser });
     } catch (error: any) {
-      console.log(`${error}`);
+      console.log(`${error.code}`);
       if (error.code === 'P2002') {
-        const message = 'User with the same email already exists.';
+        const message = `User with the same email already exists.`;
         error = errorHandler.DuplicationError(message);
       }
       errorHandler.handleError(error, res);
