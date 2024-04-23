@@ -87,6 +87,7 @@ export const prismaPermissionsToPerms = (permissions: any) => {
 const getDocsByParent = async (userId: number, parentId: number) => {
   const dirs = await getDirsByParent(userId, parentId);
   const files = await getFilesByParent(userId, parentId);
+
   const dbFiles: DbFile[] = files.map((file) => ({
     id: file.id,
     name: file.name,

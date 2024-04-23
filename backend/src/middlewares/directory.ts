@@ -4,7 +4,7 @@
  */
 
 import { Response, Request, NextFunction } from 'express';
-import { Prisma, PermissionType } from '@prisma/client';
+import { Prisma, PermissionType, Role } from '@prisma/client';
 import { errorHandler } from '../utils/errorHandler';
 import { prisma } from '../connectPrisma';
 
@@ -103,16 +103,17 @@ export const checkDirWritePerm = async (
     if (!directory) {
       throw errorHandler.RecordNotFoundError('directory does not exist');
     }
-    const isAdmin = await prisma.user.findUnique({
-      where: { id: parseInt(req.authenticatedUser.id) },
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(req.authenticatedUser?.id) },
       select: {
         role: true,
       },
     });
+    console.log(directory?.permissions);
     directory?.permissions.map((p: any) => {
       if (
         (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
-        isAdmin
+        user?.role == Role.ADMIN
       ) {
         canWrite = true;
       }
