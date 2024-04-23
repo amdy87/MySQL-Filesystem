@@ -7,7 +7,7 @@ MyFilesystem
 ## Project Abstract
 
 
-This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, size, last updated). Users will be required to log in and will only be ablet o view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
+This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, file type, last updated). Users will be required to log in and will only be able to view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
 
 ## Customer
 
@@ -21,25 +21,24 @@ The customers for this software are the CS506 instructional staff and people nee
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
-| **R01**  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
-| **R02**  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Open   |
-| **R03**  | The system will provide an interface that enables moving a file or directory that is within a directory a users has write access to another directory that they have write access to within their filesystem. |   high   | Open   |
-| **R04**  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Open   |
-| **R05**  | In order for the system to allow a user access a filesystem, a user must login to an account that has access to the filesystem and include the Bearer Token they receive from login in subsequent requests. |  high    | Open   |
-| **R06**  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Open   |
-| **R07**  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
-| **R08**  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Open   |
-| **R09**  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
-| **R10**  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Open   |
-| **R11**  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Open   |
-| **R12**  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Open   |
-| **R13**  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Open   |
-| **R14**  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Open   |
-| **R15**  | The system must be able to display the files and directories within a given directory alphabetically by filename (ascending and descending). |   low   | Open   |
-| **R16**  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Open   |
-| **R17**  | The system will provide an inteface for renaming a top-level file system. |   low   | Open   |
-| **R18**  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Open   |
-| **R19**  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Open   |
+| [**R01**](#111)  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
+| [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
+| [**R03**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
+| [**R04**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
+| [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Open   |
+| [**R06**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
+| [**R07**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
+| [**R08**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
+| [**R09**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
+| [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Open   |
+| [**R11**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
+| [**R12**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
+| [**R13**](#123)  | The system will permit users must be able to edit the metadata of all files and directories that they own.|  medium    | Done   |
+| [**R14**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
+| [**R15**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
+| [**R16**](#126)  | The system must store securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
+| [**R17**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
+| [**R18**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
 
 ### User Stories
 
@@ -52,10 +51,10 @@ The customers for this software are the CS506 instructional staff and people nee
 > To add a file, I press the “add” button and the file creation dialog appears
 
 (U02)
-> I select file type from file creation dialog, and I am prompted to name the file
+> I select a file from file creation dialog, and I am prompted to select the file
 
 (U03)
-> To finish the creation, I press “confirm” button
+> To finish the creation, I press the "open" button on the file creation dialog
 
 (U04)
 > To cancel the creation, I press the “cancel” button
@@ -63,140 +62,101 @@ The customers for this software are the CS506 instructional staff and people nee
 ##### File Deletion
 
 (U05)
-> To delete a file or directory, I select the file or directory and press delete, file is moved to “recently deleted” directory
-
-##### File Updating
-
-(U06)
-> To update a file, I select the file and right click, and am prompted with the update file options dialog
+> To delete a file or directory, I select the delete button within the file or directory row
 
 ##### File Reading
+(U06)
+> To open a file, I click on the file name and the contents of that file are displayed on the screen.
+
 (U07)
-> To open a file, I double click on it or press the open button while it is selected and the contents of that file are displayed on the screen.
+> Once file is open, to edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
 
 (U08)
-> Once file is open, To edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
-
-(U09)
 > If the file can not be displayed/opened, the system will display an error message.
 
-##### File Metadata
+(U09)
+> To go back to the tree display of the current directory I click the "Back" button. 
+
+##### File and Directory Metadata
 (U10)
-> To view the metadata of a file, I select it and right click to display the "options" dialog.
-
-(U11)
-> When the "options" dialog is open, I click the properties button and the "properties" dialog appears displaying the metadata of the file.
-
-(U38)
-> To edit the metadata I press the edit button on the options dialog
-
-(U39)
-> After making the edits I press the confirm button to save my edits to the metadata
-
-(U40)
-> I press the cancel button to discard any changes I made
+> File or directory metadata is displayed in the same row as the file or directory. Metadata includes, File name, File type, Permissions, Updated At, and Actions. 
 
 ##### Navigation
 
+(U11)
+> To change directories, I click on the name of the directory I want to go to. 
+
 (U12)
-> To change directories, I double-click the directory that I want to move to in the directory tree, and the new directory is opened up and displayed
-
-(U13)
-> When a directory is selected or the arrow attached to it is clicked, the directory tree should display the files and directories it contains beneath it in the tree.
-
-(U14)
-> When a directory is selected and its contents are already displayed in the tree, the contents should no longer be displayed in the tree.
+> The directory tree will display the files and directories it contains beneath it in the tree.
 
 ##### Login
 
-(U15)
+(U13)
 > When the webpage is loaded, login page appears and I am prompted to enter a username and password
 
-(U16)
+(U14)
 > Once my username and password are entered, I then press the “login” button to login
 
-(U17)
+(U15)
 > If my login credentials are incorrect the system will display an error message and I will be prompted to enter the info again.
 
 ##### User Creation
 
-(U18)
+(U16)
 > To create a new user, I press “create new user” button on login page and the “Create New User” page is shown
 
-(U19)
-> On the “Create New User” page, I am prompted to enter a username, password, and to re-enter the password;
+(U17)
+> On the “Create New User” page, I am prompted to enter a name, username, password, and to re-enter the password.
 
-(U20)
-> To complete user creation, I press the confirm button and I am logged into the service
+(U18)
+> To complete user creation, I press the "sign up" button and I am logged into the service
 
-(U21) 
+(U19) 
 > If the credentials I entered are not allowed, the system displays an error message.
 
-##### File Import
-(U23) 
-> To import a file, I select the import button and the import file dialog is displayed.
-
-(U24) 
->I drag the desired file into the window or search for it using the access file dialog and it is imported into the current directory.
-
-##### File Renaming
-(U25)
+##### File and Directory Renaming
+(U20)
 > To rename a file, I press the "rename file" button when the file is selected and am prompted with the "rename file" dialog
 
-(U26)
+(U21)
 > I enter the new file name into the entry box and press confirm to rename a file
 
-(U27)
+(U22)
 > To cancel file renaming, I press the cancel button in the "rename file" dialog
 
 ##### logout
-(U28)
-> To logout, I press the logout button on the homepage and am prompted with the "confirm logout" dialog
+(U23)
+> To logout, I press the logout button on the homepage and am logged out.
 
-(U29)
-> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage
-
-
-##### File sorting
-(U30)
-> To sort the files alphabetically descending, I press the sort button
-
-(U31)
-> To sort the files alphabetically ascending, I press the sort button after the files are sorted alphabetically descending
+(U24)
+> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage.
 
 ##### Project Documentation
-(U32)
+(U25)
 > To understand how the system works, I access the project README.md file 
 
-##### File System Renaming
-(U33)
-> To rename the file system, I press the edit file system name button next to the file system name and I am prompted with the rename file system dialog
-
-(U34)
-> In the rename file system dialog, I enter the new name into the prompt and press confirm to rename the file system or cancel to return
-
 ##### Account Deletion
-(U35)
-> To delete my account, I press the delete account button
+(U26)
+> To delete my account, I press the menu in the top right corner and click on "delete account"
 
-(U36)
+(U27)
 > I am prompted with the confirm account deletion dialog
 
-(U37)
+(U28)
 > I press the confirm button on the account deletion dialog to delete my account or the cancel button to return
 
 ### Use Cases
 
 - User wants to add a file (U01 - U04)
 - User wants to delete a file (U05)
-- User wants to update a file (U06)
-- User wants to view the contents of a file (U07 - U09)
-- User wants to view the metadata of a file (U10, U11)
-- User wants to change the directory they are in or view what a directory holds (U12 - U14)
-- User wants to login to a file system (U15, U16)
-- User wants to create a new account (U18-U21)
-- User wants to export a file (U22)
-- User wants to import a new file to the system (U23-U24)
+- User wants to view the contents of a file (U06 - U09)
+- User wants to view the metadata of a file or directory (U10)
+- User wants to change the directory they are in or view what a directory holds (U11 - U12)
+- User wants to login to a file system (U13 - U15)
+- User wants to create a new account (U16 - U19)
+- User wants to rename a file or directory (U20 - U22)
+- User wants to logout (U23 - U24)
+- User wants to delete their account (U26 - U28)
 
 ### User-Requirements Traceability
 | Requirements  | User stories |
@@ -307,67 +267,68 @@ title: Database ERD for an SQL-Based File System
 ---
 
 erDiagram
-    User ||--o{ File : "Creates"
+    User ||--|| Role : "Is"
+    User ||--o{ File : "Uploads"
     User ||--o{ Directory: "Creates"
-    User ||--o{ Permission: "Creates"
-    Directory ||--o{ File : "contains"
-    File ||--o{ File_Content : "contains"
-    Permission ||--|{ File_Permission: ""
-    Permission ||--|{ Directory_Permission: ""
-    File_Permission }|--|{ File: ""
-    Directory_Permission }|--|{ Directory: ""
+    Permission ||--|| PermissionType : "Is"
+    Directory ||--o{ File : "Contains"
+    Directory ||--|{ Permission : "Has"
+    File ||--|{ Permission: "Has"
 
     User {
-        int id PK
-        string name
-        string email
-        string password "Hashed/Encrypted"
-        string role "ADMIN/USER"
+        Int id PK
+        DateTime createdAt
+        DateTime updatedAt 
+        String email
+        String name
+        String password "Hashed/Encrypted"
+        Int rootDirId "optional"
+        Role role
+    }
+
+    Role {
+        enum ADMIN
+        enum USER
     }
 
     Permission {
-        int permission_id PK
-        int name
-        int description
+        Int id PK
+        PermissionType type
+        Int userId
+        Boolean enabled
+        Int directoryId "optional"
+        Int fileId "optional"
+        Directory directory "optional"
+        File file "optional"
+    }
+
+    PermissionType {
+        enum READ
+        enum WRITE
+        enum EXECUTE
     }
 
     File {
-        int file_id PK
-        int user_id FK
-        int parent_dir_id FK
-        int file_permission_id FK
-        string created_at
-        string updated_at
-        string file_path
-    }
-    File_Permission {
-        int file_permission_id PK
-        int file_id FK
-        int user_id FK
-        int permission_id FK
-    }
-    
-    Directory_Permission {
-        int dir_permission_id PK
-        int dir_id FK
-        int user_id FK
-        int permission_id FK
+        Int id PK
+        String content
+        DateTime createdAt
+        DateTime updatedAt "optional"
+        String name UK "Unique based on parentId"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
     Directory {
-        int dir_id PK
-        int parent_dir_id FK
-        int user_id FK
-        int dir_permission_id FK
-        string created_at
-        string updated_at
-        string name
-    }
-
-    File_Content {
-        int file_content_id PK
-        int file_id FK
-        string content
+        Int id PK
+        DateTime createdAt
+        DateTime updatedAt "optional"
+        String name UK "Unique based on parentId"
+        String path
+        Int parentId
+        Int ownerId
+        Permission[] permissions
     }
 
 

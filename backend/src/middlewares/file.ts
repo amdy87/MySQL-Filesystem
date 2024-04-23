@@ -100,8 +100,18 @@ export const checkFileWritePerm = async (
     if (!file) {
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
+    const isAdmin = await prisma.user.findUnique({
+      where: { id: parseInt(req.authenticatedUser.id) },
+      select: {
+        role: true,
+      },
+    });
+
     file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) {
+      if (
+        (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
+        isAdmin
+      ) {
         canWrite = true;
       }
     });

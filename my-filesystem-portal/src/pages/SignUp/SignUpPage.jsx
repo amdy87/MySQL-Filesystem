@@ -18,7 +18,7 @@ export default function SignUpPage() {
   const onPasswordCheckInput = (e) => setPasswordCheck(e.target.value);
 
   const toLogin = () => {
-    navigate('login');
+    navigate('/');
   };
 
   const onSignUp = () => {
@@ -90,13 +90,13 @@ export default function SignUpPage() {
         </Row>
         <Row className="justify-content-md-center md-6">
           <Col md={'auto'}>
-            <Button variant="secondary" onClick={onSignUp}>
-              Sign Up
+            <Button variant="secondary" onClick={toLogin}>
+              Back to Login
             </Button>
           </Col>
           <Col md={'auto'}>
-            <Button variant="secondary" onClick={toLogin}>
-              Login
+            <Button variant="secondary" onClick={onSignUp}>
+              Sign Up
             </Button>
           </Col>
         </Row>

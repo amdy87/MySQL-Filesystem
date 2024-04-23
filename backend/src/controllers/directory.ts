@@ -15,7 +15,7 @@
 
 import { Request, Response } from 'express';
 import { Prisma, PermissionType } from '@prisma/client';
-
+import { prismaPermissionsToPerms } from './tree';
 import { prisma } from '../connectPrisma';
 import { errorHandler } from '../utils/errorHandler';
 import { Metadata, Perms } from '../utils/metadata';
@@ -68,7 +68,7 @@ const existDirectoryId = async (directoryId: number) => {
   const existingDirectory = await prisma.directory.findUnique({
     where: { id: directoryId },
   });
-  console.log(existingDirectory, 'THIS');
+  //console.log(existingDirectory, 'THIS');
   return existingDirectory ? true : false;
 };
 
@@ -116,6 +116,65 @@ const updateDirectory = async (dir: DbDirectory, res: Response) => {
       },
     });
     return updatedDirectory;
+  } catch (error: any) {
+    errorHandler.handleError(error, res);
+  }
+};
+
+/**
+ * Helper function to update directory permissions
+ * @param dir
+ * @param res
+ */
+const updateDirectoryPermissions = async (dir: DbDirectory, res: Response) => {
+  try {
+    if (dir.metadata.perms.read == null) {
+      return;
+    }
+
+    const dirPermissions = await prisma.directory.findUnique({
+      where: { id: dir.id },
+      select: {
+        permissions: true,
+      },
+    });
+
+    if (!dirPermissions) {
+      throw errorHandler.RecordNotFoundError('Permissions not found');
+    }
+
+    await prisma.permission.update({
+      where: {
+        id: dirPermissions.permissions[0].id,
+        directoryId: dir.id,
+        type: PermissionType.READ,
+      },
+      data: {
+        enabled: dir.metadata.perms.read,
+      },
+    });
+
+    await prisma.permission.update({
+      where: {
+        id: dirPermissions.permissions[1].id,
+        directoryId: dir.id,
+        type: PermissionType.WRITE,
+      },
+      data: {
+        enabled: dir.metadata.perms.write,
+      },
+    });
+
+    await prisma.permission.update({
+      where: {
+        id: dirPermissions.permissions[2].id,
+        directoryId: dir.id,
+        type: PermissionType.EXECUTE,
+      },
+      data: {
+        enabled: dir.metadata.perms.execute,
+      },
+    });
   } catch (error: any) {
     errorHandler.handleError(error, res);
   }
@@ -322,36 +381,64 @@ export const directoryControllers = {
 
   updateDirById: async (req: Request, res: Response) => {
     try {
-      //  Doesn't support change permission yet
       const { directoryId, name, permissions, parentId } = req.body;
 
-      let dir: Prisma.DirectoryFindUniqueArgs;
       if (!directoryId) {
         throw errorHandler.InvalidBodyParamError('directoryId');
       }
-      dir = { where: { id: directoryId } };
 
-      const existDirectory = await prisma.directory.findUnique(dir);
+      const existDirectory = await prisma.directory.findUnique({
+        where: {
+          id: directoryId,
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          updatedAt: true,
+          name: true,
+          path: true,
+          parentId: true,
+          ownerId: true,
+          permissions: true,
+        },
+      });
+
       if (!existDirectory) {
         throw errorHandler.RecordNotFoundError('Directory does not exist');
       }
-      let perms: Perms = { read: true, write: true, execute: true };
+
+      let perms;
+
+      if (!permissions) {
+        perms = {
+          read: null,
+          write: null,
+          execute: null,
+        };
+      } else {
+        perms = {
+          read: permissions[0],
+          write: permissions[1],
+          execute: permissions[2],
+        };
+      }
+
       let metadata: Metadata = {
-        // TODO: perms: existDirectory.permissions,
         perms: perms,
         createdAt: existDirectory.createdAt.getTime(),
         updatedAt: Date.now(),
       };
+
+      let dirasDB = {
+        id: directoryId,
+        name: name || existDirectory.name, // Update name if provided, otherwise keep existing value
+        parentId: parentId || existDirectory.parentId,
+        metadata: metadata,
+      };
+      await updateDirectoryPermissions(dirasDB, res);
+
       // Update file record in the database
-      const updatedDirectory = await updateDirectory(
-        {
-          id: directoryId,
-          name: name || existDirectory.name, // Update name if provided, otherwise keep existing value
-          parentId: parentId || existDirectory.parentId,
-          metadata: metadata,
-        },
-        res,
-      );
+      const updatedDirectory = await updateDirectory(dirasDB, res);
       res.status(200).send({ directory: updatedDirectory });
     } catch (error: any) {
       console.log(error);
@@ -367,8 +454,8 @@ export const directoryControllers = {
       }
       const directoryId = parseInt(req.body.directoryId as string);
       const directoryExist = await existDirectoryId(directoryId);
-      console.log(directoryExist);
-      console.log(directoryId);
+      //console.log(directoryExist);
+      //console.log(directoryId);
 
       if (directoryExist) {
         // check if there are files with parentId that match the directoryId

@@ -1,6 +1,7 @@
 import { Button } from 'react-bootstrap';
 import React, { useState } from 'react';
 import FileRenamePopup from '../FileRenamePopup/FileRenamePopup';
+import PermissionChangePopup from '../PermissionChangePopup/PermissionChangePopup';
 import {
   fileRename,
   directoryRename,
@@ -20,13 +21,14 @@ export default function FileTableRow({
   refresh,
 }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [showPermissionPopup, setShowPermissionPopup] = useState(false);
   const navigate = useNavigate();
 
   // On file or directory click
   const click = () => {
     // If file type is directory, go inside directory
     if (fileType == 'directory') {
-      clickDirectory(fileName);
+      clickDirectory(fileName, id, permissions, updatedAt);
     } else {
       console.log(userId);
       // Navigates to the file view page for that file
@@ -80,6 +82,16 @@ export default function FileTableRow({
 
   return (
     <tr>
+      <PermissionChangePopup
+        id={id}
+        show={showPermissionPopup}
+        onClose={() => {
+          setShowPermissionPopup(false);
+        }}
+        initialPermission={permissions}
+        refresh={refresh}
+        fileType={fileType}
+      ></PermissionChangePopup>
       <td>
         <a
           onClick={click}
@@ -107,19 +119,25 @@ export default function FileTableRow({
         <div>
           {
             // if the directory is root, do not show the delete button
-            fileName != '.' && (
+            fileName != '.' && fileName != '..' && (
               <Button variant="danger" onClick={onClickDelete}>
                 Delete
               </Button>
             )
           }
-          <Button
-            variant="dark"
-            className="mx-3"
-            onClick={() => setIsPopupOpen(true)}
-          >
-            Rename
-          </Button>
+
+          {
+            // if the directory is root, do not show the rename button
+            fileName != '.' && fileName != '..' && (
+              <Button
+                variant="dark"
+                className="mx-3"
+                onClick={() => setIsPopupOpen(true)}
+              >
+                Rename
+              </Button>
+            )
+          }
           <FileRenamePopup
             isOpen={isPopupOpen}
             onClose={() => setIsPopupOpen(false)}
@@ -127,6 +145,17 @@ export default function FileTableRow({
             fileName={fileName}
             fileType={fileType}
           />
+          {
+            // if the directory is root, do not show the permission button
+            fileName != '.' && fileName != '..' && (
+              <Button
+                variant="dark"
+                onClick={() => setShowPermissionPopup(true)}
+              >
+                Change Permission
+              </Button>
+            )
+          }
         </div>
       </td>
     </tr>

@@ -16,8 +16,8 @@ export default function DirectoryCreationButton({
 
     let path = '';
     // Collecting the tree path to the file
-    for (let i = 0; i < tree.path.length; i++) {
-      path = path + '/' + tree.path[i];
+    for (let i = 0; i < tree.length; i++) {
+      path = path + '/' + tree[i];
     }
 
     formData['ownerId'] = user.id;

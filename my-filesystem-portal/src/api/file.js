@@ -102,6 +102,30 @@ async function updateFile({ fileId, content }) {
   return data;
 }
 
+async function changeFilePermission({ fileId, permissions }) {
+  const data = await request(
+    `/api/file/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ fileId, permissions }),
+    },
+    true,
+  );
+  return data;
+}
+
+async function changeDirectoryPermission({ directoryId, permissions }) {
+  const data = await request(
+    `/api/dir/update`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ directoryId, permissions }),
+    },
+    true,
+  );
+  return data;
+}
+
 export {
   getFileTree,
   sendFile,
@@ -112,4 +136,6 @@ export {
   deleteFile,
   deleteDirectory,
   updateFile,
+  changeFilePermission,
+  changeDirectoryPermission,
 };

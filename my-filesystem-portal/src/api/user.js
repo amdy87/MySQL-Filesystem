@@ -20,4 +20,14 @@ async function signup({ name, email, password }) {
   });
 }
 
-export { login, signup };
+async function deleteAccount({ userId }) {
+  return await request(
+    `/api/user?userId=${userId}`,
+    {
+      method: 'DELETE',
+    },
+    true,
+  );
+}
+
+export { login, signup, deleteAccount };

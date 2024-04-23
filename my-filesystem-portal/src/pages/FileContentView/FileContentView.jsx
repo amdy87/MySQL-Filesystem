@@ -1,6 +1,6 @@
 import { Header } from '@components';
 import { Button, Row, Col, Form } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { collectUserContent, updateFile } from '../../api/file';
 import React, { useState, useEffect } from 'react';
 
@@ -10,6 +10,7 @@ export default function FileContentView() {
   const [fileEditContent, setFileEditContent] = useState('');
   const [fileName, setFileName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,12 +52,20 @@ export default function FileContentView() {
     );
   };
 
+  // Navagates back to file tree view when clicked
+  const onClickBackPage = () => {
+    navigate('/file', { replace: true });
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Header style={{ width: 50 }}></Header>
       <Row style={{ borderBottom: '1px solid rgba(0,0,0,0.2)' }}>
         <Col className="m-3">
           <h1>{fileName}</h1>
+        </Col>
+        <Col md="auto" className="m-3">
+          <Button onClick={onClickBackPage}>Back</Button>
         </Col>
         <Col md="auto" className="m-3">
           <Button onClick={onClickEdit}>Edit File</Button>

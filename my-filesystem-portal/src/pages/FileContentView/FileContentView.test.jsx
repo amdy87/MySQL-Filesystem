@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import { useNavigate } from 'react-router-dom';
 import FileContentView from './FileContentView';
 
 // Setup mocks for react-router-dom and API call
@@ -39,6 +40,16 @@ describe('FileContentView', () => {
     fireEvent.click(await screen.findByText('Edit File'));
     expect(await screen.findByText('Confirm')).toBeInTheDocument();
   });
+
+  it('navigates back to the file tree view when back is clicked'),
+    async () => {
+      const mockNavigate = vi.fn();
+      useNavigate.mockImplementation(() => mockNavigate);
+      render(<FileContentView />);
+      fireEvent.click(await screen.findByText('Back'));
+
+      expect(mockNavigate).toHaveBeenCalledWith('/file');
+    };
 
   it('handles input change correctly', async () => {
     render(<FileContentView />);
