@@ -30,8 +30,9 @@ import { validatePassword } from '../utils/constants';
 export const generateAccessToken = (
   userId: number,
   name: string,
-  userRole: Role,
+  userRole: string,
 ) => {
+  console.log(`user role: ${userRole}`);
   return jwt.sign(
     { id: userId.toString(), name: name, role: userRole },
     JWT_SECRET as jwt.Secret,
@@ -39,20 +40,6 @@ export const generateAccessToken = (
       expiresIn: TOKEN.Access.limit,
     },
   );
-};
-
-/**
- * Convert prisma Role enum type to ENUM Role
- * @param prismaUserRole: $Enums.Role
- *
- * @return backend ENUM `Role`
- */
-const convertPrismaRole = (prismaUserRole: $Enums.Role): Role => {
-  if ($Enums.Role.ADMIN === prismaUserRole) {
-    return Role.ADMIN;
-  } else {
-    return Role.USER;
-  }
 };
 
 /**
@@ -176,7 +163,7 @@ export const userControllers = {
       const accessToken = generateAccessToken(
         newUser.id,
         newUser.name,
-        convertPrismaRole(newUser.role),
+        newUser.role,
       );
 
       // Create a root directory for new user
