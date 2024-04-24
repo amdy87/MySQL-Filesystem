@@ -12,6 +12,7 @@ process.env.JWT_SECRET = 'iiiiedsfsdf';
 import { userControllers } from '../controllers/user';
 import { prisma } from '../connectPrisma';
 import userData from './sample_data/users';
+import badUserData from './sample_data/bad.user.data';
 import bcrypt from 'bcrypt';
 
 // Mock the Prisma methods globally
@@ -151,27 +152,9 @@ describe('User Login', () => {
   });
 });
 
-describe('User signup Fail', () => {
-  it(`should throw a 409 error`, async () => {
-    const req: Partial<Request> = {
-      body: { name: 'asb', email: 'asb@gmail.com', password: 'akduhfw' },
-    }; // Mock request
-    const res: Partial<Response> = {
-      send: jest.fn(),
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn().mockReturnThis(),
-    }; // Mock response
-    let mockError = new CustomError('Mocked error', 'P2002');
-    (prisma.user.create as jest.Mock).mockRejectedValueOnce(mockError);
-
-    await userControllers.signUp(req as Request, res as Response);
-    expect(res.status).toHaveBeenCalledWith(409);
-  });
-});
-
 describe('User signup and login', () => {
   userData.forEach((user, index) => {
-    it(`should create user ${user.name}`, async () => {
+    it(`should create user ${user.name} with index ${index} and email ${user.email}`, async () => {
       const req: Partial<Request> = {
         body: { name: user.name, email: user.email, password: user.password },
       }; // Mock request
@@ -213,10 +196,15 @@ describe('User signup and login', () => {
 
       (bcrypt.hashSync as jest.Mock).mockResolvedValueOnce('hashedpw');
 
+      console.log(user.email);
       await userControllers.signUp(req as Request, res as Response);
-
       // Assert user creation
       expect(res.status).toHaveBeenCalledWith(201);
+      // expect(res.json).toHaveBeenCalledWith(
+      //   expect.objectContaining({
+      //     message: 'User with the same email already exists.',
+      //   }),
+      // );
       expect(res.send).toHaveBeenCalledWith(
         expect.objectContaining({
           user: {
@@ -226,6 +214,26 @@ describe('User signup and login', () => {
           },
         }),
       );
+    });
+  });
+});
+
+describe('User signup Fail', () => {
+  badUserData.forEach((user) => {
+    it(`should throw a 400 error with user ${user.name}`, async () => {
+      const req: Partial<Request> = {
+        body: { name: user.name, email: user.email, password: user.password },
+      }; // Mock request
+      const res: Partial<Response> = {
+        send: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      }; // Mock response
+      let mockError = new CustomError('Mocked error', 'P2002');
+      (prisma.user.create as jest.Mock).mockRejectedValueOnce(mockError);
+
+      await userControllers.signUp(req as Request, res as Response);
+      expect(res.status).toHaveBeenCalledWith(400);
     });
   });
 });
