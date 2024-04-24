@@ -152,26 +152,6 @@ describe('User Login', () => {
   });
 });
 
-describe('User signup Fail', () => {
-  badUserData.forEach((user) => {
-    it(`should throw a 400 error with user ${user.name}`, async () => {
-      const req: Partial<Request> = {
-        body: { name: user.name, email: user.email, password: user.password },
-      }; // Mock request
-      const res: Partial<Response> = {
-        send: jest.fn(),
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn().mockReturnThis(),
-      }; // Mock response
-      let mockError = new CustomError('Mocked error', 'P2002');
-      (prisma.user.create as jest.Mock).mockRejectedValueOnce(mockError);
-
-      await userControllers.signUp(req as Request, res as Response);
-      expect(res.status).toHaveBeenCalledWith(400);
-    });
-  });
-});
-
 describe('User signup and login', () => {
   userData.forEach((user, index) => {
     it(`should create user ${user.name} with index ${index} and email ${user.email}`, async () => {
@@ -237,6 +217,27 @@ describe('User signup and login', () => {
     });
   });
 });
+
+describe('User signup Fail', () => {
+  badUserData.forEach((user) => {
+    it(`should throw a 400 error with user ${user.name}`, async () => {
+      const req: Partial<Request> = {
+        body: { name: user.name, email: user.email, password: user.password },
+      }; // Mock request
+      const res: Partial<Response> = {
+        send: jest.fn(),
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn().mockReturnThis(),
+      }; // Mock response
+      let mockError = new CustomError('Mocked error', 'P2002');
+      (prisma.user.create as jest.Mock).mockRejectedValueOnce(mockError);
+
+      await userControllers.signUp(req as Request, res as Response);
+      expect(res.status).toHaveBeenCalledWith(400);
+    });
+  });
+});
+
 
 describe('update user by id', () => {
   it('Update user name but missing userId, should return status 400', async () => {
