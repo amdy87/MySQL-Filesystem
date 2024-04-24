@@ -31,6 +31,10 @@ async function useRequest(url, options = {}, needAuth = false) {
 
     // Throws an unkown error if response comes back negative
     if (!response.ok) {
+      if (response.status === 413) {
+        alert('Payload too large, please submit a smaller file.');
+        return;
+      }
       const responseBody = await response.json();
 
       const errorMessage =
