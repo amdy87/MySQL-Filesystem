@@ -44,6 +44,14 @@ export default function FileContentView() {
   };
 
   const onConfirmEdit = () => {
+    // prevent user from creating a file larger than our server will handle
+    if (fileEditContent.length > 175) {
+      alert(
+        `File length too long. Only 175 characters are supported and you have ${fileEditContent.length}`,
+      );
+      return;
+    }
+
     updateFile({ fileId: parseInt(fileId), content: fileEditContent }).then(
       () => {
         setFileContent(fileEditContent);

@@ -59,6 +59,18 @@ describe('FileContentView', () => {
     expect(textarea.value).toBe('Updated content');
   });
 
+  it('blocks user submitting too large an edit with alert', async () => {
+    render(<FileContentView />);
+    fireEvent.click(await screen.findByText('Edit File'));
+    const longString =
+      'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+    const textarea = await screen.findByRole('textbox');
+    fireEvent.change(textarea, { target: { value: longString } });
+    fireEvent.click(await screen.findByText('Confirm'));
+    expect(textarea.value).toBe(longString);
+    expect(screen.getByText('Confirm')).toBeInTheDocument();
+  });
+
   it('updates content and exits edit mode on confirm', async () => {
     render(<FileContentView />);
     fireEvent.click(await screen.findByText('Edit File'));
