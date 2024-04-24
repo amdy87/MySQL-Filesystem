@@ -255,7 +255,14 @@ export default function FileViewPage() {
           <></>
         )}
       </Breadcrumb>
-      <Container fluid style={{ height: 'calc(100vh - 100px)' }}>
+      <Container
+        fluid
+        style={{
+          height: 'calc(100vh - 100px)',
+          overflowY: 'auto',
+          paddingBottom: '40px',
+        }}
+      >
         <Table striped bordered hover>
           <thead>
             <tr>
