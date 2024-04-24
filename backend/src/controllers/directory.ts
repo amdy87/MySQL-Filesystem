@@ -142,7 +142,6 @@ const updateDirectoryPermissions = async (dir: DbDirectory, res: Response) => {
     if (!dirPermissions) {
       throw errorHandler.RecordNotFoundError('Permissions not found');
     }
-
     await prisma.permission.update({
       where: {
         id: dirPermissions.permissions[0].id,
