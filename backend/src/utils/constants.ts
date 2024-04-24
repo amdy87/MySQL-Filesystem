@@ -39,6 +39,6 @@ export const PASSWORD_LENGTH = env.PASSWORD_LENGTH || '8';
 export function validatePassword(value: string): boolean {
   return (
     value.length >= parseInt(PASSWORD_LENGTH) &&
-    (/(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*\d+)/).test(value)
+    /(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*\d+)/.test(value)
   );
 }

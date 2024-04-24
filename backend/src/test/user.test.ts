@@ -238,7 +238,6 @@ describe('User signup Fail', () => {
   });
 });
 
-
 describe('update user by id', () => {
   it('Update user name but missing userId, should return status 400', async () => {
     // Create a mock instance of PrismaClient
