@@ -39,9 +39,9 @@ The customers for this software are the CS506 instructional staff and people nee
 | [**R16**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
 | [**R17**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
 | [**R18**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice.  |  high    | Done   |
-| [**R19**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Open   |
-| [**R20**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Open   |
-| [**R21**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Open   |
+| [**R19**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Done   |
+| [**R20**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Done   |
+| [**R21**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Done   |
 
 
 
