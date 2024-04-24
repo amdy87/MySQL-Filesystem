@@ -102,7 +102,14 @@ export default function FileContentView() {
           </Row>
         </Form>
       ) : (
-        <div style={{ marginTop: '10px', marginLeft: '15px' }}>
+        <div
+          style={{
+            marginTop: '10px',
+            marginLeft: '15px',
+            marginRight: '15px',
+            wordWrap: 'break-word',
+          }}
+        >
           {fileContent}
         </div>
       )}
