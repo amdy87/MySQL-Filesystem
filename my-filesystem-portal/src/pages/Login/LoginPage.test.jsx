@@ -75,7 +75,7 @@ describe('LoginPage', () => {
     });
     fireEvent.click(screen.getByText('Login'));
 
-    expect(global.alert).toHaveBeenCalledWith('please input the email');
+    expect(global.alert).toHaveBeenCalledWith('Please input your email');
   });
 
   it('navigates to sign up page when Sign Up is clicked', () => {
