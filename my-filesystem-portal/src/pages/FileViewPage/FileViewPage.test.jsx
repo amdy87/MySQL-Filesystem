@@ -61,7 +61,12 @@ describe('FileViewPage', () => {
 
   it('displays the file tree correctly', async () => {
     // Mock user data in local storage
-    const user = { id: '123', name: 'Test User', rootDirId: 'root' };
+    const user = {
+      id: '123',
+      name: 'Test User',
+      rootDirId: 'root',
+      role: 'USER',
+    };
     window.localStorage.setItem('user', JSON.stringify(user));
 
     // Mock getFileTree response to simulate a simple file tree
@@ -115,7 +120,12 @@ describe('FileViewPage', () => {
   });
 
   it('displays the switch user canvas when showCanvas is true', async () => {
-    const user = { id: '123', name: 'Test User', rootDirId: 'root' };
+    const user = {
+      id: '123',
+      name: 'Test User',
+      rootDirId: 'root',
+      role: 'ADMIN',
+    };
     window.localStorage.setItem('user', JSON.stringify(user));
 
     vi.mocked(getFileTree).mockResolvedValue({

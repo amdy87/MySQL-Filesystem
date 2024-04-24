@@ -41,7 +41,7 @@ export const treeControllers = {
         );
       }
 
-      if (currDir.ownerId != userId) {
+      if (!isAdmin && currDir.ownerId != userId) {
         throw errorHandler.UnauthorizedError(
           'User does not own this directory',
         );
