@@ -177,14 +177,14 @@ export default function FileViewPage() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      {displayedUser && user?.role === "ADMIN" ? (
+      {displayedUser && user?.role === 'ADMIN' ? (
         <SwitchUserCanvas
           show={showCanvas}
           currentUser={displayedUser}
           switchUser={switchUser}
           onClose={closeCanvas}
         ></SwitchUserCanvas>
-      ):(
+      ) : (
         <></>
       )}
       <Header
@@ -224,14 +224,15 @@ export default function FileViewPage() {
         ) : (
           <></>
         )}
-         {displayedUser && user?.role === "ADMIN" ? (
-        <Col md="auto" className="m-3">
-          <Button variant="primary" onClick={() => setShowCanvas(true)}>
-            Switch User
-          </Button>
-        </Col>):
-        <></>
-        }
+        {displayedUser && user?.role === 'ADMIN' ? (
+          <Col md="auto" className="m-3">
+            <Button variant="primary" onClick={() => setShowCanvas(true)}>
+              Switch User
+            </Button>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
       <Breadcrumb className="m-3">
         {tree ? (
