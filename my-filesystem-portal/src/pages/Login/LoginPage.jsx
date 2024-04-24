@@ -19,11 +19,11 @@ export default function LoginPage() {
   }, [navigate]);
   const onLogin = () => {
     if (email.length === 0) {
-      alert('please input the email');
+      alert('Please input your email');
       return;
     }
     if (password.length === 0) {
-      alert('please input the password');
+      alert('Please input your password');
       return;
     }
     login({ password, email }).then((data) => {

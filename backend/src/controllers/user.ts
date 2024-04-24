@@ -147,7 +147,7 @@ export const userControllers = {
       if (!checkPassword) {
         const message =
           'Please input a password ' +
-          'with the following credentials: ' +
+          'with the following requirements: ' +
           '8 or more characters, ' +
           'at least one uppercase letter, lowercase letter, and digit.';
         throw errorHandler.ValidationError(message);

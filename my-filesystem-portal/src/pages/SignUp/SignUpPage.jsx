@@ -23,11 +23,11 @@ export default function SignUpPage() {
 
   const onSignUp = () => {
     if (name.length === 0) {
-      alert('please input the name');
+      alert('Please input your name');
       return;
     }
     if (email.length === 0) {
-      alert('please input the email');
+      alert('Please input your email');
       return;
     }
     if (
@@ -35,12 +35,12 @@ export default function SignUpPage() {
       !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/.test(password)
     ) {
       alert(
-        'please input a password with the following credentials: 8 or more characters, at least one uppercase letter, lowercase letter, and digit',
+        'Please input a password with the following requirements: 8 or more characters, at least one uppercase letter, lowercase letter, and digit',
       );
       return;
     }
     if (password != passwordCheck) {
-      alert('the passwords inputed do not match');
+      alert('The passwords entered do not match');
       return;
     }
     signup({ name, email, password }).then((data) => {
