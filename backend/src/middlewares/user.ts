@@ -114,6 +114,7 @@ export const userExistByEmail = async (
         email: true,
         rootDirId: true,
         password: true,
+        role: true,
       },
     };
     if (!email) {

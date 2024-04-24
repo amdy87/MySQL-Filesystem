@@ -4,9 +4,10 @@
  */
 
 import { Response, Request, NextFunction } from 'express';
-import { Prisma, PermissionType } from '@prisma/client';
+import { Prisma, PermissionType, Role } from '@prisma/client';
 import { errorHandler } from '../utils/errorHandler';
 import { prisma } from '../connectPrisma';
+import { isA } from 'jest-mock-extended';
 
 /**
  * This middleware is called if token is valid
@@ -43,14 +44,20 @@ export const checkFileReadPerm = async (
       },
     });
     let canRead = false;
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+
     if (!file) {
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
-    file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.READ && Boolean(p.enabled) == true) {
-        canRead = true;
-      }
-    });
+    if (!isAdmin) {
+      file?.permissions.map((p: any) => {
+        if (p.type == PermissionType.READ && Boolean(p.enabled) == true) {
+          canRead = true;
+        }
+      });
+    } else {
+      canRead = true;
+    }
     if (!canRead) {
       throw errorHandler.UnauthorizedError(
         'User has no Read Permission on file',
@@ -100,21 +107,17 @@ export const checkFileWritePerm = async (
     if (!file) {
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
-    const isAdmin = await prisma.user.findUnique({
-      where: { id: parseInt(req.authenticatedUser.id) },
-      select: {
-        role: true,
-      },
-    });
 
-    file?.permissions.map((p: any) => {
-      if (
-        (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) ||
-        isAdmin
-      ) {
-        canWrite = true;
-      }
-    });
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
+    if (!isAdmin) {
+      file?.permissions.map((p: any) => {
+        if (p.type == PermissionType.WRITE && Boolean(p.enabled) == true) {
+          canWrite = true;
+        }
+      });
+    } else {
+      canWrite = true;
+    }
     console.log(`canWrite: ${canWrite}`);
     if (!canWrite) {
       throw errorHandler.UnauthorizedError(
@@ -161,14 +164,19 @@ export const checkFileExecutePerm = async (
       },
     });
     let canExecute = false;
+    const isAdmin = req.authenticatedUser?.role == Role.ADMIN;
     if (!file) {
       throw errorHandler.RecordNotFoundError('File does not exist');
     }
-    file?.permissions.map((p: any) => {
-      if (p.type == PermissionType.EXECUTE && Boolean(p.enabled) == true) {
-        canExecute = true;
-      }
-    });
+    if (!isAdmin) {
+      file?.permissions.map((p: any) => {
+        if (p.type == PermissionType.EXECUTE && Boolean(p.enabled) == true) {
+          canExecute = true;
+        }
+      });
+    } else {
+      canExecute = true;
+    }
     if (!canExecute) {
       throw errorHandler.UnauthorizedError(
         'User has no EXECUTE Permission on file',

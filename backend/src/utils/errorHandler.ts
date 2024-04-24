@@ -117,6 +117,7 @@ export const errorHandler = {
   },
 
   handleError: (error: Error, res: Response) => {
+    console.log(error);
     if (Object.values(ERROR).includes(error.name)) {
       res.status(error.status);
       res.json({

@@ -36,7 +36,12 @@ const router = express.Router();
  *
  */
 
-router.post('/add', directoryControllers.addDirectory);
+router.post(
+  '/add',
+  authAccessToken,
+  checkDirWritePerm,
+  directoryControllers.addDirectory,
+);
 
 /**
  * Get a list of all directories owned by a user
@@ -81,15 +86,13 @@ router.get(
  *  @field name (string)
  *  @description name of the file
  *
- *  @optional
- *  @field path (string)
- *  @description absolute path of the file
  *
  *  @optional
  *  @field parentId (number)
  *  @description directoryId of the parent directory
  *
- *
+ *  @optional
+ *  @field permissions (object)
  */
 
 router.post(
