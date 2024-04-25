@@ -27,12 +27,13 @@ export default function FileTableRow({
   // On file or directory click
   const click = () => {
     // If file type is directory, go inside directory
-    if (fileType == 'directory') {
+    if (fileType == 'directory' && permissions.read) {
       clickDirectory(fileName, id, permissions, updatedAt);
-    } else {
-      console.log(userId);
+    } else if (permissions.read) {
       // Navigates to the file view page for that file
       navigate(`/content/${userId}/${id}`);
+    } else {
+      alert(`You do not have read access to this ${fileType}`);
     }
   };
 
@@ -104,6 +105,7 @@ export default function FileTableRow({
                 }
               : {}
           }
+          role="link"
         >
           {fileName}
         </a>
