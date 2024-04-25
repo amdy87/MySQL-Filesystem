@@ -83,6 +83,14 @@ describe('FileContentView', () => {
     expect(screen.getByText('Updated content')).toBeInTheDocument();
   });
 
+  it('edit button is hidden while editing', async () => {
+    render(<FileContentView />);
+    fireEvent.click(await screen.findByText('Edit File'));
+    await waitFor(() => {
+      expect(screen.queryByText('Edit File')).not.toBeInTheDocument();
+    });
+  });
+
   it('exits edit mode and does not update content on cancel', async () => {
     render(<FileContentView />);
     fireEvent.click(await screen.findByText('Edit File'));
