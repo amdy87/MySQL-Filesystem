@@ -75,9 +75,11 @@ export default function FileContentView() {
         <Col md="auto" className="m-3">
           <Button onClick={onClickBackPage}>Back</Button>
         </Col>
-        <Col md="auto" className="m-3">
-          <Button onClick={onClickEdit}>Edit File</Button>
-        </Col>
+        {!isEditing && (
+          <Col md="auto" className="m-3">
+            <Button onClick={onClickEdit}>Edit File</Button>
+          </Col>
+        )}
       </Row>
       {isEditing ? (
         <Form>
