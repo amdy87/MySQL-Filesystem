@@ -14,7 +14,7 @@ import { deleteDirsByOwner } from './directory';
 import { directoryControllers } from './directory';
 import { User } from '../utils/user';
 import { errorHandler } from '../utils/errorHandler';
-import { TOKEN } from '../utils/constants';
+import { TOKEN, validateEmail } from '../utils/constants';
 import { Role } from '../utils/constants';
 import { JWT_SECRET } from '../utils/constants';
 import { validatePassword } from '../utils/constants';
@@ -143,6 +143,11 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
+      const checkEmail = validateEmail(email);
+      if (!checkEmail) {
+        const message = 'Please input a valid email';
+        throw errorHandler.ValidationError(message);
+      }
       const checkPassword = validatePassword(password);
       if (!checkPassword) {
         const message =
