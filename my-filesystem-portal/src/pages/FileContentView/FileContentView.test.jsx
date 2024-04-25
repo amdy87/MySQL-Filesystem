@@ -16,7 +16,14 @@ vi.mock('react-router-dom', async () => {
 vi.mock('../../api/file', () => ({
   collectUserContent: vi.fn(() =>
     Promise.resolve({
-      files: [{ id: 2, name: 'Test File', content: 'This is test content.' }],
+      files: [
+        {
+          id: 2,
+          path: './Test/Test File',
+          name: 'Test File',
+          content: 'This is test content.',
+        },
+      ],
     }),
   ),
   updateFile: vi.fn(() => Promise.resolve({ message: 'Update successful' })),
@@ -28,6 +35,9 @@ describe('FileContentView', () => {
 
     // Check if file name is displayed
     expect(await screen.findByText('Test File')).toBeInTheDocument();
+
+    // Check if file path is displayed
+    expect(await screen.findByText('./Test/Test File')).toBeInTheDocument();
 
     // Check if file content is displayed
     expect(

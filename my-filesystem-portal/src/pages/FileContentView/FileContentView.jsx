@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function FileContentView() {
   const { userId, fileId } = useParams();
+  const [filePath, setFilePath] = useState('');
   const [fileContent, setFileContent] = useState('');
   const [fileEditContent, setFileEditContent] = useState('');
   const [fileName, setFileName] = useState('');
@@ -25,6 +26,7 @@ export default function FileContentView() {
           setFileContent(file.content);
           setFileEditContent(file.content);
           setFileName(file.name);
+          setFilePath(file.path);
         }
       } catch (error) {
         console.error('Failed to fetch file content:', error);
@@ -70,7 +72,10 @@ export default function FileContentView() {
       <Header style={{ width: 50 }}></Header>
       <Row style={{ borderBottom: '1px solid rgba(0,0,0,0.2)' }}>
         <Col className="m-3">
-          <h1>{fileName}</h1>
+          <Row>
+            <h6>{filePath}</h6>
+            <h1>{fileName}</h1>
+          </Row>
         </Col>
         <Col md="auto" className="m-3">
           <Button onClick={onClickBackPage}>Back</Button>
