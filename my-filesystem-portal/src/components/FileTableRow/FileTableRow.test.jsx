@@ -24,6 +24,7 @@ describe('FileTableRow', () => {
   beforeAll(() => {
     // mock the timezone so it display the same time in all environments
     timezoneMock.register('UTC');
+    global.alert = vi.fn();
   });
 
   afterAll(() => {
@@ -95,5 +96,74 @@ describe('FileTableRow', () => {
 
     expect(deleteDirectory).toHaveBeenCalledWith({ directoryId: '456' });
     expect(mockRefresh).toHaveBeenCalled();
+  });
+
+  it('Rename popup is called when rename button is clicked', async () => {
+    render(
+      <table>
+        <tbody>
+          <FileTableRow {...fileProps} />
+        </tbody>
+      </table>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Rename' }));
+    expect(screen.getByText('New Name:')).toBeInTheDocument();
+  });
+
+  it('Permissions Popup is called when change permissions is clicked', async () => {
+    render(
+      <table>
+        <tbody>
+          <FileTableRow {...fileProps} />
+        </tbody>
+      </table>,
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Change Permission' }),
+    );
+    expect(screen.getByText('Close')).toBeInTheDocument();
+  });
+
+  it('Cannot open a file when you do not have read access', async () => {
+    const falseReadFileProps = {
+      ...fileProps,
+      permissions: { read: false, write: true, execute: false },
+    };
+    render(
+      <table>
+        <tbody>
+          <FileTableRow {...falseReadFileProps} />
+        </tbody>
+      </table>,
+    );
+
+    await userEvent.click(screen.getByRole('link', { name: 'test-file' }));
+    expect(global.alert).toHaveBeenCalledWith(
+      'You do not have read access to this file',
+    );
+  });
+
+  it('Cannot open a directory when you do not have read access', async () => {
+    const falseReadDirProps = {
+      ...fileProps,
+      fileName: 'testDirectory',
+      fileType: 'directory',
+      permissions: { read: false, write: true, execute: false },
+    };
+
+    render(
+      <table>
+        <tbody>
+          <FileTableRow {...falseReadDirProps} />
+        </tbody>
+      </table>,
+    );
+
+    await userEvent.click(screen.getByRole('link', { name: 'testDirectory' }));
+    expect(global.alert).toHaveBeenCalledWith(
+      'You do not have read access to this directory',
+    );
   });
 });
