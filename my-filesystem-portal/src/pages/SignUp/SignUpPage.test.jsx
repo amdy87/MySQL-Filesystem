@@ -92,4 +92,42 @@ describe('SignUpPage Component', () => {
     expect(signup).not.toHaveBeenCalled();
     expect(mockedNavigate).not.toHaveBeenCalled();
   });
+
+  const invalidEmails = ['Fredwisc.edu', 'Fred@', '@wisc.edu', 'Fred@wiscedu'];
+  invalidEmails.forEach((email) => {
+    it('does not submit form when invalid email is inputed', async () => {
+      render(<SignUpPage />);
+      await userEvent.type(screen.getByLabelText('Name'), 'Fred');
+      await userEvent.type(screen.getByLabelText('Email'), email);
+      await userEvent.type(screen.getByLabelText('Password'), 'Password123');
+      await userEvent.type(
+        screen.getByLabelText('Retype Password'),
+        'Password123',
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+      expect(signup).not.toHaveBeenCalled();
+      expect(mockedNavigate).not.toHaveBeenCalled();
+    });
+  });
+
+  const invalidPasswords = ['abcDefg&', 'ABCDEFG5&', 'abcdefg5&', 'Ab84cD'];
+  invalidPasswords.forEach((password) => {
+    it('does not submit form when invalid email is inputed', async () => {
+      render(<SignUpPage />);
+      await userEvent.type(screen.getByLabelText('Name'), 'Fred');
+      await userEvent.type(screen.getByLabelText('Email'), 'Fred@test.com');
+      await userEvent.type(screen.getByLabelText('Password'), password);
+      await userEvent.type(
+        screen.getByLabelText('Retype Password'),
+        'Password123',
+      );
+
+      await userEvent.click(screen.getByRole('button', { name: /sign up/i }));
+
+      expect(signup).not.toHaveBeenCalled();
+      expect(mockedNavigate).not.toHaveBeenCalled();
+    });
+  });
 });

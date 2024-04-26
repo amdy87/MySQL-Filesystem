@@ -27,12 +27,19 @@ export default function SignUpPage() {
       return;
     }
     if (email.length === 0) {
-      alert('Please input your email');
+      alert('Please input email');
+    }
+    if (!(email.length >= 5 && /(?=.*.+@.+\..+)/.test(email))) {
+      alert('Please input valid email');
+      return;
+    }
+    if (password.length === 0) {
+      alert('Please input password');
       return;
     }
     if (
       password.length < 8 ||
-      !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/.test(password)
+      !/(?=.*[A-Z]+)(?=.*[a-z]+)(?=.*\d+)/.test(password)
     ) {
       alert(
         'Please input a password with the following requirements: 8 or more characters, at least one uppercase letter, lowercase letter, and digit',
