@@ -11,6 +11,11 @@ export default function FileContentView() {
   const [fileEditContent, setFileEditContent] = useState('');
   const [fileName, setFileName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [permission, setPermission] = useState({
+    read: false,
+    write: false,
+    execute: false,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +32,7 @@ export default function FileContentView() {
           setFileEditContent(file.content);
           setFileName(file.name);
           setFilePath(file.path);
+          setPermission(file.permissions);
         }
       } catch (error) {
         console.error('Failed to fetch file content:', error);
@@ -80,13 +86,13 @@ export default function FileContentView() {
         <Col md="auto" className="m-3">
           <Button onClick={onClickBackPage}>Back</Button>
         </Col>
-        {!isEditing && (
+        {permission.write && !isEditing && (
           <Col md="auto" className="m-3">
             <Button onClick={onClickEdit}>Edit File</Button>
           </Col>
         )}
       </Row>
-      {isEditing ? (
+      {permission.write && isEditing ? (
         <Form>
           <Form.Group className="mb-3" controlId="form.fileContent">
             <Form.Label></Form.Label>
