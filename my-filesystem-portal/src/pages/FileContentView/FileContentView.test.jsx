@@ -13,24 +13,51 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('../../api/file', () => ({
-  collectUserContent: vi.fn(() =>
-    Promise.resolve({
-      files: [
-        {
-          id: 2,
-          path: './Test/Test File',
-          name: 'Test File',
-          content: 'This is test content.',
-        },
-      ],
-    }),
-  ),
-  updateFile: vi.fn(() => Promise.resolve({ message: 'Update successful' })),
-}));
-
 describe('FileContentView', () => {
+  it('edit button is hidden when user does not have write permissions', async () => {
+    vi.mock('../../api/file', () => ({
+      collectUserContent: vi.fn(() =>
+        Promise.resolve({
+          files: [
+            {
+              id: 2,
+              path: './Test/Test File',
+              name: 'Test File',
+              content: 'This is test content',
+              permissions: { read: true, write: false, execute: true },
+            },
+          ],
+        }),
+      ),
+      updateFile: vi.fn(() =>
+        Promise.resolve({ message: 'Update successful' }),
+      ),
+    }));
+    render(<FileContentView />);
+    expect(screen.queryByText('Edit File')).not.toBeInTheDocument();
+    expect(screen.queryByText('Confirm')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
+  });
+
   it('displays file content correctly after fetching', async () => {
+    vi.mock('../../api/file', () => ({
+      collectUserContent: vi.fn(() =>
+        Promise.resolve({
+          files: [
+            {
+              id: 2,
+              path: './Test/Test File',
+              name: 'Test File',
+              content: 'This is test content.',
+              permissions: { read: true, write: true, execute: true },
+            },
+          ],
+        }),
+      ),
+      updateFile: vi.fn(() =>
+        Promise.resolve({ message: 'Update successful' }),
+      ),
+    }));
     render(<FileContentView />);
 
     // Check if file name is displayed
