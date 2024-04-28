@@ -9,7 +9,7 @@ const NameDirectoryPopup = ({ isOpen, onClose, onDirCreation }) => {
     e.preventDefault();
     onDirCreation(dirName);
     onClose();
-    setDirName('')
+    setDirName('');
   };
 
   if (!isOpen) return null;
