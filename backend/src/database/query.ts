@@ -146,7 +146,7 @@ async function readFile(userId: number) {
   }
 }
 /**
- * 
+ *
  * @param fileId : number
  * @returns permissions for the specified file
  */
@@ -168,7 +168,7 @@ async function listPermsForFile(fileId: number) {
   }
 }
 /**
- * 
+ *
  * @param directoryId : number
  * @returns permissions for the specified directory
  */
@@ -190,7 +190,7 @@ async function listPermsForDirectory(directoryId: number) {
   }
 }
 /**
- * 
+ *
  * @param userId : number
  * @returns permissions for the specified user
  */
