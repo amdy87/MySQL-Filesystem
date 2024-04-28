@@ -35,7 +35,12 @@ export default function FileContentView() {
           setFileEditContent(file.content);
           setFileName(file.name);
           setFilePath(file.path);
-          setPermission(file.permissions);
+          const filePerms = {
+            read: file.permissions[0].enabled,
+            write: file.permissions[1].enabled,
+            execute: file.permissions[2].enabled,
+          };
+          setPermission(filePerms);
         }
       } catch (error) {
         console.error('Failed to fetch file content:', error);
