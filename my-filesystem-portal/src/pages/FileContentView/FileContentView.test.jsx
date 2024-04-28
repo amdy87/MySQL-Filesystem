@@ -25,7 +25,7 @@ describe('FileContentView', () => {
               path: './Test/Test File',
               name: 'Test File',
               content: 'This is test content',
-              permissions: { read: true, write: false, execute: true },
+              permissions: permissionsAllTrue,
             },
           ],
         }),
@@ -54,7 +54,7 @@ describe('FileContentView', () => {
               path: './Test/Test File',
               name: 'Test File',
               content: 'This is test content.',
-              permissions: { read: true, write: true, execute: true },
+              permissions: permissionsAllTrue,
             },
           ],
         }),
@@ -173,3 +173,30 @@ describe('FileContentView', () => {
     expect(screen.getByText('This is test content.')).toBeInTheDocument();
   });
 });
+
+const permissionsAllTrue = [
+  {
+    id: 289,
+    type: 'READ',
+    userId: 47,
+    enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+  {
+    id: 290,
+    type: 'WRITE',
+    userId: 47,
+    enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+  {
+    id: 291,
+    type: 'EXECUTE',
+    userId: 47,
+    enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+];
