@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { useNavigate } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import FileContentView from './FileContentView';
 
 // Setup mocks for react-router-dom and API call
@@ -33,7 +34,11 @@ describe('FileContentView', () => {
         Promise.resolve({ message: 'Update successful' }),
       ),
     }));
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     expect(screen.queryByText('Edit File')).not.toBeInTheDocument();
     expect(screen.queryByText('Confirm')).not.toBeInTheDocument();
     expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
@@ -58,7 +63,11 @@ describe('FileContentView', () => {
         Promise.resolve({ message: 'Update successful' }),
       ),
     }));
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
 
     // Check if file name is displayed
     expect(await screen.findByText('Test File')).toBeInTheDocument();
@@ -73,7 +82,11 @@ describe('FileContentView', () => {
   });
 
   it('enables edit mode when edit button is clicked', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     expect(await screen.findByText('Confirm')).toBeInTheDocument();
   });
@@ -89,7 +102,11 @@ describe('FileContentView', () => {
     };
 
   it('handles input change correctly', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     const textarea = await screen.findByRole('textbox');
     fireEvent.change(textarea, { target: { value: 'Updated content' } });
@@ -97,7 +114,11 @@ describe('FileContentView', () => {
   });
 
   it('blocks user submitting too large an edit with alert', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     const longString =
       'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
@@ -109,7 +130,11 @@ describe('FileContentView', () => {
   });
 
   it('updates content and exits edit mode on confirm', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     const textarea = await screen.findByRole('textbox');
     fireEvent.change(textarea, { target: { value: 'Updated content' } });
@@ -121,7 +146,11 @@ describe('FileContentView', () => {
   });
 
   it('edit button is hidden while editing', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     await waitFor(() => {
       expect(screen.queryByText('Edit File')).not.toBeInTheDocument();
@@ -129,7 +158,11 @@ describe('FileContentView', () => {
   });
 
   it('exits edit mode and does not update content on cancel', async () => {
-    render(<FileContentView />);
+    render(
+      <BrowserRouter>
+        <FileContentView />
+      </BrowserRouter>,
+    );
     fireEvent.click(await screen.findByText('Edit File'));
     const textarea = await screen.findByRole('textbox');
     fireEvent.change(textarea, { target: { value: 'Updated content' } });

@@ -19,6 +19,7 @@ export default function FileTableRow({
   updatedAt,
   clickDirectory,
   refresh,
+  tree,
 }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPermissionPopup, setShowPermissionPopup] = useState(false);
@@ -29,9 +30,10 @@ export default function FileTableRow({
     // If file type is directory, go inside directory
     if (fileType == 'directory' && permissions.read) {
       clickDirectory(fileName, id, permissions, updatedAt);
+
+      // Navigates to the file view page for that file and carries current tree path
     } else if (permissions.read) {
-      // Navigates to the file view page for that file
-      navigate(`/content/${userId}/${id}`);
+      navigate(`/content/${userId}/${id}`, { state: { tree } });
     } else {
       alert(`You do not have read access to this ${fileType}`);
     }
@@ -65,7 +67,6 @@ export default function FileTableRow({
 
   // delete file or directory and refresh the page
   const onClickDelete = () => {
-    console.log(fileType);
     if (fileType != 'directory') {
       if (confirm('Are you sure you want to delete this file?')) {
         deleteFile({ fileId: id }).then(() => {
