@@ -97,12 +97,15 @@ const getFilesByParentDir = async (directoryId: number) => {
  */
 const updateDirectory = async (dir: DbDirectory, res: Response) => {
   try {
+    const updatedAt = new Date(dir.metadata.updatedAt);
+
     const updatedDirectory = await prisma.directory.update({
       where: { id: dir.id },
       data: {
         ownerId: dir.ownerId,
         name: dir.name,
         parentId: dir.parentId,
+        updatedAt: updatedAt,
       },
       select: {
         id: true,

@@ -23,6 +23,8 @@ const updateFile = async (file: DbFile, res: Response) => {
   try {
     await updateFilePermissions(file, res);
 
+    const updatedAt = new Date(file.metadata.updatedAt);
+
     const updatedFile = await prisma.file.update({
       where: { id: file.id },
       data: {
@@ -31,6 +33,7 @@ const updateFile = async (file: DbFile, res: Response) => {
         parentId: file.parentId,
         content: file.content,
         path: file.path,
+        updatedAt: updatedAt,
       },
       select: {
         id: true,
