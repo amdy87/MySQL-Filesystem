@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, waitFor, screen, fireEvent } from '@testing-library/react';
 import { getFileTree } from '@api/file'; // Import mocked API
+import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import FileViewPage from './FileViewPage';
 
@@ -95,7 +96,11 @@ describe('FileViewPage', () => {
       id: 1,
     });
 
-    render(<FileViewPage />);
+    render(
+      <BrowserRouter>
+        <FileViewPage />
+      </BrowserRouter>,
+    );
 
     await waitFor(() => {
       // Check for the directories and files rendered
@@ -136,7 +141,11 @@ describe('FileViewPage', () => {
       id: 1,
     });
 
-    render(<FileViewPage />);
+    render(
+      <BrowserRouter>
+        <FileViewPage />
+      </BrowserRouter>,
+    );
     fireEvent.click(screen.getByText('Switch User'));
     await waitFor(() => {
       expect(screen.getByTestId('switch-user-canvas')).toBeInTheDocument();

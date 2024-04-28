@@ -6,12 +6,14 @@ import {
   Button,
   Col,
 } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import { Header, FileTableRow, SwitchUserCanvas } from '@components';
 import DirectoryCreationButton from '../../components/DirectoryCreation/DirectoryCreationButton';
 import { useCallback, useEffect, useState } from 'react';
 import { getFileTree, sendFile } from '@api/file';
 
 export default function FileViewPage() {
+  const location = useLocation();
   const [tree, setTree] = useState();
   const [displayedFiles, setDisplayedFiles] = useState();
   const [user, setUser] = useState();
@@ -96,16 +98,21 @@ export default function FileViewPage() {
 
   // set the user state from the local storage
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('user')));
-    setDisplayedUser(JSON.parse(localStorage.getItem('user')));
+    const userData = JSON.parse(localStorage.getItem('user'));
+    setUser(userData);
+    setDisplayedUser(userData);
   }, []);
 
   // Update the file tree when the user state changes
   useEffect(() => {
     if (displayedUser) {
-      getInitialFileTree();
+      if (location.state?.tree) {
+        setTree(location.state.tree);
+      } else {
+        getInitialFileTree();
+      }
     }
-  }, [displayedUser, getInitialFileTree]);
+  }, [displayedUser, getInitialFileTree, location.state]);
 
   // Update the displayed files when the tree changes
   useEffect(() => {
@@ -172,8 +179,6 @@ export default function FileViewPage() {
   const closeCanvas = () => {
     setShowCanvas(false);
   };
-  console.log(user);
-  // console.log(user.role === "ADMIN");
 
   return (
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
@@ -283,6 +288,7 @@ export default function FileViewPage() {
                       {...file}
                       clickDirectory={clickDirectory}
                       refresh={updateFileTree}
+                      tree={tree}
                     ></FileTableRow>
                   );
                 })

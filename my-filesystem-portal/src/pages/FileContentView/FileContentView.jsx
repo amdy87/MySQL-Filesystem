@@ -1,10 +1,14 @@
 import { Header } from '@components';
 import { Button, Row, Col, Form } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { collectUserContent, updateFile } from '../../api/file';
 import React, { useState, useEffect } from 'react';
 
 export default function FileContentView() {
+  const location = useLocation();
+  const treeFromParams = location.state?.tree;
+  const navigate = useNavigate();
+
   const { userId, fileId } = useParams();
   const [filePath, setFilePath] = useState('');
   const [fileContent, setFileContent] = useState('');
@@ -16,7 +20,6 @@ export default function FileContentView() {
     write: false,
     execute: false,
   });
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +73,8 @@ export default function FileContentView() {
 
   // Navagates back to file tree view when clicked
   const onClickBackPage = () => {
-    navigate('/file', { replace: true });
+    // Navigate back to the previous directory using the passed tree state
+    navigate('/file', { state: { tree: treeFromParams }, replace: true });
   };
 
   return (
