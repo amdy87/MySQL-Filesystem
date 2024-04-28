@@ -145,7 +145,11 @@ async function readFile(userId: number) {
     throw e;
   }
 }
-
+/**
+ * 
+ * @param fileId : number
+ * @returns permissions for the specified file
+ */
 async function listPermsForFile(fileId: number) {
   try {
     const perms = await prisma.file.findUnique({
@@ -163,7 +167,11 @@ async function listPermsForFile(fileId: number) {
     throw e;
   }
 }
-
+/**
+ * 
+ * @param directoryId : number
+ * @returns permissions for the specified directory
+ */
 async function listPermsForDirectory(directoryId: number) {
   try {
     const perms = await prisma.directory.findUnique({
@@ -181,7 +189,11 @@ async function listPermsForDirectory(directoryId: number) {
     throw e;
   }
 }
-
+/**
+ * 
+ * @param userId : number
+ * @returns permissions for the specified user
+ */
 async function listPermsForUser(userId: number) {
   try {
     const perms = await prisma.permission.findMany({
