@@ -114,7 +114,7 @@ describe('SignUpPage Component', () => {
 
   const invalidPasswords = ['abcDefg&', 'ABCDEFG5&', 'abcdefg5&', 'Ab84cD'];
   invalidPasswords.forEach((password) => {
-    it('does not submit form when invalid email is inputed', async () => {
+    it('does not submit form when invalid password is inputed', async () => {
       render(<SignUpPage />);
       await userEvent.type(screen.getByLabelText('Name'), 'Fred');
       await userEvent.type(screen.getByLabelText('Email'), 'Fred@test.com');
