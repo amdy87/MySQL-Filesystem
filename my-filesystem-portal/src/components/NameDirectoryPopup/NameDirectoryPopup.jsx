@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import '../Popup.css';
 
 const NameDirectoryPopup = ({ isOpen, onClose, onDirCreation }) => {
-  const [dirName, setDirName] = useState('New-Directory');
+  const [dirName, setDirName] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onDirCreation(dirName);
     onClose();
+    setDirName('')
   };
 
   if (!isOpen) return null;
