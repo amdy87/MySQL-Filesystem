@@ -22,26 +22,28 @@ The customers for this software are the CS506 instructional staff and people nee
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | [**R01**](#111)  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
-| [**R02**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
-| [**R03**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
-| [**R04**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
-| [**R05**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Done   |
-| [**R06**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
-| [**R07**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
-| [**R08**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
-| [**R09**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
-| [**R10**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Done   |
-| [**R11**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
-| [**R12**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
-| [**R13**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
-| [**R14**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
-| [**R15**](#126)  | The system must securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
-| [**R16**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
-| [**R17**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
-| [**R18**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice.  |  high    | Done   |
-| [**R19**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Done   |
-| [**R20**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Done   |
-| [**R21**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Done   |
+| [**R02**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice.  |  high    | Done   |
+| [**R03**](#166)  | The system will has two types of users, `USER`, and  `ADMIN`. When a new user sign up, the system assign a user ROLE, `USER` by default. `ADMIN` user ROLE is assigned internally, which means only internal developers can grant this ROLE from the database level.   |  high    | Done   |
+| [**R04**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
+| [**R05**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
+| [**R06**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
+| [**R07**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
+| [**R08**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Done   |
+| [**R09**](#167)  |  The system will assign READ/WRITE/EXECUTE permissions for new files and directories when they are created |  high  | Done   |
+| [**R10**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
+| [**R11**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
+| [**R12**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
+| [**R13**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
+| [**R14**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Done   |
+| [**R15**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
+| [**R16**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
+| [**R17**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
+| [**R18**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Done   |
+| [**R19**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Done   |
+| [**R20**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Done   |
+| [**R21**](#126)  | The system must securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
+| [**R22**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
+| [**R23**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
 
 
 
@@ -195,26 +197,25 @@ default a regular "USER".
 ### User-Requirements Traceability
 | Requirements  | User stories |
 | ------------  | ------------ |
-| [**R05**](#115)  | [U01-U04](#file-creation)  |
-| [**R06**](#116) | [U05](#file-deletion)  |
-| [**R08**](#118)  | [U06](#file-reading)  |
-| [**R02**](#112)  | [U07-U09](#file-editing) |
-| [**R10**](#120) , [**R12**](#122)  | [U10](#file-metadata) |
-| [**R03**](#113) , [**R08**](#118), [**R04**](#114) | [U11-U12](#navigation)  |
 | [**R01**](#111) , | [U13-U15](#login)|
-| [**R18**](#146) | [U16-U19](#user-creation)|
-| [**R07**](#117)| [U20-U22](#file-renaming) |
-| [**R09**](#119)   | [U23-U24](#logout) |
-| [**R16**](#127)  | [U26-U28](#account-deletion) |
-| [**R11**](#121)  | [U29-U31](#permission-update) |
-| [**R12**](#122)  | [U32](#permission-view) |
-| [**R14**](#125)  | [U23-U24](#file-import) |
-| [**R17**](#128) | [U32](#project-documentation) |
-| [**R19**](#148) ,[**R20**](#149), [**R21**](#150)  | [U33-U35](#admin-user-capabilities) |
-| [**R15**](#126) | [Security](#security-requirements) |
-| [**R06**](#user-requirements) | [Style](#user-interface-requirements) |
+| [**R2**](#146),[**R3**](#166),[**R05**](#113) | [U16-U19](#user-creation)|
+| [**R04**](#125)  | [U23-U24](#file-import) |
+| [**R05**](#112)  | [U07-U09](#file-editing) |
+| [**R07**](#114) ,[**R16**](#122)  | [U32](#permission-view) |
+| [**R08**](#115) ,[**R09**](#167)  | [U01-U04](#file-creation)  |
+| [**R10**](#116) | [U05](#file-deletion)  |
+| [**R11**](#117)| [U20-U22](#file-renaming) |
+| [**R12**](#118)  | [U06](#file-reading)  |
+| [**R12**](#118) | [U11-U12](#navigation)  |
+| [**R15**](#121)  | [U29-U31](#permission-update) |
+| [**R14**](#120) , [**R16**](#122)  | [U10](#file-metadata) |
+| [**R12**](#119)   | [U23-U24](#logout) |
+| [**R17**](#124) | [System Requirements](#system-requirements) |
+| [**R18**](#148) ,[**R19**](#149), [**R20**](#150)  | [U33-U35](#admin-user-capabilities) |
+| [**R21**](#126) | [Security](#security-requirements) |
+| [**R22**](#127)  | [U26-U28](#account-deletion) |
+| [**R23**](#128) | [U32](#project-documentation) |
 | [**R09**](#user-requirements) | [Permissions Class](#class-diagram) |
-| [**R13**](#124) | [System Requirements](#system-requirements) |
 
 
 
