@@ -22,6 +22,10 @@ export default function LoginPage() {
       alert('Please input your email');
       return;
     }
+    if (!(email.length < 3 || /(?=.*.+@.+\..+)/.test(email))) {
+      alert('Please input a valid email');
+      return;
+    }
     if (password.length === 0) {
       alert('Please input your password');
       return;
