@@ -143,11 +143,15 @@ export const userControllers = {
     try {
       let user: Prisma.UserCreateInput;
       const { name, email, password } = req.body;
+
+      // Validate the email
       const checkEmail = validateEmail(email);
       if (!checkEmail) {
         const message = 'Please input a valid email';
         throw errorHandler.ValidationError(message);
       }
+
+      // Validate the password
       const checkPassword = validatePassword(password);
       if (!checkPassword) {
         const message =

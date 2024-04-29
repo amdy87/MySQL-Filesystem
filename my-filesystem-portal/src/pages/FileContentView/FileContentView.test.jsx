@@ -25,7 +25,7 @@ describe('FileContentView', () => {
               path: './Test/Test File',
               name: 'Test File',
               content: 'This is test content',
-              permissions: permissionsAllTrue,
+              permissions: permissionsWriteFalse,
             },
           ],
         }),
@@ -39,8 +39,13 @@ describe('FileContentView', () => {
         <FileContentView />
       </BrowserRouter>,
     );
+    // Check if Edit File buttom isn't displayed
     expect(screen.queryByText('Edit File')).not.toBeInTheDocument();
+
+    // Check if Confirm Button isn't displayed
     expect(screen.queryByText('Confirm')).not.toBeInTheDocument();
+
+    // Check if Cancel button isnt displayed
     expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
   });
 
@@ -188,6 +193,33 @@ const permissionsAllTrue = [
     type: 'WRITE',
     userId: 47,
     enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+  {
+    id: 291,
+    type: 'EXECUTE',
+    userId: 47,
+    enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+];
+
+const permissionsWriteFalse = [
+  {
+    id: 289,
+    type: 'READ',
+    userId: 47,
+    enabled: true,
+    directoryId: null,
+    fileId: 17,
+  },
+  {
+    id: 290,
+    type: 'WRITE',
+    userId: 47,
+    enabled: false,
     directoryId: null,
     fileId: 17,
   },

@@ -21,6 +21,7 @@ export default function FileContentView() {
     execute: false,
   });
 
+  // Get the data of the file being viewed
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,6 +42,7 @@ export default function FileContentView() {
             execute: file.permissions[2].enabled,
           };
           setPermission(filePerms);
+          console.log('write permissions:', file.permissions[0].enabled);
         }
       } catch (error) {
         console.error('Failed to fetch file content:', error);
@@ -60,7 +62,7 @@ export default function FileContentView() {
   };
 
   const onConfirmEdit = () => {
-    // prevent user from creating a file larger than our server will handle
+    // Prevent user from creating a file larger than our server will handle
     if (fileEditContent.length > 175) {
       alert(
         `File length too long. Only 175 characters are supported and you have ${fileEditContent.length}`,
