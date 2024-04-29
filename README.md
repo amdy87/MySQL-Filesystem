@@ -6,41 +6,36 @@ MyFilesystem
 
 ## Project Abstract
 
-
-This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, file type, last updated). Users will be required to log in and will only be able to view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in the file system in a tree structure.
+This project will implement a MySQL-based filesystem that will allow users to manage their files like they would in the file system in a typical operating system. Using React, Express, and Prisma with MySQL as the underlying storage layer, it will provide a web interface for users to create, read, update, and delete files, directories or subdirectories. They will be able to view any associated file metadata (e.g. permissions, file type, last updated). Users will be required to log in and will only be able to view/update files that they have the required permissions for. Additionally, using the web interface, users will be able to visualize all directories and files in their file system in a tree structure.
 
 ## Customer
 
-<!--A brief description of the customer for this software, both in general (the population who might eventually use such a system) and specifically for this document (the customer(s) who informed this document). Every project will have a customer from the CS506 instructional staff. Requirements should not be derived simply from discussion among team members. Ideally your customer should not only talk to you about requirements but also be excited later in the semester to use the system.-->
-The customers for this software are the CS506 instructional staff and people needing/desiring a web based file system.
+The customers for this software are the CS506 instructional staff as well as people needing/desiring a web based file system.
 
 ### User Requirements
-
-<!--This section lists the behavior that the users see. This information needs to be presented in a logical, organized fashion. It is most helpful if this section is organized in outline form: a bullet list of major topics (e.g., one for each kind of user, or each major piece of system functionality) each with some number of subtopics.-->
-
 
 | ID   | Description                                                  | Priority | Status |
 | ---- | ------------------------------------------------------------ | -------- | ------ |
 | [**R01**](#111)  | The system will provide a login page for users to access their account using a username and password. |   high   | Done   |
 | [**R02**](#146)  | The system will provide a signup page for users to create an account. No user with the same email can be used to create an account more than once. The system asks the user to input password twice.  |  high    | Done   |
-| [**R03**](#166)  | The system will has two types of users, `USER`, and  `ADMIN`. When a new user sign up, the system assign a user ROLE, `USER` by default. `ADMIN` user ROLE is assigned internally, which means only internal developers can grant this ROLE from the database level.   |  high    | Done   |
+| [**R03**](#166)  | The system will has two types of users, `USER`, and  `ADMIN`. When a new user signs up, the system assigns the ROLE, `USER` by default. `ADMIN` user ROLE is assigned internally, which means only internal developers can grant this ROLE from the database level.   |  high    | Done   |
 | [**R04**](#125)  | The system will be able to handle file uploads for both empty and non-empty files. |  medium    | Done   |
-| [**R05**](#112)  | The system will provide an interface to users for editing the contents of a file they have write permission for (add and delete text). |   low   | Done   |
-| [**R06**](#113)  |  The system will create a root directory for a new User when they first signup   | high | Done   |
-| [**R07**](#114)  |  The system will permit users READ/WRITE/EXECUTE permissions for the root directory when the user first signup |  high   | Done   |
+| [**R05**](#112)  | The system will provide an interface to allow users to edit the contents of a file they have WRITE permission for (add and delete text). |   low   | Done   |
+| [**R06**](#113)  |  The system will create a root directory for a new User when they first sign up   | high | Done   |
+| [**R07**](#114)  |  The system will grant users READ/WRITE/EXECUTE permissions for the root directory when the user first signs up |  high   | Done   |
 | [**R08**](#115)  |  The system will permit users to create new files and directories within directories they have write permissions to. |  high  | Done   |
 | [**R09**](#167)  |  The system will assign READ/WRITE/EXECUTE permissions for new files and directories when they are created |  high  | Done   |
-| [**R10**](#116)  |  The system will permit users to delete files and directories that they have write permissions for. |  high   | Done   |
-| [**R11**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have write access to. |  medium     | Done   |
-| [**R12**](#118)  | The system will display the contents of a file that a user has read permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
+| [**R10**](#116)  |  The system will permit users to delete files and directories that they have WRITE permissions for. |  high   | Done   |
+| [**R11**](#117)  |  The sytem will provide an interface for users to rename files and directories that they have WRITE access to. |  medium     | Done   |
+| [**R12**](#118)  | The system will display the contents of a file that a user has READ permissions to when the name of that file is clicked on in the "tree-display" page. |   high   | Done   |
 | [**R13**](#119)  | The system will provide an interface for users to log out of an account, terminating their authenticated session. |   high   | Done   |
-| [**R14**](#120)  | The system will not allow any user to read files they don't have read permission for, write to file they don't have write permission for, or read, write, or view any file metadata that is contained within a directory that the user doesn't have read permission for.|  high    | Done   |
+| [**R14**](#120)  | The system will not allow any user to read files they don't have READ permission for, write to file they don't have WRITE permission for, or read, write, or view any metadata that is contained within a directory that the user doesn't have READ permission for.|  high    | Done   |
 | [**R15**](#121)  | The system will permit permisisons update when User has WRITE permission on the directory or file |   low   | Done   |
-| [**R16**](#122)  | The system will display metadata--read, write, and execute permissions, time when the file was created, and time the file was last updated--about all files and directories that are within directories that a user has read access to. |   medium   | Done   |
+| [**R16**](#122)  | The system will display metadata -- file name, file type, READ/WRITE/EXECUTE permissions, and the date and time the file was last updated -- about all files and directories within directories that a user has read access to. |   medium   | Done   |
 | [**R17**](#124)  | The system must be able to meet the designated speed and capacity performance requirements  |   high   | Done   |
-| [**R18**](#148)  | The system provides an interface listing all existing users when an ADMIN user log in  |  high    | Done   |
+| [**R18**](#148)  | The system provides an interface listing all existing users when an ADMIN user logs in  |  high    | Done   |
 | [**R19**](#149)  | The system allows an ADMIN user to click and view any user's file system |  high    | Done   |
-| [**R20**](#150)  | The system allows an ADMIN user to modify file perimissions and directory permissions in any user's file system |  high    | Done   |
+| [**R20**](#150)  | The system allows an ADMIN user to modify file and directory permissions in any user's file system |  high    | Done   |
 | [**R21**](#126)  | The system must securely store sensitive information, including but not limited to, the names of the users, user passwords, file contents and metadata, and application secrets. |   high   | Done   |
 | [**R22**](#127)  | The system will provide an interface for deletion of user accounts that displays a button to each user that allows them to delete only their account. |   medium   | Done   |
 | [**R23**](#128)  | Documentation about how the system is designed by shall be contained in the README.md file stored on GitLab.  |  high    | Done   |
@@ -50,171 +45,170 @@ The customers for this software are the CS506 instructional staff and people nee
 
 ### User Stories
 
-<!--Use cases and user stories that support the user requirements in the previous section. The use cases should be based off user stories. Every major scenario should be represented by a use case, and every use case should say something not already illustrated by the other use cases. Diagrams (such as sequence charts) are encouraged. Ask the customer what are the most important use cases to implement by the deadline. You can have a total ordering, or mark use cases with “must have,” “useful,” or “optional.” For each use case you may list one or more concrete acceptance tests (concrete scenarios that the customer will try to see if the use case is implemented).-->
-
-
-##### File Creation
+##### File and Directory Creation
 
 (U01)
-> To add a file, I press the “add” button and the file creation dialog appears
+> To add a file, I press the “add file” button and the file creation dialog appears.
 
 (U02)
-> I select a file from file creation dialog, and I am prompted to select the file
+> I choose a file from file creation dialog, and I am prompted to select the file.
 
 (U03)
-> To finish the creation, I press the "open" button on the file creation dialog
+> To add a directory, I press the "add directory" button, and I am prompted to type a name for my directory.
 
 (U04)
-> To cancel the creation, I press the “cancel” button
-
-##### File Deletion
+> To finish the creation, I press the "open" or "submit" button on the file or directory creation dialog.
 
 (U05)
-> To delete a file or directory, I select the delete button within the file or directory row
+> To cancel the creation of a file or directory, I press the “cancel” button.
+
+##### File and Directory Deletion
+
+(U06)
+> To delete a file or directory, I select the delete button within the file or directory row.
 
 ##### File Reading
-(U06)
+(U07)
 > To open a file, I click on the file name and the contents of that file are displayed on the screen.
 
-(U07)
+(U08)
 > Once file is open, to edit the file's contents I hit the edit button and can now make basic edits to the file's contents.
 
-(U08)
+(U09)
 > If the file can not be displayed/opened, the system will display an error message.
 
-(U09)
+(U10)
 > To go back to the tree display of the current directory I click the "Back" button. 
 
 ##### File and Directory Metadata
-(U10)
+(U11)
 > File or directory metadata is displayed in the same row as the file or directory. Metadata includes, File name, File type, Permissions, Updated At, and Actions. 
 
 ##### Navigation
 
-(U11)
+(U12)
 > To change directories, I click on the name of the directory I want to go to. 
 
-(U12)
+(U13)
 > The directory tree will display the files and directories it contains beneath it in the tree.
 
 ##### Login
 
-(U13)
-> When the webpage is loaded, login page appears and I am prompted to enter a username and password
-
 (U14)
-> Once my username and password are entered, I then press the “login” button to login
+> When the webpage is loaded, the login page appears and I am prompted to enter a username and password.
 
 (U15)
+> Once the username and password are entered, I then press the “login” button to login.
+
+(U16)
 > If my login credentials are incorrect the system will display an error message and I will be prompted to enter the info again.
 
 ##### User Creation
 
-(U16)
-> To create a new user, I press “create new user” button on login page and the “Create New User” page is shown
-
 (U17)
-> On the “Create New User” page, I am prompted to enter a name, username, password, and to re-enter the password.
+> To create a new user, I press the “sign up” button on login page and the “Create New User” page is shown.
 
 (U18)
-> To complete user creation, I press the "sign up" button and I am logged into the service
+> On the “Create New User” page, I am prompted to enter a name, username, password, and to re-enter the password.
 
-(U19) 
+(U19)
+> To complete user creation, I press the "sign up" button and I am logged into the service.
+
+(U20) 
 > If the credentials I entered are not allowed, the system displays an error message.
 
 ##### File and Directory Renaming
-(U20)
-> To rename a file, I press the "rename file" button when the file is selected and am prompted with the "rename file" dialog
-
 (U21)
-> I enter the new file name into the entry box and press confirm to rename a file
+> To rename a file or directory, I press the "rename" button in the row of the item I want to rename, and am prompted with the "rename" dialog.
 
 (U22)
-> To cancel file renaming, I press the cancel button in the "rename file" dialog
+> I enter the new file or directory name into the entry box and press confirm to rename a file or directory.
+
+(U23)
+> To cancel file or directory renaming, I press the cancel button in the "rename" dialog.
 
 ##### logout
-(U23)
-> To logout, I press the logout button on the homepage and am logged out.
-
 (U24)
-> I press the confirm button on the confirm logout dialog to logout or the cancel button to return to the homepage.
+> To logout, I press the Welcome menu in the top right corner and am given options to logout or delete my account.
+
+(U25)
+> I press the "logout" button to log out of my account.
 
 ##### Project Documentation
-(U25)
-> To understand how the system works, I access the project README.md file 
+(U26)
+> To understand how the system works, I access the project README.md file.
 
 ##### Account Deletion
-(U26)
-> To delete my account, I press the menu in the top right corner and click on "delete account"
-
 (U27)
-> I am prompted with the confirm account deletion dialog
+> To delete my account, I press the menu in the top right corner and click on "delete account".
 
 (U28)
-> I press the confirm button on the account deletion dialog to delete my account or the cancel button to return
+> I am prompted with the confirm account deletion dialog.
+
+(U29)
+> I press the "confirm" button on the account deletion dialog to delete my account or the "cancel" button to return.
 
 ##### Permission Update
-(U29)
-> To update permission on a file or directory, I need to have WRITE permisison on that file or directory
-
 (U30)
-> I click "Permission" button, I can uncheck checkbox to disable permissions, such as READ, WRITE, or EXECTUE.
+> To update permission on a file or directory, I need to have WRITE permisison on that file or directory.
 
 (U31)
-> I click "Permission" button, I can check checkbox to disable permissions, such as READ, WRITE, or EXECTUE.
+> I click "Change Permission" button, I can uncheck the checkboxes to disable permissions, such as READ, WRITE, or EXECTUE.
+
+(U32)
+> I click "Change Permission" button, I can check checkbox to enable permissions, such as READ, WRITE, or EXECTUE.
 
 ##### Permission View
-(U32)
-> To view permission on a file or directory, I click the "Permission" button. It shows the list of permissions that I am granted for this file.
+(U33)
+> To view permission on a file or directory, I look at the "Permission" column of the file or directory row. "R" means READ, "W" means WRITE, and "X" means EXECUTE permissions are granted. 
 
 ##### ADMIN User Capability
-(U33)
-> An ADMIN user is created in the database level/internally, not from the application level. User sign up from application is
-default a regular "USER".
-
 (U34)
-> An ADMIN user can view a list of all existing users, and click into each of their file systems.
+> An ADMIN user is created in the database level/internally, not from the application level. User sign up from application is default a regular "USER".
 
 (U35)
+> An ADMIN user can view a list of all existing users, and click into each of their file systems.
+
+(U36)
 > An ADMIN user can modify the file/directory permissions that's created by any user by clicking a button to change the permissions.
 
 ### Use Cases
 
-- User wants to add a file (U01 - U04)
-- User wants to delete a file (U05)
-- User wants to view the contents of a file (U06 - U09)
-- User wants to view the metadata of a file or directory (U10)
-- User wants to change the directory they are in or view what a directory holds (U11 - U12)
-- User wants to login to a file system (U13 - U15)
-- User wants to create a new account (U16 - U19)
-- User wants to rename a file or directory (U20 - U22)
-- User wants to logout (U23 - U24)
-- User wants to delete their account (U26 - U28)
-- User wants to change permissions of a file or directory (U29 - U31)
-- User wants to view permissions of a file or directory (U32)
-- ADMIN User wants to manage permissions of any other user's file systems (U33 - U35)
+- User wants to add a file or directory (U01 - U05)
+- User wants to delete a file or directory (U06)
+- User wants to view the contents of a file (U07 - U10)
+- User wants to view the metadata of a file or directory (U11)
+- User wants to change the directory they are in or view what a directory holds (U12 - U13)
+- User wants to login to a file system (U14 - U16)
+- User wants to create a new account (U17 - U20)
+- User wants to rename a file or directory (U21 - U23)
+- User wants to logout (U24 - U25)
+- User wants to delete their account (U27 - U29)
+- User wants to change permissions of a file or directory (U30 - U32)
+- User wants to view permissions of a file or directory (U33)
+- ADMIN User wants to manage permissions of any other user's file systems (U34 - U36)
 
 ### User-Requirements Traceability
 | Requirements  | User stories |
 | ------------  | ------------ |
-| [**R01**](#111) , | [U13-U15](#login)|
-| [**R2**](#146),[**R3**](#166),[**R05**](#113) | [U16-U19](#user-creation)|
-| [**R04**](#125)  | [U23-U24](#file-import) |
-| [**R05**](#112)  | [U07-U09](#file-editing) |
-| [**R07**](#114) ,[**R16**](#122)  | [U32](#permission-view) |
-| [**R08**](#115) ,[**R09**](#167)  | [U01-U04](#file-creation)  |
-| [**R10**](#116) | [U05](#file-deletion)  |
-| [**R11**](#117)| [U20-U22](#file-renaming) |
-| [**R12**](#118)  | [U06](#file-reading)  |
-| [**R12**](#118) | [U11-U12](#navigation)  |
-| [**R15**](#121)  | [U29-U31](#permission-update) |
-| [**R14**](#120) , [**R16**](#122)  | [U10](#file-metadata) |
-| [**R12**](#119)   | [U23-U24](#logout) |
+| [**R01**](#111) , | [U14-U16](#login)|
+| [**R2**](#146),[**R3**](#166),[**R05**](#113) | [U17-U20](#user-creation)|
+| [**R04**](#125)  | [U24-U25](#file-import) |
+| [**R05**](#112)  | [U08-U10](#file-editing) |
+| [**R07**](#114),[**R16**](#122)  | [U33](#permission-view) |
+| [**R08**](#115),[**R09**](#167)  | [U01-U05](#file-creation)  |
+| [**R10**](#116) | [U06](#file-deletion)  |
+| [**R11**](#117)| [U21-U23](#file-renaming) |
+| [**R12**](#118)  | [U07](#file-reading)  |
+| [**R12**](#118) | [U12-U13](#navigation)  |
+| [**R15**](#121)  | [U30-U32](#permission-update) |
+| [**R14**](#120), [**R16**](#122)  | [U11](#file-metadata) |
+| [**R12**](#119)   | [U24-U25](#logout) |
 | [**R17**](#124) | [System Requirements](#system-requirements) |
-| [**R18**](#148) ,[**R19**](#149), [**R20**](#150)  | [U33-U35](#admin-user-capabilities) |
+| [**R18**](#148),[**R19**](#149), [**R20**](#150)  | [U34-U36](#admin-user-capabilities) |
 | [**R21**](#126) | [Security](#security-requirements) |
-| [**R22**](#127)  | [U26-U28](#account-deletion) |
-| [**R23**](#128) | [U32](#project-documentation) |
+| [**R22**](#127)  | [U27-U29](#account-deletion) |
+| [**R23**](#128) | [U33](#project-documentation) |
 | [**R09**](#user-requirements) | [Permissions Class](#class-diagram) |
 
 
@@ -222,8 +216,6 @@ default a regular "USER".
 ### User Interface Requirements
 
 <!--Describes any customer user interface requirements including graphical user interface requirements as well as data exchange format requirements. This also should include necessary reporting and other forms of human readable input and output. This should focus on how the feature or product and user interact to create the desired workflow. Describing your intended interface as “easy” or “intuitive” will get you nowhere unless it is accompanied by details.-->
-
-<!--NOTE: Please include illustrations or screenshots of what your user interface would look like -- even if they’re rough -- and interleave it with your description.-->
 
 - Login page
 - User creation page
@@ -266,12 +258,6 @@ default a regular "USER".
 ## Specification
 
 <!--A detailed specification of the system. UML, or other diagrams, such as finite automata, or other appropriate specification formalisms, are encouraged over natural language.-->
-
-<!--Include sections, for example, illustrating the database architecture (with, for example, an ERD).-->
-
-<!--Included below are some sample diagrams, including some example tech stack diagrams.-->
-
-<!-- You can make headings at different levels by writing `# Heading` with the number of `#` corresponding to the heading level (e.g. `## h2`). -->
 
 #### Technology Stack
 
@@ -489,23 +475,23 @@ This document outlined the code standard for writing our project: MySQL-based Fi
 [Styling](#styling)
 
 ### Structure
-- src/
-    - components/: reusable components without state.
-        - sample/: page directory 
-            - sample.js: actual component 
-            - sample.test.js: test file for the component
-        - index.js: file for exporting all components
-    - containers/: a single use container with states that possibly contain multiple components.
-    - pages/: a single page.
-        - sample/: page directory 
-            - sample.js: actual page view
-            - sample.test.js: test file for the page
-    - utils/: helper functions and constants.
-        - constans/: contains directory
-        - helper/: helper function directory
-    - api/: API calls.
-    - stores/: Global state store using Redux
-    - assets/: Static assets like images and icons.
+- `src/`
+    - `components/`: reusable components without state.
+        - `sample/`: page directory 
+            - `sample.js`: actual component 
+            - `sample.test.js`: test file for the component
+        - `index.js`: file for exporting all components
+    - `containers/`: a single use container with states that possibly contain multiple components.
+    - `pages/`: a single page.
+        - `sample/`: page directory 
+            - `sample.js`: actual page view
+            - `sample.test.js`: test file for the page
+    - `utils/`: helper functions and constants.
+        - `constans/`: contains directory
+        - `helper/`: helper function directory
+    - `api/`: API calls.
+    - `stores/`: Global state store using Redux
+    - `assets/`: Static assets like images and icons.
 
 ### State Management
 
