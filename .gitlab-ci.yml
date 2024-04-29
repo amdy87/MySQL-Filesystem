@@ -61,11 +61,11 @@ test_db:
     - name: mysql:latest
       alias: mysql
   variables:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: db
-      DATABASE_URL: mysql://root:password@mysql:3306/db
-      CI: 'true'
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_ROOT_HOST: "%"
+    MYSQL_DATABASE: db
+    DATABASE_URL: mysql://root:password@mysql:3306/db
+    CI: "true"
   script:
     - cd backend
     - npm install
@@ -79,11 +79,11 @@ coverage_backend:
     - name: mysql:latest
       alias: mysql
   variables:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: db
-      DATABASE_URL: mysql://root:password@mysql:3306/db
-      CI: 'true'
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_ROOT_HOST: "%"
+    MYSQL_DATABASE: db
+    DATABASE_URL: mysql://root:password@mysql:3306/db
+    CI: "true"
   script:
     - cd backend
     - npm install

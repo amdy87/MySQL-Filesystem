@@ -22,7 +22,7 @@ export default function LoginPage() {
       alert('Please input your email');
       return;
     }
-    if (!(email.length < 3 || /(?=.*.+@.+\..+)/.test(email))) {
+    if (!(email.length >= 5 && /(?=.*.+@.+\..+)/.test(email))) {
       alert('Please input a valid email');
       return;
     }

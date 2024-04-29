@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -8,10 +8,10 @@ services:
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: db
     volumes:
-    - db-volume:/var/lib/mysql
+      - db-volume:/var/lib/mysql
 
   frontend:
     image: my-filesystem-portal:latest
